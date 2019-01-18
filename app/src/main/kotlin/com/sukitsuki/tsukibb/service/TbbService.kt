@@ -4,16 +4,17 @@ import com.google.gson.GsonBuilder
 import com.sukitsuki.tsukibb.utils.LZString
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import java.util.concurrent.TimeUnit
-import okhttp3.ResponseBody
 
 
 const val BASE_URL = "https://ebb.io/_/"
@@ -27,6 +28,8 @@ fun <S> create(serviceClass: Class<S>): S {
     .create()
 
   retrofit = Retrofit.Builder()
+    // Show primitive/String Type
+    .addConverterFactory(ScalarsConverterFactory.create())
     .addConverterFactory(GsonConverterFactory.create(gson))
     .baseUrl(BASE_URL)
     .client(httpBuilder.build())
@@ -52,7 +55,7 @@ val httpBuilder: OkHttpClient.Builder
       .readTimeout(30, TimeUnit.SECONDS)
 
     val loggingInterceptor = HttpLoggingInterceptor()
-    loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+    loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
     httpClient.addInterceptor(loggingInterceptor)
 
     return httpClient
@@ -66,46 +69,46 @@ interface TbbService {
   }
 
   @POST("logout")
-  fun logout(): Call<Unit>
+  fun logout(): Call<String>
 
   @GET("user")
-  fun fetchUser(): Call<Unit>
+  fun fetchUser(): Call<DataUser>
 
   @GET("seasons_watch_history")
-  fun fetchSeasonsWatchHistory(e: Any): Call<Unit>
+  fun fetchSeasonsWatchHistory(e: Any): Call<String>
 
   @GET("hpdata")
   fun fetchHPData(): Call<RespHpData>
 
   @GET("anime_list")
-  fun fetchAnimeList(@Body e: Any): Call<Unit>
+  fun fetchAnimeList(): Call<Array<DataAnimeList>>
 
   @GET("season_list/{season_list}")
-  fun fetchSeason(@Path("season_list") season_list: String): Call<Unit>
+  fun fetchSeason(@Path("season_list") season_list: String): Call<String>
 
   @GET("anime_page_sp/{anime_page_sp}")
-  fun fetchPageSpecials(@Path("anime_page_sp") anime_page_sp: String): Call<Unit>
+  fun fetchPageSpecials(@Path("anime_page_sp") anime_page_sp: String): Call<String>
 
   @POST("search")
-  fun fetchSearchResults(@Body params: SearchBody): Call<Unit>
+  fun fetchSearchResults(@Body params: SearchBody): Call<String>
 
   @POST("timeline_anime_list")
-  fun fetchTimelineAnimeList(@Body params: TimeLineBody): Call<Unit>
+  fun fetchTimelineAnimeList(@Body params: TimeLineBody): Call<String>
 
   @GET("article/{article}")
-  fun fetchArticle(@Path("article") article: String): Call<Unit>
+  fun fetchArticle(@Path("article") article: String): Call<String>
 
   @GET("watch_history")
-  fun fetchWatchHistory(): Call<Unit>
+  fun fetchWatchHistory(): Call<String>
 
   @POST("update_watch_history")
-  fun updateWatchHistory(@Body e: Any): Call<Unit>
+  fun updateWatchHistory(@Body e: Any): Call<String>
 
   @POST("remove_watch_history")
-  fun removeWatchHistory(@Body e: Any): Call<Unit>
+  fun removeWatchHistory(@Body e: Any): Call<String>
 
   @POST("report_comment")
-  fun reportCommentAbuse(@Body e: Any): Call<Unit>
+  fun reportCommentAbuse(@Body e: Any): Call<String>
 }
 
 data class TimeLineBody(val year: String, val season: String)
