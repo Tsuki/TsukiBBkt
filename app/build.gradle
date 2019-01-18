@@ -69,12 +69,8 @@ dependencies {
     // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
     implementation group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.1.0'
 
-    implementation 'com.nytimes.android:store3:3.1.0'
-    implementation 'com.nytimes.android:store-kotlin3:3.1.0'
-    implementation 'com.nytimes.android:filesystem3:3.1.0'
-
-
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 
 }
