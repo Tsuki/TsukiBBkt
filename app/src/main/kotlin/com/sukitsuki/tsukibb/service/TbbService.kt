@@ -1,6 +1,7 @@
 package com.sukitsuki.tsukibb.service
 
 import com.google.gson.GsonBuilder
+import com.sukitsuki.tsukibb.utils.LZString
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,9 +13,11 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import java.util.concurrent.TimeUnit
+import okhttp3.ResponseBody
 
-val BASE_URL = "https://ebb.io/_"
-val service: TbbService = create(TbbService::class.java)
+
+const val BASE_URL = "https://ebb.io/_/"
+
 
 lateinit var retrofit: Retrofit
 
@@ -23,7 +26,6 @@ fun <S> create(serviceClass: Class<S>): S {
     .serializeNulls()
     .create()
 
-  // create retrofit
   retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create(gson))
     .baseUrl(BASE_URL)
@@ -40,11 +42,12 @@ val httpBuilder: OkHttpClient.Builder
         val original = chain.request()
 
         val request = original.newBuilder()
-//                    .header("Accept", "application/json")
           .method(original.method(), original.body())
           .build()
-
-        return@Interceptor chain.proceed(request)
+        val response = chain.proceed(request)
+        val body = response.body()
+        val newBody = ResponseBody.create(body?.contentType(), LZString.decompressFromUTF16(body?.string()))
+        return@Interceptor response.newBuilder().body(newBody).build()
       })
       .readTimeout(30, TimeUnit.SECONDS)
 
@@ -56,6 +59,12 @@ val httpBuilder: OkHttpClient.Builder
   }
 
 interface TbbService {
+  companion object {
+    val instance by lazy {
+      create(TbbService::class.java)
+    }
+  }
+
   @POST("logout")
   fun logout(): Call<Unit>
 
@@ -66,7 +75,7 @@ interface TbbService {
   fun fetchSeasonsWatchHistory(e: Any): Call<Unit>
 
   @GET("hpdata")
-  fun fetchHPData(): Call<Unit>
+  fun fetchHPData(): Call<RespHpData>
 
   @GET("anime_list")
   fun fetchAnimeList(@Body e: Any): Call<Unit>
@@ -99,11 +108,7 @@ interface TbbService {
   fun reportCommentAbuse(@Body e: Any): Call<Unit>
 }
 
-class TimeLineBody {
-  lateinit var year: String
-  lateinit var season: String
-}
+data class TimeLineBody(val year: String, val season: String)
 
-class SearchBody {
-  lateinit var query: String
-}
+
+data class SearchBody(var query: String)
