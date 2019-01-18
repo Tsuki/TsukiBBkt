@@ -1,4 +1,4 @@
-package com.diogoduailibe.lzstring4j;
+package com.sukitsuki.tsukibb.utils;
 
 
 import java.util.ArrayList;
@@ -9,24 +9,24 @@ import java.util.List;
 public class LZString {
 
 
-  static String keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  private static String keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
 
-  public static String compress(String uncompressed) {
+  private static String compress(String uncompressed) {
 
     if (uncompressed == null)
       return "";
     int value;
-    HashMap<String, Integer> context_dictionary = new HashMap<String, Integer>();
-    HashSet<String> context_dictionaryToCreate = new HashSet<String>();
-    String context_c = "";
-    String context_wc = "";
+    HashMap<String, Integer> context_dictionary = new HashMap<>();
+    HashSet<String> context_dictionaryToCreate = new HashSet<>();
+    String context_c;
+    String context_wc;
     String context_w = "";
     double context_enlargeIn = 2d; // Compensate for the first entry which
     // should not count
     int context_dictSize = 3;
     int context_numBits = 2;
-    String context_data_string = "";
+    StringBuilder context_data_string = new StringBuilder();
     int context_data_val = 0;
     int context_data_position = 0;
 
@@ -49,7 +49,7 @@ public class LZString {
               context_data_val = (context_data_val << 1);
               if (context_data_position == 15) {
                 context_data_position = 0;
-                context_data_string += (char) context_data_val;
+                context_data_string.append((char) context_data_val);
                 context_data_val = 0;
               } else {
                 context_data_position++;
@@ -61,7 +61,7 @@ public class LZString {
                   | (value & 1);
               if (context_data_position == 15) {
                 context_data_position = 0;
-                context_data_string += (char) context_data_val;
+                context_data_string.append((char) context_data_val);
                 context_data_val = 0;
               } else {
                 context_data_position++;
@@ -74,7 +74,7 @@ public class LZString {
               context_data_val = (context_data_val << 1) | value;
               if (context_data_position == 15) {
                 context_data_position = 0;
-                context_data_string += (char) context_data_val;
+                context_data_string.append((char) context_data_val);
                 context_data_val = 0;
               } else {
                 context_data_position++;
@@ -87,7 +87,7 @@ public class LZString {
                   | (value & 1);
               if (context_data_position == 15) {
                 context_data_position = 0;
-                context_data_string += (char) context_data_val;
+                context_data_string.append((char) context_data_val);
                 context_data_val = 0;
               } else {
                 context_data_position++;
@@ -108,7 +108,7 @@ public class LZString {
                 | (value & 1);
             if (context_data_position == 15) {
               context_data_position = 0;
-              context_data_string += (char) context_data_val;
+              context_data_string.append((char) context_data_val);
               context_data_val = 0;
             } else {
               context_data_position++;
@@ -124,7 +124,7 @@ public class LZString {
         }
         // Add wc to the dictionary.
         context_dictionary.put(context_wc, context_dictSize++);
-        context_w = new String(context_c);
+        context_w = context_c;
       }
     }
 
@@ -136,7 +136,7 @@ public class LZString {
             context_data_val = (context_data_val << 1);
             if (context_data_position == 15) {
               context_data_position = 0;
-              context_data_string += (char) context_data_val;
+              context_data_string.append((char) context_data_val);
               context_data_val = 0;
             } else {
               context_data_position++;
@@ -148,7 +148,7 @@ public class LZString {
                 | (value & 1);
             if (context_data_position == 15) {
               context_data_position = 0;
-              context_data_string += (char) context_data_val;
+              context_data_string.append((char) context_data_val);
               context_data_val = 0;
             } else {
               context_data_position++;
@@ -161,7 +161,7 @@ public class LZString {
             context_data_val = (context_data_val << 1) | value;
             if (context_data_position == 15) {
               context_data_position = 0;
-              context_data_string += (char) context_data_val;
+              context_data_string.append((char) context_data_val);
               context_data_val = 0;
             } else {
               context_data_position++;
@@ -174,7 +174,7 @@ public class LZString {
                 | (value & 1);
             if (context_data_position == 15) {
               context_data_position = 0;
-              context_data_string += (char) context_data_val;
+              context_data_string.append((char) context_data_val);
               context_data_val = 0;
             } else {
               context_data_position++;
@@ -194,7 +194,7 @@ public class LZString {
           context_data_val = (context_data_val << 1) | (value & 1);
           if (context_data_position == 15) {
             context_data_position = 0;
-            context_data_string += (char) context_data_val;
+            context_data_string.append((char) context_data_val);
             context_data_val = 0;
           } else {
             context_data_position++;
@@ -216,7 +216,7 @@ public class LZString {
       context_data_val = (context_data_val << 1) | (value & 1);
       if (context_data_position == 15) {
         context_data_position = 0;
-        context_data_string += (char) context_data_val;
+        context_data_string.append((char) context_data_val);
         context_data_val = 0;
       } else {
         context_data_position++;
@@ -228,12 +228,12 @@ public class LZString {
     while (true) {
       context_data_val = (context_data_val << 1);
       if (context_data_position == 15) {
-        context_data_string += (char) context_data_val;
+        context_data_string.append((char) context_data_val);
         break;
       } else
         context_data_position++;
     }
-    return context_data_string;
+    return context_data_string.toString();
   }
 
   public static String decompressHexString(String hexString) {
@@ -262,17 +262,17 @@ public class LZString {
   }
 
 
-  public static String decompress(String compressed) {
+  private static String decompress(String compressed) {
 
     if (compressed == null)
       return "";
-    if (compressed == "")
+    if (compressed.equals(""))
       return null;
-    List<String> dictionary = new ArrayList<String>(200);
+    List<String> dictionary = new ArrayList<>(200);
     double enlargeIn = 4;
     int dictSize = 4;
     int numBits = 3;
-    String entry = "";
+    String entry;
     StringBuilder result;
     String w;
     int bits;
@@ -457,7 +457,7 @@ public class LZString {
   public static String compressToUTF16(String input) {
     if (input == null)
       return "";
-    String output = "";
+    StringBuilder output = new StringBuilder();
     int c;
     int current = 0;
     int status = 0;
@@ -468,73 +468,73 @@ public class LZString {
       c = (int) input.charAt(i);
       switch (status++) {
         case 0:
-          output += (char) ((c >> 1) + 32);
+          output.append((char) ((c >> 1) + 32));
           current = (c & 1) << 14;
           break;
         case 1:
-          output += (char) ((current + (c >> 2)) + 32);
+          output.append((char) ((current + (c >> 2)) + 32));
           current = (c & 3) << 13;
           break;
         case 2:
-          output += (char) ((current + (c >> 3)) + 32);
+          output.append((char) ((current + (c >> 3)) + 32));
           current = (c & 7) << 12;
           break;
         case 3:
-          output += (char) ((current + (c >> 4)) + 32);
+          output.append((char) ((current + (c >> 4)) + 32));
           current = (c & 15) << 11;
           break;
         case 4:
-          output += (char) ((current + (c >> 5)) + 32);
+          output.append((char) ((current + (c >> 5)) + 32));
           current = (c & 31) << 10;
           break;
         case 5:
-          output += (char) ((current + (c >> 6)) + 32);
+          output.append((char) ((current + (c >> 6)) + 32));
           current = (c & 63) << 9;
           break;
         case 6:
-          output += (char) ((current + (c >> 7)) + 32);
+          output.append((char) ((current + (c >> 7)) + 32));
           current = (c & 127) << 8;
           break;
         case 7:
-          output += (char) ((current + (c >> 8)) + 32);
+          output.append((char) ((current + (c >> 8)) + 32));
           current = (c & 255) << 7;
           break;
         case 8:
-          output += (char) ((current + (c >> 9)) + 32);
+          output.append((char) ((current + (c >> 9)) + 32));
           current = (c & 511) << 6;
           break;
         case 9:
-          output += (char) ((current + (c >> 10)) + 32);
+          output.append((char) ((current + (c >> 10)) + 32));
           current = (c & 1023) << 5;
           break;
         case 10:
-          output += (char) ((current + (c >> 11)) + 32);
+          output.append((char) ((current + (c >> 11)) + 32));
           current = (c & 2047) << 4;
           break;
         case 11:
-          output += (char) ((current + (c >> 12)) + 32);
+          output.append((char) ((current + (c >> 12)) + 32));
           current = (c & 4095) << 3;
           break;
         case 12:
-          output += (char) ((current + (c >> 13)) + 32);
+          output.append((char) ((current + (c >> 13)) + 32));
           current = (c & 8191) << 2;
           break;
         case 13:
-          output += (char) ((current + (c >> 14)) + 32);
+          output.append((char) ((current + (c >> 14)) + 32));
           current = (c & 16383) << 1;
           break;
         case 14:
-          output += (char) ((current + (c >> 15)) + 32);
-          output += (char) ((c & 32767) + 32);
+          output.append((char) ((current + (c >> 15)) + 32));
+          output.append((char) ((c & 32767) + 32));
 
           status = 0;
           break;
       }
     }
 
-    output += (char) (current + 32);
+    output.append((char) (current + 32));
 
-    return output;
+    return output.toString();
   }
 
   public static String decompressFromUTF16(String input) {
@@ -621,13 +621,13 @@ public class LZString {
 
   }
 
-  public static String decompressFromBase64(String input) throws Exception {
+  public static String decompressFromBase64(String input) {
     return LZString.decompress(decode64(input));
   }
 
 
   // implemented from JS version
-  public static String decode64(String input) {
+  private static String decode64(String input) {
 
     StringBuilder str = new StringBuilder(200);
 
@@ -635,7 +635,7 @@ public class LZString {
     int output_=0;
     int chr1, chr2, chr3;
     int enc1, enc2, enc3, enc4;
-    int i = 0; int j=0;
+    int i = 0;
 
     while (i < input.length()) {
 
@@ -673,7 +673,7 @@ public class LZString {
     return str.toString();
   }
 
-  public static String encode64(String input) {
+  private static String encode64(String input) {
     StringBuilder result = new StringBuilder((input.length() * 8 + 1) / 3);
     for (int i = 0, max = input.length() << 1; i < max;) {
       int left = max - i;
@@ -752,12 +752,12 @@ public class LZString {
 }
 
 class Data {
-  public int val;
+  int val;
   public String string;
-  public int position;
-  public int index;
+  int position;
+  int index;
 
-  public static Data getInstance() {
+  static Data getInstance() {
     return new Data();
   }
 }
