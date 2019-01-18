@@ -20,6 +20,10 @@ android {
         test.java.srcDirs = ['src/test/kotlin']
         androidTest.java.srcDirs = ['src/androidTest/kotlin']
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -29,6 +33,9 @@ android {
     testOptions {
         // FIX log cat to mock
         unitTests.returnDefaultValues = true
+    }
+    androidExtensions {
+        experimental = true
     }
 }
 
@@ -46,7 +53,19 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
+    // https://mvnrepository.com/artifact/com.squareup.retrofit2/adapter-rxjava2
+    implementation group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: '2.5.0'
+
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+
     implementation 'com.google.code.gson:gson:2.8.5'
+
+    // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
+    implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.5'
+    // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxkotlin
+    implementation group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.3.0'
+    // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
+    implementation group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.1.0'
+
 }
