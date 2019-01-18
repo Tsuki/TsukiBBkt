@@ -9,7 +9,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import com.sukitsuki.tsukibb.service.TbbService
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,6 +33,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     toggle.syncState()
 
     navView.setNavigationItemSelectedListener(this)
+
+    val progress: ProgressBar = findViewById(R.id.progressBar)
+    doAsync {
+      initContext()
+      uiThread {
+        progress.visibility = View.GONE
+      }
+    }
+
   }
 
   override fun onBackPressed() {
@@ -77,9 +90,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     return true
   }
 
-  fun InitContext(): Unit {
-    TbbService.instance.fetchHPData()
-    TbbService.instance.fetchUser()
-    TbbService.instance.fetchAnimeList()
+  private fun initContext() {
+    TbbService.path = this.applicationContext.filesDir
+    TbbService.instance.fetchHPData().toFuture()
+    TbbService.instance.fetchUser().toFuture()
+    TbbService.instance.fetchAnimeList().toFuture()
   }
 }

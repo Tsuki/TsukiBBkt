@@ -1,6 +1,8 @@
 package com.sukitsuki.tsukibb.service
 
 import com.google.gson.GsonBuilder
+import com.nytimes.android.external.store3.base.impl.Store
+import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.HpData
 import com.sukitsuki.tsukibb.model.User
@@ -18,6 +20,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 
@@ -71,6 +74,19 @@ interface TbbService {
     val instance by lazy {
       create(TbbService::class.java)
     }
+    val hpDataStore by lazy {
+      store()
+    }
+    lateinit var path: File
+
+    private fun store(): Store<HpData, String> {
+//      return FluentStoreBuilder.key()
+      return StoreBuilder.key<String, HpData>()
+        .fetcher { TbbService.instance.fetchHPData().firstOrError() }
+//        .persister { FileSystemPersister.create<HpData>(FileSystemFactory.create(path)), }
+//        .persister(FileSystemPersisterFactory.create<HpData>(FileSystemFactory.create(path), )
+        .open()
+    }
   }
 
   @POST("logout")
@@ -120,3 +136,12 @@ data class TimeLineBody(val year: String, val season: String)
 
 
 data class SearchBody(var query: String)
+
+
+//private fun provideStore(): Store<String, HpData> {
+//  return StoreBuilder.key<String, HpData>()
+//    .fetcher { TbbService.instance.fetchHPData().firstOrError() }
+//    .persister(FileSystemPersister.create(FileSystemFactory.create(filesDir)) { key -> key })
+//    .parser(JacksonParserFactory.createSourceParser(HpData::class.java))
+//    .open()
+//}
