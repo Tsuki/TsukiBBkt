@@ -1,30 +1,22 @@
 package com.sukitsuki.tsukibb
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.ProgressBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.sukitsuki.tsukibb.model.AnimeList
-import com.sukitsuki.tsukibb.model.HpData
-import com.sukitsuki.tsukibb.model.User
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-  private lateinit var hpData: HpData
-  private lateinit var user: User
-  lateinit var animeList: List<AnimeList>
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_main)
     val toolbar: Toolbar = findViewById(R.id.toolbar)
     setSupportActionBar(toolbar)
@@ -38,15 +30,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     toggle.syncState()
 
     navView.setNavigationItemSelectedListener(this)
-
-    val progressBar: ProgressBar = findViewById(R.id.progressBar)
-
-    doAsync {
-      initContext()
-      uiThread {
-        progressBar.visibility = View.GONE
-      }
-    }
 
   }
 
@@ -97,11 +80,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
     drawerLayout.closeDrawer(GravityCompat.START)
     return true
-  }
-
-  private fun initContext() {
-//    this.hpData = TbbService.instance.fetchHPData().toFuture().get()
-//    TbbService.instance.fetchUser().switchIfEmpty { User(isNull = true) }.subscribe { this.user = it }
-//    this.animeList = TbbService.instance.fetchAnimeList().toFuture().get()
   }
 }
