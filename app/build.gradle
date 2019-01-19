@@ -82,7 +82,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 //    annotationProcessor "androidx.arch.lifecycle:compiler:1.0.0"
-
+    implementation "com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:13"
     implementation "com.google.android.exoplayer:exoplayer:2.9.3"
 //    implementation "com.google.android.exoplayer:exoplayer-core:$exo_version"
 //    implementation "com.google.android.exoplayer:exoplayer-dash:$exo_version"
