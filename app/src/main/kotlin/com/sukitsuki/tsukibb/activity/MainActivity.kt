@@ -1,4 +1,4 @@
-package com.sukitsuki.tsukibb
+package com.sukitsuki.tsukibb.activity
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.sukitsuki.tsukibb.R
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -24,7 +25,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
     val navView: NavigationView = findViewById(R.id.nav_view)
     val toggle = ActionBarDrawerToggle(
-      this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+      this, drawerLayout, toolbar,
+      R.string.navigation_drawer_open,
+      R.string.navigation_drawer_close
     )
     drawerLayout.addDrawerListener(toggle)
     toggle.syncState()
