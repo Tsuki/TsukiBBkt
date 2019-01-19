@@ -8,17 +8,13 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
-/build
 /captures
 .externalNativeBuild
 *.apk
-*.ap_
-*.dex
-*.class
 bin/
 gen/
-out/
 build/
+app/debug
 proguard/
 *.log
 .navigation/
@@ -27,8 +23,6 @@ captures/
 .idea/gradle.xml
 .idea/assetWizardSettings.xml
 .idea/dictionaries
-.idea/libraries
-.idea/caches
 google-services.json
 freeline.py
 freeline/
@@ -38,3 +32,4 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+key.jks
