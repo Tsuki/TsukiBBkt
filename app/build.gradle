@@ -40,6 +40,7 @@ android {
 }
 
 ext.anko_version = '0.10.8'
+ext.exo_version = '2.9.3'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -82,4 +83,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 //    annotationProcessor "androidx.arch.lifecycle:compiler:1.0.0"
 
+    implementation "com.google.android.exoplayer:exoplayer:2.9.3"
+//    implementation "com.google.android.exoplayer:exoplayer-core:$exo_version"
+//    implementation "com.google.android.exoplayer:exoplayer-dash:$exo_version"
+//    implementation "com.google.android.exoplayer:exoplayer-ui:$exo_version"
 }
