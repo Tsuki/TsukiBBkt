@@ -42,6 +42,7 @@ fun <S> create(serviceClass: Class<S>): S {
 
   return retrofit.create(serviceClass)
 }
+//login telegram https://oauth.telegram.org/auth?bot_id=639045451&origin=https%3A%2F%2Febb.io
 
 val httpBuilder: OkHttpClient.Builder
   get() {

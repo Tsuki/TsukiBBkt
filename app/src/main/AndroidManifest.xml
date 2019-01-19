@@ -35,5 +35,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.AnimeDetailActivity" />
+        <activity android:name=".activity.LoginWebViewActivity" />
     </application>
 </manifest>

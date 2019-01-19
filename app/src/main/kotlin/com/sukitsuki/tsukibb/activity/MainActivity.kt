@@ -1,5 +1,6 @@
 package com.sukitsuki.tsukibb.activity
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.Menu
@@ -11,6 +12,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.sukitsuki.tsukibb.R
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,7 +58,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // automatically handle clicks on the Home/Up button, so long
     // as you specify a parent activity in AndroidManifest.xml.
     return when (item.itemId) {
-      R.id.action_settings -> true
+      R.id.action_settings -> {
+        val intent = Intent(this, LoginWebViewActivity::class.java)
+        this.startActivity(intent)
+        true
+      }
       else -> super.onOptionsItemSelected(item)
     }
   }
