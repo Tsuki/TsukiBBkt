@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.sukitsuki.tsukibb.R
@@ -12,7 +13,6 @@ import com.sukitsuki.tsukibb.model.AnimeList
 
 class AnimeListAdapter : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
   var dataSet: List<AnimeList> = emptyList()
-
   fun loadDataSet(newDataSet: List<AnimeList>) {
     dataSet = newDataSet
     this.notifyDataSetChanged()
@@ -29,9 +29,11 @@ class AnimeListAdapter : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val anime = dataSet[position]
     Picasso.get().load("https://seaside.ebb.io/${anime.animeId}x${anime.seasonId}.jpg").into(holder.animeImage)
+    holder.textView.text = anime.nameChi
   }
 
   class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val animeImage: ImageView = v.findViewById(R.id.anime_image)
+    val textView: TextView = v.findViewById(R.id.anime_title)
   }
 }
