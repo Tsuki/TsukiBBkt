@@ -1,7 +1,6 @@
 package com.sukitsuki.tsukibb
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,7 +22,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   private lateinit var hpData: HpData
   private lateinit var user: User
-  private lateinit var animeList: Array<AnimeList>
+  lateinit var animeList: List<AnimeList>
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

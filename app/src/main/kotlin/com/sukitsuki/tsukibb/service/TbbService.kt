@@ -86,7 +86,7 @@ interface TbbService {
   fun fetchHPData(): Flowable<HpData>
 
   @GET("anime_list")
-  fun fetchAnimeList(): Flowable<Array<AnimeList>>
+  fun fetchAnimeList(): Flowable<List<AnimeList>>
 
   @GET("season_list/{season_list}")
   fun fetchSeason(@Path("season_list") season_list: String): Flowable<String>
