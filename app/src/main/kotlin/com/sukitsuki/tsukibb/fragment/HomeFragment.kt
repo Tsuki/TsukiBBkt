@@ -48,7 +48,6 @@ class HomeFragment : Fragment() {
       adapter = viewAdapter
     }
     animeListViewModel.animeList.observe(this, Observer {
-      // TODO remove if else
       animeListAdapter.loadDataSet(it)
     })
     val itemDecoration = ItemOffsetDecoration(context!!, R.dimen.item_offset)
