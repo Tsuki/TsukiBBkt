@@ -1,6 +1,7 @@
 package com.sukitsuki.tsukibb.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.AnimeListAdapter
 import com.sukitsuki.tsukibb.model.AnimeListViewModel
 
@@ -46,6 +48,12 @@ class HomeFragment : Fragment() {
       setHasFixedSize(true)
       layoutManager = viewManager
       adapter = viewAdapter
+
+    }
+    animeListAdapter.onItemClick = { it ->
+      val intent = Intent(context, AnimeDetailActivity::class.java)
+      intent.putExtra("animeList", it)
+      startActivity(intent)
     }
     animeListViewModel.animeList.observe(this, Observer {
       animeListAdapter.loadDataSet(it)

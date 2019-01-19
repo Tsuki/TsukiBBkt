@@ -89,10 +89,10 @@ interface TbbService {
   fun fetchAnimeList(): Flowable<List<AnimeList>>
 
   @GET("season_list/{season_list}")
-  fun fetchSeason(@Path("season_list") season_list: String): Flowable<String>
+  fun fetchSeason(@Path("season_list") season_list: Int): Flowable<String>
 
   @GET("anime_page_sp/{anime_page_sp}")
-  fun fetchPageSpecials(@Path("anime_page_sp") anime_page_sp: String): Flowable<String>
+  fun fetchPageSpecials(@Path("anime_page_sp") anime_page_sp: Int): Flowable<String>
 
   @POST("search")
   fun fetchSearchResults(@Body params: SearchBody): Flowable<String>
