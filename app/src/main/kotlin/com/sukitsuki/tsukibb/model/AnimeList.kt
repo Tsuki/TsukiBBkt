@@ -1,8 +1,15 @@
 package com.sukitsuki.tsukibb.model
 
+import android.annotation.SuppressLint
 import android.os.Parcelable
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.google.gson.annotations.SerializedName
+import com.sukitsuki.tsukibb.service.TbbService
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize
+
 
 @Parcelize
 data class AnimeList(
@@ -37,3 +44,23 @@ data class AnimeList(
   @SerializedName("season_title")
   val seasonTitle: String
 ) : Parcelable
+
+fun <T : Any?> MutableLiveData<T>.default(initialValue: T) = apply { setValue(initialValue) }
+
+class AnimeListViewModel : ViewModel() {
+  var animeList = MutableLiveData<List<AnimeList>>().default(emptyList())
+
+  init {
+    loadAnimeList()
+  }
+
+  @SuppressLint("CheckResult")
+  private fun loadAnimeList() {
+    TbbService.instance.fetchAnimeList()
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe {
+        animeList.value = it
+      }
+  }
+}

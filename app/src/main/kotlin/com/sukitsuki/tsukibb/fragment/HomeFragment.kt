@@ -8,18 +8,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DimenRes
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.sukitsuki.tsukibb.MainActivity
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.adapter.AnimeListAdapter
-import com.sukitsuki.tsukibb.model.AnimeList
+import com.sukitsuki.tsukibb.model.AnimeListViewModel
 
 
 class HomeFragment : Fragment() {
   private lateinit var recyclerView: RecyclerView
   private lateinit var viewAdapter: RecyclerView.Adapter<*>
   private lateinit var viewManager: RecyclerView.LayoutManager
+  private lateinit var animeListViewModel: AnimeListViewModel
+  private var animeListAdapter: AnimeListAdapter = AnimeListAdapter()
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    animeListViewModel = activity?.run {
+      ViewModelProviders.of(this).get(AnimeListViewModel::class.java)
+    } ?: throw Exception("Invalid Activity")
+  }
 
   override fun onAttach(context: Context?) {
     viewManager = GridLayoutManager(context, 3)
@@ -27,52 +37,8 @@ class HomeFragment : Fragment() {
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    val main: MainActivity = activity as MainActivity
-    val strtext = arguments?.getParcelableArrayList("animeList") ?: emptyList<AnimeList>()
-//    viewAdapter = AnimeListAdapter(main.animeList)
-    viewAdapter = AnimeListAdapter(
-      listOf(
-        AnimeList(
-          aired = 201810,
-          animeId = 228,
-          episodeTitle = "15",
-          isEnded = 0,
-          isHidden = 0,
-          lastUpdated = "2019 - 01 - 18 T15 :35:22.000Z",
-          nameChi = "魔法禁書目錄",
-          nameJpn = "とある魔術の禁書目録",
-          seasonId = 797,
-          seasonTitle = "第三季"
-        ),
-        AnimeList(
-          aired = 201810,
-          animeId = 228,
-          episodeTitle = "15",
-          isEnded = 0,
-          isHidden = 0,
-          lastUpdated = "2019 - 01 - 18 T15 :35:22.000Z",
-          nameChi = "魔法禁書目錄",
-          nameJpn = "とある魔術の禁書目録",
-          seasonId = 797,
-          seasonTitle = "第三季"
-        ),
-        AnimeList(
-          aired = 201810,
-          animeId = 228,
-          episodeTitle = "15",
-          isEnded = 0,
-          isHidden = 0,
-          lastUpdated = "2019 - 01 - 18 T15 :35:22.000Z",
-          nameChi = "魔法禁書目錄",
-          nameJpn = "とある魔術の禁書目録",
-          seasonId = 797,
-          seasonTitle = "第三季"
-        )
-      )
-    )
-
+    viewAdapter = animeListAdapter
     return inflater.inflate(R.layout.fragment_home, container, false)
-//    return super.onCreateView(inflater, container, savedInstanceState)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,6 +47,10 @@ class HomeFragment : Fragment() {
       layoutManager = viewManager
       adapter = viewAdapter
     }
+    animeListViewModel.animeList.observe(this, Observer {
+      // TODO remove if else
+      animeListAdapter.loadDataSet(if (it.isEmpty()) it else it.subList(0, 6))
+    })
     val itemDecoration = ItemOffsetDecoration(context!!, R.dimen.item_offset)
     recyclerView.addItemDecoration(itemDecoration)
     super.onViewCreated(view, savedInstanceState)

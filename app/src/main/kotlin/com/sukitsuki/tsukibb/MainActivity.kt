@@ -14,7 +14,6 @@ import com.google.android.material.navigation.NavigationView
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.HpData
 import com.sukitsuki.tsukibb.model.User
-import com.sukitsuki.tsukibb.service.TbbService
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -101,8 +100,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   }
 
   private fun initContext() {
-    this.hpData = TbbService.instance.fetchHPData().toFuture().get()
-    this.user = TbbService.instance.fetchUser().defaultIfEmpty(User(isNull = true)).toFuture().get()
-    this.animeList = TbbService.instance.fetchAnimeList().toFuture().get()
+//    this.hpData = TbbService.instance.fetchHPData().toFuture().get()
+//    TbbService.instance.fetchUser().switchIfEmpty { User(isNull = true) }.subscribe { this.user = it }
+//    this.animeList = TbbService.instance.fetchAnimeList().toFuture().get()
   }
 }

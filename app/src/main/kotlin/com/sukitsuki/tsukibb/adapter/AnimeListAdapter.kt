@@ -10,7 +10,13 @@ import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.model.AnimeList
 
 
-class AnimeListAdapter(private val dataSet: List<AnimeList>) : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
+class AnimeListAdapter : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
+  var dataSet: List<AnimeList> = emptyList()
+
+  fun loadDataSet(newDataSet: List<AnimeList>) {
+    dataSet = newDataSet
+    this.notifyDataSetChanged()
+  }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     val textView =
@@ -27,6 +33,5 @@ class AnimeListAdapter(private val dataSet: List<AnimeList>) : RecyclerView.Adap
 
   class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val animeImage: ImageView = v.findViewById(R.id.anime_image)
-
   }
 }
