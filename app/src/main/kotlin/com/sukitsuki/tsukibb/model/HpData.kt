@@ -1,7 +1,13 @@
 package com.sukitsuki.tsukibb.model
 
 import android.os.Parcelable
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.google.gson.annotations.SerializedName
+import com.sukitsuki.tsukibb.service.TbbService
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -63,5 +69,22 @@ data class HpData(
         val path: String
       ) : Parcelable
     }
+  }
+}
+
+class HpDataViewModel : ViewModel() {
+  var hpData = MutableLiveData<HpData>()
+
+  init {
+    init()
+  }
+
+  private fun init(): Disposable? {
+    return TbbService.instance.fetchHPData()
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe {
+        hpData.value = it
+      }
   }
 }
