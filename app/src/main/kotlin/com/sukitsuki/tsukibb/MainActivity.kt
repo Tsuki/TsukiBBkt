@@ -1,8 +1,11 @@
 package com.sukitsuki.tsukibb
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -18,16 +21,15 @@ import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-  lateinit var hpData: HpData
-  lateinit var user: User
-  lateinit var animeList: Array<AnimeList>
-  var manager = this.supportFragmentManager
+  private lateinit var hpData: HpData
+  private lateinit var user: User
+  private lateinit var animeList: Array<AnimeList>
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     val toolbar: Toolbar = findViewById(R.id.toolbar)
-//    support
-//    setSupportActionBar(toolbar)
+    setSupportActionBar(toolbar)
 
     val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
     val navView: NavigationView = findViewById(R.id.nav_view)
@@ -39,12 +41,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     navView.setNavigationItemSelectedListener(this)
 
-//    val progress: ProgressBar = findViewById(R.id.progressBar)
+    val progressBar: ProgressBar = findViewById(R.id.progressBar)
 
     doAsync {
       initContext()
       uiThread {
-        //        progress.visibility = View.GONE
+        progressBar.visibility = View.GONE
       }
     }
 
@@ -88,6 +90,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
       }
       R.id.nav_send -> {
+
+      }
+      else -> {
 
       }
     }
