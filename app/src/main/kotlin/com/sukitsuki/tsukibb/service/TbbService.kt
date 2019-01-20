@@ -3,6 +3,7 @@ package com.sukitsuki.tsukibb.service
 import com.google.gson.GsonBuilder
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.HpData
+import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.User
 import io.reactivex.Flowable
 import okhttp3.Interceptor
@@ -92,7 +93,7 @@ interface TbbService {
   fun fetchAnimeList(): Flowable<List<AnimeList>>
 
   @GET("season_list/{season_list}")
-  fun fetchSeason(@Path("season_list") season_list: Int): Flowable<String>
+  fun fetchSeason(@Path("season_list") season_list: Int): Flowable<Season>
 
   @GET("anime_page_sp/{anime_page_sp}")
   fun fetchPageSpecials(@Path("anime_page_sp") anime_page_sp: Int): Flowable<String>
