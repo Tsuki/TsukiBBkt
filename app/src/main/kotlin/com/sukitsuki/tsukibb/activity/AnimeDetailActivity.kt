@@ -3,16 +3,20 @@ package com.sukitsuki.tsukibb.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager.widget.PagerAdapter
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.fragment.EpisodesListFragment
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.Season
+import com.sukitsuki.tsukibb.model.SeasonsItem
 import com.sukitsuki.tsukibb.service.TbbService
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -26,14 +30,15 @@ class AnimeDetailActivity : AppCompatActivity() {
   private lateinit var season: Season
   private lateinit var pagesp: String
   private lateinit var viewPager: ViewPager
+  private var fragment = mutableListOf<Fragment>()
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val intent = this.intent
     val animeList = intent.getParcelableExtra<AnimeList>("animeList")
     setContentView(R.layout.activity_anime_detail)
     toolbar = supportActionBar
-    tabLayout = findViewById(R.id.sessionTab)
     progressBar = findViewById(R.id.playerProgressBar)
+    tabLayout = findViewById(R.id.sessionTab)
     viewPager = findViewById(R.id.episodesListView)
     doAsync {
       season = TbbService.instance.fetchSeason(animeList.animeId).toFuture().get()
@@ -42,24 +47,30 @@ class AnimeDetailActivity : AppCompatActivity() {
       Log.d(tag, pagesp)
       uiThread {
         tabLayout.removeAllTabs()
-        season.list.seasons?.forEach { i -> tabLayout.addTab(tabLayout.newTab().setText(i.seasonTitle)) }
-//        viewPager.adapter = EpisodesListPageViewAdapter()
+        season.list.seasons.forEach { i: SeasonsItem ->
+          val episodesListFragment = EpisodesListFragment()
+          episodesListFragment.arguments = bundleOf("SeasonsItem" to i)
+          fragment.add(episodesListFragment)
+        }
+        viewPager.adapter = EpisodesListFragmentAdapter(supportFragmentManager)
+        tabLayout.setupWithViewPager(viewPager)
         progressBar.visibility = View.GONE
       }
     }
   }
 
-  inner class EpisodesListPageViewAdapter : PagerAdapter() {
-    override fun isViewFromObject(view: View, o: Any): Boolean {
-      return o == view
+
+  inner class EpisodesListFragmentAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
+    override fun getPageTitle(position: Int): CharSequence? {
+      return season.list.seasons[position].seasonTitle
+    }
+
+    override fun getItem(position: Int): Fragment {
+      return fragment[position]
     }
 
     override fun getCount(): Int {
-      return season.list.seasons?.size ?: 0
-    }
-
-    override fun destroyItem(container: ViewGroup, position: Int, o: Any) {
-      container.removeView(o as View)
+      return season.list.seasons.size
     }
   }
 }

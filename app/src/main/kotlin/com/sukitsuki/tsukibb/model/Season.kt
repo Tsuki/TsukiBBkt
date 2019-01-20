@@ -1,8 +1,11 @@
 package com.sukitsuki.tsukibb.model
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Anime(
   @SerializedName("is_ended")
   val isEnded: Int = 0,
@@ -20,9 +23,9 @@ data class Anime(
   val nameJpn: String = "",
   @SerializedName("tags")
   val tags: List<TagsItem>?
-)
+) : Parcelable
 
-
+@Parcelize
 data class EpisodesItem(
   @SerializedName("duration")
   val duration: Int = 0,
@@ -32,9 +35,9 @@ data class EpisodesItem(
   val id: String = "",
   @SerializedName("title")
   val title: String = ""
-)
+) : Parcelable
 
-
+@Parcelize
 data class TagsItem(
   @SerializedName("color")
   val color: String = "",
@@ -42,9 +45,9 @@ data class TagsItem(
   val name: String = "",
   @SerializedName("id")
   val id: Int = 0
-)
+) : Parcelable
 
-
+@Parcelize
 data class SeasonsItem(
   @SerializedName("studio")
   val studio: String = "",
@@ -63,18 +66,18 @@ data class SeasonsItem(
   @SerializedName("anime_id")
   val animeId: Int = 0,
   @SerializedName("episodes")
-  val episodes: List<EpisodesItem>?
-)
+  val episodes: List<EpisodesItem>
+) : Parcelable
 
-
+@Parcelize
 data class SeasonList(
   @SerializedName("seasons")
-  val seasons: List<SeasonsItem>?,
+  val seasons: List<SeasonsItem>,
   @SerializedName("anime")
   val anime: Anime
-)
+) : Parcelable
 
-
+@Parcelize
 data class Season(
   @SerializedName("success")
   val success: Boolean = false,
@@ -82,6 +85,6 @@ data class Season(
   val list: SeasonList,
   @SerializedName("status")
   val status: Int = 0
-)
+) : Parcelable
 
 
