@@ -71,19 +71,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // Handle navigation view item clicks here.
     when (item.itemId) {
       R.id.nav_home -> {
-        // Handle the camera action
       }
       R.id.nav_gallery -> {
-
       }
-      R.id.nav_share -> {
-
+      R.id.nav_favorite -> {
       }
-      R.id.nav_send -> {
-
+      R.id.nav_history -> {
+      }
+      R.id.nav_login -> {
+      }
+      R.id.nav_logout -> {
+      }
+      R.id.nav_download -> {
+      }
+      R.id.nav_setting -> {
       }
       else -> {
-
       }
     }
     val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)

@@ -16,4 +16,10 @@
     <string name="menu_send">Send</string>
     <string name="communicate">Communicate</string>
     <string name="anime_list">Anime List</string>
+    <string name="menu_favorite">Favorite</string>
+    <string name="menu_history">History</string>
+    <string name="menu_login">login</string>
+    <string name="menu_logout">logout</string>
+    <string name="menu_download">download</string>
+    <string name="menu_setting">setting</string>
 </resources>
