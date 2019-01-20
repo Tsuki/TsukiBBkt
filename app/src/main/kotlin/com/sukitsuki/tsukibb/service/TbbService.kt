@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.HpData
 import com.sukitsuki.tsukibb.model.User
-import com.sukitsuki.tsukibb.utils.LZString
 import io.reactivex.Flowable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -18,6 +17,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import rufus.lzstring4java.LZString
 import java.util.concurrent.TimeUnit
 
 

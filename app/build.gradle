@@ -29,6 +29,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            resValue("string", "PORT_NUMBER", "8081")
+        }
     }
     testOptions {
         // FIX log cat to mock
@@ -97,4 +100,7 @@ dependencies {
     implementation group: 'androidx.room', name: 'room-rxjava2', version: '2.0.0'
     kapt group: 'androidx.room', name: 'room-compiler', version: '2.0.0'
     testImplementation  group: 'androidx.room', name: 'room-testing', version: '2.0.0'
+
+    implementation 'com.github.wajda:lzstring4java:0.1'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 }
