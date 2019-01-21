@@ -1,30 +1,30 @@
-package com.sukitsuki.tsukibb.service
+package com.sukitsuki.tsukibb.repository
 
 import com.sukitsuki.tsukibb.model.HpData
 import com.sukitsuki.tsukibb.model.User
 import org.junit.Test
 
-class TbbServiceKtTest {
+class TbbRepositoryKtTest {
 
-  private val service: TbbService = TbbService.instance
+  private val repository: TbbRepository = TbbRepository.instance
 
   @Test
   fun test_fetchHPData() {
-    val execute = service.fetchHPData().toFuture()
+    val execute = repository.fetchHPData().toFuture()
     val body: HpData? = execute.get()
     println(body)
   }
 
   @Test
   fun test_fetchUser() {
-    val execute = service.fetchUser().defaultIfEmpty(User(isNull = true))
+    val execute = repository.fetchUser().defaultIfEmpty(User(isNull = true))
     val body = execute.toFuture().get()
     println(body)
   }
 
   @Test
   fun test_anime_list() {
-    val execute = service.fetchAnimeList().toFuture()
+    val execute = repository.fetchAnimeList().toFuture()
     val body = execute.get()
     println(body?.joinToString("\n"))
   }

@@ -1,4 +1,4 @@
-package com.sukitsuki.tsukibb.service
+package com.sukitsuki.tsukibb.repository
 
 import com.google.gson.GsonBuilder
 import com.sukitsuki.tsukibb.main.TbbEnum
@@ -28,7 +28,7 @@ const val BASE_URL = "https://ebb.io/_/"
 
 lateinit var retrofit: Retrofit
 
-fun <S> create(serviceClass: Class<S>): S {
+fun <S> create(repositoryClass: Class<S>): S {
   val gson = GsonBuilder()
     .serializeNulls()
     .create()
@@ -42,7 +42,7 @@ fun <S> create(serviceClass: Class<S>): S {
     .client(httpBuilder.build())
     .build()
 
-  return retrofit.create(serviceClass)
+  return retrofit.create(repositoryClass)
 }
 //login telegram https://oauth.telegram.org/auth?bot_id=639045451&origin=https%3A%2F%2Febb.io
 
@@ -71,10 +71,10 @@ val httpBuilder: OkHttpClient.Builder
     return httpClient
   }
 
-interface TbbService {
+interface TbbRepository {
   companion object {
     val instance by lazy {
-      create(TbbService::class.java)
+      create(TbbRepository::class.java)
     }
   }
 

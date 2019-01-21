@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.annotations.SerializedName
-import com.sukitsuki.tsukibb.service.TbbService
+import com.sukitsuki.tsukibb.repository.TbbRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -80,7 +80,7 @@ class HpDataViewModel : ViewModel() {
   }
 
   private fun init(): Disposable? {
-    return TbbService.instance.fetchHPData()
+    return TbbRepository.instance.fetchHPData()
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe {

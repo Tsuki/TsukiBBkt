@@ -31,7 +31,7 @@ import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.EpisodesItem
 import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.SeasonsItem
-import com.sukitsuki.tsukibb.service.TbbService
+import com.sukitsuki.tsukibb.repository.TbbRepository
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -92,8 +92,8 @@ class AnimeDetailActivity : AppCompatActivity(),
     playerView.player = exoPlayer
 
     doAsync {
-      season = TbbService.instance.fetchSeason(animeList.animeId).toFuture().get()
-      pageSp = TbbService.instance.fetchPageSpecials(animeList.seasonId).toFuture().get()
+      season = TbbRepository.instance.fetchSeason(animeList.animeId).toFuture().get()
+      pageSp = TbbRepository.instance.fetchPageSpecials(animeList.seasonId).toFuture().get()
       getListSuccess = season.status == 200
       uiThread {
         season.list.seasons.forEach { i: SeasonsItem ->

@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.annotations.SerializedName
-import com.sukitsuki.tsukibb.service.TbbService
+import com.sukitsuki.tsukibb.repository.TbbRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -54,7 +54,7 @@ class AnimeListViewModel : ViewModel() {
   }
 
   private fun init(): Disposable? {
-    return TbbService.instance.fetchAnimeList()
+    return TbbRepository.instance.fetchAnimeList()
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe {
