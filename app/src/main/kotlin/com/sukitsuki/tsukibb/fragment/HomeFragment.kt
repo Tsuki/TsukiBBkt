@@ -62,20 +62,21 @@ class HomeFragment : Fragment() {
     recyclerView.addItemDecoration(itemDecoration)
     super.onViewCreated(view, savedInstanceState)
   }
-}
 
-class ItemOffsetDecoration(private val mItemOffset: Int) : RecyclerView.ItemDecoration() {
+  class ItemOffsetDecoration(private val mItemOffset: Int) : RecyclerView.ItemDecoration() {
 
-  constructor(context: Context, @DimenRes itemOffsetId: Int) : this(
-    context.resources.getDimensionPixelSize(
-      itemOffsetId
+    constructor(context: Context, @DimenRes itemOffsetId: Int) : this(
+      context.resources.getDimensionPixelSize(
+        itemOffsetId
+      )
     )
-  )
 
-  override fun getItemOffsets(
-    outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
-  ) {
-    super.getItemOffsets(outRect, view, parent, state)
-    outRect.set(mItemOffset, mItemOffset, mItemOffset, mItemOffset)
+    override fun getItemOffsets(
+      outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
+    ) {
+      super.getItemOffsets(outRect, view, parent, state)
+      outRect.set(mItemOffset, mItemOffset, mItemOffset, mItemOffset)
+    }
   }
 }
+
