@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListAdapter
-import android.widget.ListView
 import androidx.fragment.app.ListFragment
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.adapter.EpisodesListAdapter
 import com.sukitsuki.tsukibb.model.SeasonsItem
 
 
@@ -18,7 +16,7 @@ class EpisodesListFragment : ListFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     item = arguments?.get("SeasonsItem") as SeasonsItem
     data = item.episodes.map { it.title }.sortedDescending()
-    listAdapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, data) as ListAdapter
+    listAdapter = EpisodesListAdapter(context!!, R.layout.item_episode, item.episodes)
     super.onCreate(savedInstanceState)
   }
 
@@ -26,12 +24,5 @@ class EpisodesListFragment : ListFragment() {
     return inflater.inflate(R.layout.view_episodes_item, container, false)
   }
 
-  override fun getView(): View? {
-    return super.getView()
-  }
-
-  override fun getListView(): ListView {
-    return super.getListView()
-  }
 }
 
