@@ -24,6 +24,7 @@ class EpisodesListAdapter(context: Context, resource: Int, items: List<EpisodesI
       mViewHolder = ViewHolder(inflate.findViewById(R.id.episodesTitle), inflate.findViewById(R.id.episodesDuration))
       inflate.tag = mViewHolder
     } else {
+      inflate = convertView
       mViewHolder = convertView.tag as ViewHolder
     }
     mViewHolder.episodesTitle.text = item?.title
