@@ -2,6 +2,7 @@ package com.sukitsuki.tsukibb.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.ActionBar
@@ -31,12 +32,17 @@ class AnimeDetailActivity : AppCompatActivity() {
   private lateinit var pagesp: String
   private lateinit var viewPager: ViewPager
   private var fragment = mutableListOf<Fragment>()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val intent = this.intent
     val animeList = intent.getParcelableExtra<AnimeList>("animeList")
     setContentView(R.layout.activity_anime_detail)
+
     toolbar = supportActionBar
+    toolbar?.setDisplayHomeAsUpEnabled(true)
+    toolbar?.setTitle(animeList.nameChi)
+
     progressBar = findViewById(R.id.playerProgressBar)
     tabLayout = findViewById(R.id.sessionTab)
     viewPager = findViewById(R.id.episodesListView)
@@ -46,7 +52,6 @@ class AnimeDetailActivity : AppCompatActivity() {
       pagesp = TbbService.instance.fetchPageSpecials(animeList.seasonId).toFuture().get()
       Log.d(tag, pagesp)
       uiThread {
-        tabLayout.removeAllTabs()
         season.list.seasons.forEach { i: SeasonsItem ->
           val episodesListFragment = EpisodesListFragment()
           episodesListFragment.arguments = bundleOf("SeasonsItem" to i)
@@ -59,6 +64,19 @@ class AnimeDetailActivity : AppCompatActivity() {
     }
   }
 
+  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    when (item?.itemId) {
+      // Use android.R.id rather than packaged id
+      android.R.id.home -> {
+        this.finish()
+        return true
+      }
+      else -> {
+        Log.d(tag, "itemId" + item?.itemId?.let { resources.getResourceName(it).split("\\/") })
+      }
+    }
+    return super.onOptionsItemSelected(item)
+  }
 
   inner class EpisodesListFragmentAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
     override fun getPageTitle(position: Int): CharSequence? {
