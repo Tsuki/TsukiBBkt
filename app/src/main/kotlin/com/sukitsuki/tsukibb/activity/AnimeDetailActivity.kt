@@ -41,16 +41,14 @@ class AnimeDetailActivity : AppCompatActivity() {
 
     toolbar = supportActionBar
     toolbar?.setDisplayHomeAsUpEnabled(true)
-    toolbar?.setTitle(animeList.nameChi)
+    toolbar?.title = animeList.nameChi
 
     progressBar = findViewById(R.id.playerProgressBar)
     tabLayout = findViewById(R.id.sessionTab)
     viewPager = findViewById(R.id.episodesListView)
     doAsync {
       season = TbbService.instance.fetchSeason(animeList.animeId).toFuture().get()
-      Log.d(tag, season.toString())
       pagesp = TbbService.instance.fetchPageSpecials(animeList.seasonId).toFuture().get()
-      Log.d(tag, pagesp)
       uiThread {
         season.list.seasons.forEach { i: SeasonsItem ->
           val episodesListFragment = EpisodesListFragment()
