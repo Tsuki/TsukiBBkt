@@ -1,6 +1,7 @@
 package com.sukitsuki.tsukibb.service
 
 import com.google.gson.GsonBuilder
+import com.sukitsuki.tsukibb.main.TbbEnum
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.HpData
 import com.sukitsuki.tsukibb.model.Season
@@ -54,7 +55,7 @@ val httpBuilder: OkHttpClient.Builder
         val request = original.newBuilder()
           .method(original.method(), original.body())
           // FIXME change to login method
-          .addHeader("user-agent","ebb Android v1.4.3a (Linux;Android 6.0)")
+          .addHeader("user-agent", TbbEnum.TbbUserAgent)
           .build()
         val response = chain.proceed(request)
         val body = response.body()

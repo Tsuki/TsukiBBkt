@@ -1,5 +1,6 @@
 package com.sukitsuki.tsukibb.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -11,7 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
+import com.google.android.exoplayer2.util.Util
 import com.google.android.material.tabs.TabLayout
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.fragment.EpisodesListFragment
@@ -31,9 +39,11 @@ class AnimeDetailActivity : AppCompatActivity() {
   private lateinit var tabLayout: TabLayout
   private lateinit var playerView: PlayerView
   private lateinit var season: Season
-  private lateinit var pagesp: String
+  private lateinit var pageSp: String
   private lateinit var viewPager: ViewPager
+  private lateinit var exoPlayer: SimpleExoPlayer
   private var fragment = mutableListOf<Fragment>()
+  private var getListSuccess = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -49,9 +59,13 @@ class AnimeDetailActivity : AppCompatActivity() {
     tabLayout = findViewById(R.id.sessionTab)
     viewPager = findViewById(R.id.episodesListView)
     playerView = findViewById(R.id.playerView)
+
+
+    exoPlayer = ExoPlayerFactory.newSimpleInstance(applicationContext, DefaultTrackSelector())
     doAsync {
       season = TbbService.instance.fetchSeason(animeList.animeId).toFuture().get()
-      pagesp = TbbService.instance.fetchPageSpecials(animeList.seasonId).toFuture().get()
+      pageSp = TbbService.instance.fetchPageSpecials(animeList.seasonId).toFuture().get()
+      getListSuccess = season.status == 200
       uiThread {
         season.list.seasons.forEach { i: SeasonsItem ->
           val episodesListFragment = EpisodesListFragment()
@@ -63,6 +77,7 @@ class AnimeDetailActivity : AppCompatActivity() {
       }
     }
   }
+
 
   override fun onOptionsItemSelected(item: MenuItem?): Boolean {
     when (item?.itemId) {
@@ -79,6 +94,16 @@ class AnimeDetailActivity : AppCompatActivity() {
   }
 
   fun openEpisodesItem(episodesItem: EpisodesItem) {
+    if (getListSuccess) {
+      val dataFactory = DefaultDataSourceFactory(applicationContext, Util.getUserAgent(applicationContext, "ebb"))
+      val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
+      httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/228x797")
+      val hlsMediaSource = HlsMediaSource.Factory(dataFactory).createMediaSource(Uri.parse(episodesItem.sl))
+      exoPlayer.prepare(hlsMediaSource)
+    }
+//    Util.getUserAgent(applicationContext, "TsukiBB")
+//    HlsMediaSource.Factory()
+//    exoPlayer.prepare(HlsMediaSource(uri, dataSourceFactory, handler, eventListener))
 //    playerView.player.
     Log.d(tag, "" + episodesItem)
   }
