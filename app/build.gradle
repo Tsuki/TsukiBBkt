@@ -27,8 +27,8 @@ android {
         androidTest.java.srcDirs = ['src/androidTest/kotlin']
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
     buildTypes {
         release {
@@ -53,24 +53,34 @@ ext.exo_version = '2.9.3'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.0.1'
-//    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-//    implementation 'com.android.support:support-v4:28.0.0'
-//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-//    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
-//    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    implementation 'androidx.core:core-ktx:1.0.1'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+
+    implementation 'androidx.room:room-runtime:2.0.0'
+    implementation 'androidx.room:room-migration:2.0.0'
+    implementation 'androidx.room:room-rxjava2:2.0.0'
+    testImplementation 'androidx.room:room-testing:2.0.0'
+    kapt 'androidx.room:room-compiler:2.0.0'
+
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation "com.google.android.exoplayer:exoplayer:2.9.3"
+    implementation "com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:13"
+
+
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
-    // https://mvnrepository.com/artifact/com.squareup.retrofit2/adapter-rxjava2
-    implementation group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: '2.5.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
 
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
@@ -78,38 +88,17 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
-    implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.5'
-    // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxkotlin
-    implementation group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.3.0'
-    // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
-    implementation group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.5'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
 
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
-//    implementation "org.jetbrains.anko:anko-sdk27:$anko_version" // sdk15, sdk19, sdk21, sdk23 are also available
-//    implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
-
-//    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
-
-    implementation "com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:13"
-
-    implementation "com.google.android.exoplayer:exoplayer:2.9.3"
-//    implementation "com.google.android.exoplayer:exoplayer-core:$exo_version"
-//    implementation "com.google.android.exoplayer:exoplayer-dash:$exo_version"
-//    implementation "com.google.android.exoplayer:exoplayer-ui:$exo_version"
-
-    implementation group: 'androidx.room', name: 'room-runtime', version: '2.0.0'
-    implementation group: 'androidx.room', name: 'room-migration', version: '2.0.0'
-    implementation group: 'androidx.room', name: 'room-rxjava2', version: '2.0.0'
-    kapt group: 'androidx.room', name: 'room-compiler', version: '2.0.0'
-    testImplementation group: 'androidx.room', name: 'room-testing', version: '2.0.0'
 
     implementation 'com.github.wajda:lzstring4java:0.1'
+    implementation 'net.danlew:android.joda:2.10.1.1'
+
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
-    implementation 'androidx.viewpager:viewpager:1.0.0'
+
 }
