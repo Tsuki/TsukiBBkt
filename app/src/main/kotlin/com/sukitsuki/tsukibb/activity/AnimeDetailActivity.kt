@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -14,10 +15,13 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES
+import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_DETECT_ACCESS_UNITS
+import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.tabs.TabLayout
@@ -32,7 +36,27 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 
-class AnimeDetailActivity : AppCompatActivity() {
+class AnimeDetailActivity : AppCompatActivity(),
+  View.OnClickListener,
+//  PlaybackPreparer,
+  PlayerControlView.VisibilityListener {
+  override fun onClick(v: View?) {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
+
+//  override fun preparePlayback() {
+//    initializePlayer()
+//    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//  }
+
+//  private fun initializePlayer() {
+//    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//  }
+
+  override fun onVisibilityChange(visibility: Int) {
+    Log.d(tag, "visibility: $visibility")
+  }
+
   private val tag: String = this.javaClass.simpleName
   private var toolbar: ActionBar? = null
   private lateinit var progressBar: ProgressBar
@@ -58,10 +82,15 @@ class AnimeDetailActivity : AppCompatActivity() {
     progressBar = findViewById(R.id.playerProgressBar)
     tabLayout = findViewById(R.id.sessionTab)
     viewPager = findViewById(R.id.episodesListView)
+
     playerView = findViewById(R.id.playerView)
+    playerView.setControllerVisibilityListener(this)
+    playerView.requestFocus()
 
 
     exoPlayer = ExoPlayerFactory.newSimpleInstance(applicationContext, DefaultTrackSelector())
+    playerView.player = exoPlayer
+
     doAsync {
       season = TbbService.instance.fetchSeason(animeList.animeId).toFuture().get()
       pageSp = TbbService.instance.fetchPageSpecials(animeList.seasonId).toFuture().get()
@@ -95,10 +124,15 @@ class AnimeDetailActivity : AppCompatActivity() {
 
   fun openEpisodesItem(episodesItem: EpisodesItem) {
     if (getListSuccess) {
-      val dataFactory = DefaultDataSourceFactory(applicationContext, Util.getUserAgent(applicationContext, "ebb"))
       val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
-      httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/228x797")
-      val hlsMediaSource = HlsMediaSource.Factory(dataFactory).createMediaSource(Uri.parse(episodesItem.sl))
+      httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")
+      val defaultHlsExtractorFactory =
+        DefaultHlsExtractorFactory(FLAG_DETECT_ACCESS_UNITS and FLAG_ALLOW_NON_IDR_KEYFRAMES)
+      val hlsMediaSource = HlsMediaSource.Factory(httpDataSourceFactory)
+        .setExtractorFactory(defaultHlsExtractorFactory)
+        .setAllowChunklessPreparation(true)
+        .createMediaSource(Uri.parse(episodesItem.sl))
+      exoPlayer.playWhenReady = true
       exoPlayer.prepare(hlsMediaSource)
     }
 //    Util.getUserAgent(applicationContext, "TsukiBB")
@@ -107,6 +141,7 @@ class AnimeDetailActivity : AppCompatActivity() {
 //    playerView.player.
     Log.d(tag, "" + episodesItem)
   }
+
 
   inner class EpisodesListFragmentAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
     override fun getPageTitle(position: Int): CharSequence? {

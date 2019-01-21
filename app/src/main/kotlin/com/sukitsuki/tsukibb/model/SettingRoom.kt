@@ -1,9 +1,9 @@
 package com.sukitsuki.tsukibb.model
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.room.RoomDatabase
-import androidx.room.Database
+import com.sukitsuki.tsukibb.utils.SingletonHolder
 
 
 @Entity(tableName = "settings", indices = [Index(value = ["key_k"], unique = true)])
@@ -40,4 +40,9 @@ interface SettingDataDao {
 @Database(entities = [SettingData::class], version = 1)
 abstract class TbbDatabase : RoomDatabase() {
   abstract fun settingDataDao(): SettingDataDao
+
+  companion object : SingletonHolder<TbbDatabase, Context>({
+    Room.databaseBuilder(it.applicationContext, TbbDatabase::class.java, "TbbDatabase.db").build()
+  })
+
 }
