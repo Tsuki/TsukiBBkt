@@ -1,6 +1,7 @@
 package com.sukitsuki.tsukibb.adapter
 
 import android.content.Context
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.model.EpisodesItem
-import java.time.Duration
+
 
 class EpisodesListAdapter(context: Context, resource: Int, items: List<EpisodesItem>) :
   ArrayAdapter<EpisodesItem>(context, resource, items), View.OnClickListener {
@@ -26,7 +27,7 @@ class EpisodesListAdapter(context: Context, resource: Int, items: List<EpisodesI
       mViewHolder = convertView.tag as ViewHolder
     }
     mViewHolder.episodesTitle.text = item?.title
-    mViewHolder.episodesDuration.text = Duration.ofSeconds(item?.duration?.toLong() ?: 0).toString()
+    mViewHolder.episodesDuration.text = DateUtils.formatElapsedTime(item?.duration?.toLong() ?: 0)
     return inflate
   }
 
