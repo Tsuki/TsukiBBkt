@@ -57,6 +57,9 @@ class AnimeDetailActivity : AppCompatActivity(),
     Log.d(tag, "visibility: $visibility")
   }
 
+  //  @Inject
+  lateinit var exoPlayer: SimpleExoPlayer
+
   private val tag: String = this.javaClass.simpleName
   private var toolbar: ActionBar? = null
   private lateinit var progressBar: ProgressBar
@@ -65,7 +68,6 @@ class AnimeDetailActivity : AppCompatActivity(),
   private lateinit var season: Season
   private lateinit var pageSp: String
   private lateinit var viewPager: ViewPager
-  private lateinit var exoPlayer: SimpleExoPlayer
   private var fragment = mutableListOf<Fragment>()
   private var getListSuccess = false
 
@@ -87,7 +89,7 @@ class AnimeDetailActivity : AppCompatActivity(),
     playerView.setControllerVisibilityListener(this)
     playerView.requestFocus()
 
-
+//    DaggerAnimeDetailActivityComponent.builder().build().inject(this)
     exoPlayer = ExoPlayerFactory.newSimpleInstance(applicationContext, DefaultTrackSelector())
     playerView.player = exoPlayer
 
