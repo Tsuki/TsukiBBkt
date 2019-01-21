@@ -2,7 +2,6 @@ package com.sukitsuki.tsukibb.adapter
 
 import android.content.Context
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,7 @@ import com.sukitsuki.tsukibb.model.EpisodesItem
 
 
 class EpisodesListAdapter(context: Context, resource: Int, items: List<EpisodesItem>) :
-  ArrayAdapter<EpisodesItem>(context, resource, items), View.OnClickListener {
-  private val tag: String = this.javaClass.simpleName
+  ArrayAdapter<EpisodesItem>(context, resource, items) {
   private lateinit var mViewHolder: ViewHolder
   private lateinit var inflate: View
   override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -30,10 +28,6 @@ class EpisodesListAdapter(context: Context, resource: Int, items: List<EpisodesI
     mViewHolder.episodesTitle.text = item?.title
     mViewHolder.episodesDuration.text = DateUtils.formatElapsedTime(item?.duration?.toLong() ?: 0)
     return inflate
-  }
-
-  override fun onClick(view: View?) {
-    Log.d(tag, view.toString())
   }
 
   private data class ViewHolder @JvmOverloads constructor(

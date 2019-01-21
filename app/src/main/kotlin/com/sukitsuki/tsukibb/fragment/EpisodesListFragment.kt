@@ -1,22 +1,23 @@
 package com.sukitsuki.tsukibb.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.EpisodesListAdapter
+import com.sukitsuki.tsukibb.model.EpisodesItem
 import com.sukitsuki.tsukibb.model.SeasonsItem
 
 
 class EpisodesListFragment : ListFragment() {
-  private lateinit var item: SeasonsItem
+  private lateinit var items: List<EpisodesItem>
   override fun onCreate(savedInstanceState: Bundle?) {
-    item = arguments?.get("SeasonsItem") as SeasonsItem
-    listAdapter = EpisodesListAdapter(context!!, R.layout.item_episode, item.episodes.sortedByDescending { it.title })
+    items = (arguments?.get("SeasonsItem") as SeasonsItem).episodes.sortedByDescending { it.title }
+    listAdapter = EpisodesListAdapter(context!!, R.layout.item_episode, items)
     super.onCreate(savedInstanceState)
   }
 
@@ -25,7 +26,8 @@ class EpisodesListFragment : ListFragment() {
   }
 
   override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
-    Log.d(tag, "onListItemClick" + position)
+    val animeDetailActivity = activity as AnimeDetailActivity
+    animeDetailActivity.openEpisodesItem(items[position])
     super.onListItemClick(l, v, position, id)
   }
 }

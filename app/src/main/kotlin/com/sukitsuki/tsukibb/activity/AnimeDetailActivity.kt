@@ -3,7 +3,6 @@ package com.sukitsuki.tsukibb.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.material.tabs.TabLayout
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.fragment.EpisodesListFragment
 import com.sukitsuki.tsukibb.model.AnimeList
+import com.sukitsuki.tsukibb.model.EpisodesItem
 import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.SeasonsItem
 import com.sukitsuki.tsukibb.service.TbbService
@@ -28,6 +29,7 @@ class AnimeDetailActivity : AppCompatActivity() {
   private var toolbar: ActionBar? = null
   private lateinit var progressBar: ProgressBar
   private lateinit var tabLayout: TabLayout
+  private lateinit var playerView: PlayerView
   private lateinit var season: Season
   private lateinit var pagesp: String
   private lateinit var viewPager: ViewPager
@@ -46,6 +48,7 @@ class AnimeDetailActivity : AppCompatActivity() {
     progressBar = findViewById(R.id.playerProgressBar)
     tabLayout = findViewById(R.id.sessionTab)
     viewPager = findViewById(R.id.episodesListView)
+    playerView = findViewById(R.id.playerView)
     doAsync {
       season = TbbService.instance.fetchSeason(animeList.animeId).toFuture().get()
       pagesp = TbbService.instance.fetchPageSpecials(animeList.seasonId).toFuture().get()
@@ -57,7 +60,6 @@ class AnimeDetailActivity : AppCompatActivity() {
         }
         viewPager.adapter = EpisodesListFragmentAdapter(supportFragmentManager)
         tabLayout.setupWithViewPager(viewPager)
-        progressBar.visibility = View.GONE
       }
     }
   }
@@ -74,6 +76,11 @@ class AnimeDetailActivity : AppCompatActivity() {
       }
     }
     return super.onOptionsItemSelected(item)
+  }
+
+  fun openEpisodesItem(episodesItem: EpisodesItem) {
+//    playerView.player.
+    Log.d(tag, "" + episodesItem)
   }
 
   inner class EpisodesListFragmentAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
