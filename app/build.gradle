@@ -121,4 +121,6 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.21'
     kapt 'com.google.dagger:dagger-android-processor:2.21'
 
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.0.0'
 }
