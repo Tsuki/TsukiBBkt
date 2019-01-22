@@ -7,10 +7,12 @@
 - [x] Anime list activity layout
 - [x] Anime detail activity layout
 - [x] Complete player HLS source
-- [ ] Dagger dependence injection refactor
+- [x] Dagger dependence injection refactor
 - [ ] Butterknife view bind refactor
 - [ ] Player notification service
 - [ ] Full screen player function
+- [ ] Picture in picture player
+- [ ] Split screen application
 - [ ] Save player history
 - [ ] Google login
 - [ ] Telegram login
