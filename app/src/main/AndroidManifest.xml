@@ -35,7 +35,11 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.AnimeDetailActivity" />
+        <activity
+            android:name=".activity.AnimeDetailActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true" />
         <activity android:name=".activity.LoginWebViewActivity" />
     </application>
 </manifest>
