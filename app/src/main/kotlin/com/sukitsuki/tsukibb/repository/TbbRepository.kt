@@ -6,7 +6,8 @@ import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.HpData
 import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.User
-import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.Observable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -79,46 +80,46 @@ interface TbbRepository {
   }
 
   @POST("logout")
-  fun logout(): Flowable<String>
+  fun logout(): Observable<String>
 
   @GET("user")
-  fun fetchUser(): Flowable<User>
+  fun fetchUser(): Maybe<User>
 
   @GET("seasons_watch_history")
-  fun fetchSeasonsWatchHistory(e: Any): Flowable<String>
+  fun fetchSeasonsWatchHistory(e: Any): Observable<String>
 
   @GET("hpdata")
-  fun fetchHPData(): Flowable<HpData>
+  fun fetchHPData(): Observable<HpData>
 
   @GET("anime_list")
-  fun fetchAnimeList(): Flowable<List<AnimeList>>
+  fun fetchAnimeList(): Observable<List<AnimeList>>
 
   @GET("season_list/{season_list}")
-  fun fetchSeason(@Path("season_list") season_list: Int): Flowable<Season>
+  fun fetchSeason(@Path("season_list") season_list: Int): Observable<Season>
 
   @GET("anime_page_sp/{anime_page_sp}")
-  fun fetchPageSpecials(@Path("anime_page_sp") anime_page_sp: Int): Flowable<String>
+  fun fetchPageSpecials(@Path("anime_page_sp") anime_page_sp: Int): Observable<String>
 
   @POST("search")
-  fun fetchSearchResults(@Body params: SearchBody): Flowable<String>
+  fun fetchSearchResults(@Body params: SearchBody): Observable<String>
 
   @POST("timeline_anime_list")
-  fun fetchTimelineAnimeList(@Body params: TimeLineBody): Flowable<String>
+  fun fetchTimelineAnimeList(@Body params: TimeLineBody): Observable<String>
 
   @GET("article/{article}")
-  fun fetchArticle(@Path("article") article: String): Flowable<String>
+  fun fetchArticle(@Path("article") article: String): Observable<String>
 
   @GET("watch_history")
-  fun fetchWatchHistory(): Flowable<String>
+  fun fetchWatchHistory(): Observable<String>
 
   @POST("update_watch_history")
-  fun updateWatchHistory(@Body e: Any): Flowable<String>
+  fun updateWatchHistory(@Body e: Any): Observable<String>
 
   @POST("remove_watch_history")
-  fun removeWatchHistory(@Body e: Any): Flowable<String>
+  fun removeWatchHistory(@Body e: Any): Observable<String>
 
   @POST("report_comment")
-  fun reportCommentAbuse(@Body e: Any): Flowable<String>
+  fun reportCommentAbuse(@Body e: Any): Observable<String>
 }
 
 data class TimeLineBody(val year: String, val season: String)

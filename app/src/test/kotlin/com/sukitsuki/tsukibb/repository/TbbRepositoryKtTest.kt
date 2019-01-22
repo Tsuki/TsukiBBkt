@@ -1,7 +1,6 @@
 package com.sukitsuki.tsukibb.repository
 
-import com.sukitsuki.tsukibb.model.HpData
-import com.sukitsuki.tsukibb.model.User
+import org.junit.Assert
 import org.junit.Test
 
 class TbbRepositoryKtTest {
@@ -10,23 +9,26 @@ class TbbRepositoryKtTest {
 
   @Test
   fun test_fetchHPData() {
-    val execute = repository.fetchHPData().toFuture()
-    val body: HpData? = execute.get()
+    val execute = repository.fetchHPData()
+    val body = execute.blockingFirst()
     println(body)
+    Assert.assertNotNull("fetchHPData", body)
   }
 
   @Test
   fun test_fetchUser() {
-    val execute = repository.fetchUser().defaultIfEmpty(User(isNull = true))
-    val body = execute.toFuture().get()
+    val execute = repository.fetchUser()
+    val body = execute.blockingGet()
     println(body)
+    Assert.assertNull("fetchUser", body)
   }
 
   @Test
   fun test_anime_list() {
-    val execute = repository.fetchAnimeList().toFuture()
-    val body = execute.get()
-    println(body?.joinToString("\n"))
+    val execute = repository.fetchAnimeList()
+    val body = execute.blockingFirst()
+    println(body.joinToString("\n"))
+    Assert.assertTrue(body.isNotEmpty())
   }
 
 }
