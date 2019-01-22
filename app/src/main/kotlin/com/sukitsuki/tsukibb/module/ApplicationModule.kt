@@ -1,14 +1,17 @@
 package com.sukitsuki.tsukibb.module
 
 import android.app.Application
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-abstract class ApplicationModule(private val mApplication: Application) {
+class ApplicationModule(private val mApplication: Application) {
 
-  @Binds
+
+  @Provides
   @Singleton
-  abstract fun providesApplication(app: Application): Application
+  fun providesApplication(app: Application): Application {
+    return app
+  }
 }
