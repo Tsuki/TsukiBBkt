@@ -17,11 +17,14 @@ import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.
 import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.PlayerControlView
+import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.tabs.TabLayout
+import com.squareup.picasso.Picasso
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.adapter.DescriptionAdapter
 import com.sukitsuki.tsukibb.fragment.EpisodesListFragment
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.EpisodesItem
@@ -61,51 +64,57 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
 
   @Inject
   lateinit var exoPlayer: SimpleExoPlayer
+  @Inject
+  lateinit var playerNotificationManager: PlayerNotificationManager
+  @Inject
+  lateinit var descriptionAdapter: DescriptionAdapter
 
   private val tag: String = this.javaClass.simpleName
   private var toolbar: ActionBar? = null
-  private lateinit var progressBar: ProgressBar
-  private lateinit var tabLayout: TabLayout
-  private lateinit var playerView: PlayerView
-  private lateinit var season: Season
-  private lateinit var pageSp: String
-  private lateinit var viewPager: ViewPager
+  private lateinit var mProgressBar: ProgressBar
+  private lateinit var mTabLayout: TabLayout
+  private lateinit var mPlayerView: PlayerView
+  private lateinit var mSeason: Season
+  private lateinit var mPageSp: String
+  private lateinit var mViewPager: ViewPager
+  private lateinit var mAnimeList: AnimeList
+  private lateinit var mPicasso: Picasso
   private var fragment = mutableListOf<Fragment>()
   private var getListSuccess = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val intent = this.intent
-    val animeList = intent.getParcelableExtra<AnimeList>("animeList")
+    mAnimeList = intent.getParcelableExtra("animeList")
     setContentView(R.layout.activity_anime_detail)
-
+    mPicasso = Picasso.get()
     toolbar = supportActionBar
     toolbar?.setDisplayHomeAsUpEnabled(true)
-    toolbar?.title = animeList.nameChi
+    toolbar?.title = mAnimeList.nameChi
 
-    progressBar = findViewById(R.id.playerProgressBar)
-    tabLayout = findViewById(R.id.sessionTab)
-    viewPager = findViewById(R.id.episodesListView)
+    mProgressBar = findViewById(R.id.playerProgressBar)
+    mTabLayout = findViewById(R.id.sessionTab)
+    mViewPager = findViewById(R.id.episodesListView)
 
-    playerView = findViewById(R.id.playerView)
-    playerView.setControllerVisibilityListener(this)
-    playerView.requestFocus()
+    mPlayerView = findViewById(R.id.playerView)
+    mPlayerView.setControllerVisibilityListener(this)
+    mPlayerView.requestFocus()
 
     Log.d(this.javaClass.simpleName, "" + exoPlayer)
-    playerView.player = exoPlayer
+    mPlayerView.player = exoPlayer
 
     doAsync {
-      season = TbbRepository.instance.fetchSeason(animeList.animeId).toFuture().get()
-      pageSp = TbbRepository.instance.fetchPageSpecials(animeList.seasonId).toFuture().get()
-      getListSuccess = season.status == 200
+      mSeason = TbbRepository.instance.fetchSeason(mAnimeList.animeId).toFuture().get()
+      mPageSp = TbbRepository.instance.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
+      getListSuccess = mSeason.status == 200
       uiThread {
-        season.list.seasons.forEach { i: SeasonsItem ->
+        mSeason.list.seasons.forEach { i: SeasonsItem ->
           val episodesListFragment = EpisodesListFragment()
           episodesListFragment.arguments = bundleOf("SeasonsItem" to i)
           fragment.add(episodesListFragment)
         }
-        viewPager.adapter = EpisodesListFragmentAdapter(supportFragmentManager)
-        tabLayout.setupWithViewPager(viewPager)
+        mViewPager.adapter = EpisodesListFragmentAdapter(supportFragmentManager)
+        mTabLayout.setupWithViewPager(mViewPager)
       }
     }
   }
@@ -129,7 +138,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     return super.onOptionsItemSelected(item)
   }
 
-  fun openEpisodesItem(episodesItem: EpisodesItem) {
+  fun openEpisodesItem(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
     if (getListSuccess) {
       val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
       httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")
@@ -140,19 +149,21 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
         .setAllowChunklessPreparation(true)
         .createMediaSource(Uri.parse(episodesItem.sl))
       exoPlayer.playWhenReady = true
+      descriptionAdapter.contentTitle = mAnimeList.nameChi
+      descriptionAdapter.contentText = "${seasonsItem.seasonTitle} - ${episodesItem.title}"
+      doAsync {
+        descriptionAdapter.largeIcon =
+          mPicasso.load("https://seaside.ebb.io/${seasonsItem.animeId}x${seasonsItem.id}.jpg").get()
+      }
+      playerNotificationManager
       exoPlayer.prepare(hlsMediaSource)
     }
-//    Util.getUserAgent(applicationContext, "TsukiBB")
-//    HlsMediaSource.Factory()
-//    exoPlayer.prepare(HlsMediaSource(uri, dataSourceFactory, handler, eventListener))
-//    playerView.player.
-    Log.d(tag, "" + episodesItem)
   }
 
 
   inner class EpisodesListFragmentAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
     override fun getPageTitle(position: Int): CharSequence? {
-      return season.list.seasons[position].seasonTitle
+      return mSeason.list.seasons[position].seasonTitle
     }
 
     override fun getItem(position: Int): Fragment {
@@ -160,7 +171,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     }
 
     override fun getCount(): Int {
-      return season.list.seasons.size
+      return mSeason.list.seasons.size
     }
   }
 }

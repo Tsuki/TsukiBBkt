@@ -21,14 +21,16 @@ class ExoPlayerModule {
 
   @Provides
   @Singleton
-  fun providesPlayerNotificationManager(app: Application): PlayerNotificationManager {
+  fun providesDescriptionAdapter(app: Application): DescriptionAdapter {
+    return DescriptionAdapter(app)
+  }
 
-    return PlayerNotificationManager.createWithNotificationChannel(
-      app.applicationContext,
-      "CHANNEL_ID",
-      R.string.exo_download_notification_channel_name,
-      1000,
-      DescriptionAdapter(app)
-    )
+  @Provides
+  @Singleton
+  fun providesPlayerNotificationManager(app: Application, adapter: DescriptionAdapter): PlayerNotificationManager {
+    return PlayerNotificationManager
+      .createWithNotificationChannel(
+        app.applicationContext, "CHANNEL_ID", R.string.exo_download_notification_channel_name, 1000, adapter
+      )
   }
 }

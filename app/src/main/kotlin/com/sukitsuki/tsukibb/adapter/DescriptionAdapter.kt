@@ -9,23 +9,25 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.sukitsuki.tsukibb.activity.MainActivity
 
 
-class DescriptionAdapter(val app: Application) : PlayerNotificationManager.MediaDescriptionAdapter {
-
+class DescriptionAdapter(private val app: Application) : PlayerNotificationManager.MediaDescriptionAdapter {
+  lateinit var contentText: String
+  lateinit var contentTitle: String
+  var largeIcon: Bitmap? = null
   override fun createCurrentContentIntent(player: Player?): PendingIntent? {
     val intent = Intent(app.applicationContext, MainActivity::class.java)
     return PendingIntent.getActivity(app.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
   }
 
   override fun getCurrentContentText(player: Player?): String? {
-    return "ContentText"
+    return contentText
   }
 
   override fun getCurrentContentTitle(player: Player?): String {
-    return "ContentTitle"
+    return contentTitle
   }
 
   override fun getCurrentLargeIcon(player: Player?, callback: PlayerNotificationManager.BitmapCallback?): Bitmap? {
-    return null
+    return largeIcon
   }
 
 }

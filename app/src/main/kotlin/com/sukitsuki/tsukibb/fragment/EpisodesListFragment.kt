@@ -14,10 +14,12 @@ import com.sukitsuki.tsukibb.model.SeasonsItem
 
 
 class EpisodesListFragment : ListFragment() {
-  private lateinit var items: List<EpisodesItem>
+  private lateinit var mItems: List<EpisodesItem>
+  private lateinit var mSeasonsItem: SeasonsItem
   override fun onCreate(savedInstanceState: Bundle?) {
-    items = (arguments?.get("SeasonsItem") as SeasonsItem).episodes.sortedByDescending { it.title }
-    listAdapter = EpisodesListAdapter(context!!, R.layout.item_episode, items)
+    mSeasonsItem = arguments?.get("SeasonsItem") as SeasonsItem
+    mItems = mSeasonsItem.episodes.sortedByDescending { it.title }
+    listAdapter = EpisodesListAdapter(context!!, R.layout.item_episode, mItems)
     super.onCreate(savedInstanceState)
   }
 
@@ -27,7 +29,7 @@ class EpisodesListFragment : ListFragment() {
 
   override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
     val animeDetailActivity = activity as AnimeDetailActivity
-    animeDetailActivity.openEpisodesItem(items[position])
+    animeDetailActivity.openEpisodesItem(mItems[position], mSeasonsItem.copy(episodes = emptyList()))
     super.onListItemClick(l, v, position, id)
   }
 }
