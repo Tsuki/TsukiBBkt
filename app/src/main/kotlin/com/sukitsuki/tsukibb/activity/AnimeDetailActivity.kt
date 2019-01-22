@@ -91,9 +91,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     playerView.setControllerVisibilityListener(this)
     playerView.requestFocus()
 
-//    DaggerAnimeDetailActivityComponent.builder().build().inject(this)
     Log.d(this.javaClass.simpleName, "" + exoPlayer)
-//    exoPlayer = ExoPlayerFactory.newSimpleInstance(applicationContext, DefaultTrackSelector())
     playerView.player = exoPlayer
 
     doAsync {

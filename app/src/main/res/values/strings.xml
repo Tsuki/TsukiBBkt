@@ -22,4 +22,5 @@
     <string name="menu_logout">logout</string>
     <string name="menu_download">download</string>
     <string name="menu_setting">setting</string>
+    <string name="exo_player_channel_name" translatable="false">exo_player_channel_name</string>
 </resources>

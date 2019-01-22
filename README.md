@@ -16,6 +16,7 @@
 - [ ] Save player history
 - [ ] Google login
 - [ ] Telegram login
+- [ ] Concatenating Source
 - [ ] Enhance player control
 - [ ] Enhance player gesture
 - [ ] Enhance player timeline preview

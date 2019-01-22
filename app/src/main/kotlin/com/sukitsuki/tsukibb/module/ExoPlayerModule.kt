@@ -4,6 +4,9 @@ import android.app.Application
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.PlayerNotificationManager
+import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.adapter.DescriptionAdapter
 import dagger.Provides
 import javax.inject.Singleton
 
@@ -14,5 +17,18 @@ class ExoPlayerModule {
   @Singleton
   fun providesExoPlayer(app: Application): SimpleExoPlayer {
     return ExoPlayerFactory.newSimpleInstance(app.applicationContext, DefaultTrackSelector())
+  }
+
+  @Provides
+  @Singleton
+  fun providesPlayerNotificationManager(app: Application): PlayerNotificationManager {
+
+    return PlayerNotificationManager.createWithNotificationChannel(
+      app.applicationContext,
+      "CHANNEL_ID",
+      R.string.exo_download_notification_channel_name,
+      1000,
+      DescriptionAdapter(app)
+    )
   }
 }
