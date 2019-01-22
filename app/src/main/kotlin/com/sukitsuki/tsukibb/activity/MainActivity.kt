@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.material.navigation.NavigationView
 import com.sukitsuki.tsukibb.R
 import dagger.android.AndroidInjector
@@ -37,6 +38,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     abstract fun bind(builder: Component.Builder): AndroidInjector.Factory<*>
   }
 
+  @Inject
+  lateinit var exoPlayer: SimpleExoPlayer
+  @Inject
+  lateinit var playerNotificationManager: PlayerNotificationManager
   @Inject
   fun logInjection() {
     Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
@@ -117,5 +122,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
     drawerLayout.closeDrawer(GravityCompat.START)
     return true
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    playerNotificationManager.setPlayer(null)
   }
 }
