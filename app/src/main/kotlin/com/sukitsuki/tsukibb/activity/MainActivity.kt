@@ -109,6 +109,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
       R.id.nav_history -> {
       }
       R.id.nav_login -> {
+        this.startActivity(Intent(this, LoginWebViewActivity::class.java))
       }
       R.id.nav_logout -> {
       }
@@ -117,6 +118,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
       R.id.nav_setting -> {
       }
       else -> {
+        return false
       }
     }
     val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
