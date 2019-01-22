@@ -1,13 +1,12 @@
 package com.sukitsuki.tsukibb.activity
 
-//import com.sukitsuki.tsukibb.module.ExoPlayerModule
-import android.app.Application
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.ProgressBar
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -30,37 +29,16 @@ import com.sukitsuki.tsukibb.model.EpisodesItem
 import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.SeasonsItem
 import com.sukitsuki.tsukibb.repository.TbbRepository
-import dagger.Binds
-import dagger.android.AndroidInjector
-import dagger.android.support.DaggerAppCompatActivity
-import dagger.multibindings.ClassKey
-import dagger.multibindings.IntoMap
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import javax.inject.Inject
 
 
-class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.VisibilityListener {
-
-  @dagger.Subcomponent(modules = [])
-  interface Component : AndroidInjector<AnimeDetailActivity> {
-    @dagger.Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<AnimeDetailActivity>()
-  }
-
-  @dagger.Module(subcomponents = [Component::class])
-  abstract class Module {
-    @Binds
-    @IntoMap
-    @ClassKey(AnimeDetailActivity::class)
-    abstract fun bind(builder: Component.Builder): AndroidInjector.Factory<*>
-  }
+class AnimeDetailActivity : AppCompatActivity(), PlayerControlView.VisibilityListener {
 
 
   //  @Inject
   lateinit var exoPlayer: SimpleExoPlayer
-  @Inject
-  lateinit var app: Application
+
   private val tag: String = this.javaClass.simpleName
   private var toolbar: ActionBar? = null
   private lateinit var progressBar: ProgressBar

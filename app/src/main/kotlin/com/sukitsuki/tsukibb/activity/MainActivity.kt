@@ -3,22 +3,51 @@ package com.sukitsuki.tsukibb.activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.material.navigation.NavigationView
 import com.sukitsuki.tsukibb.R
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
+import dagger.multibindings.IntoMap
+import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+  @dagger.Subcomponent(modules = [])
+  interface Component : AndroidInjector<MainActivity> {
+
+    @dagger.Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<MainActivity>()
+  }
+
+  @dagger.Module(subcomponents = [Component::class])
+  abstract class Module {
+    @dagger.Binds
+    @IntoMap
+    @ClassKey(MainActivity::class)
+    abstract fun bind(builder: Component.Builder): AndroidInjector.Factory<*>
+  }
+
+  @Inject
+  fun logInjection() {
+    Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
+  }
+
+  @Inject
+  lateinit var exoPlayer: SimpleExoPlayer
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    Log.d("exoPlayer", "exoPlayer: " + exoPlayer)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_main)
     val toolbar: Toolbar = findViewById(R.id.toolbar)
