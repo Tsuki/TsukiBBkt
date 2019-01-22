@@ -1,6 +1,5 @@
 package com.sukitsuki.tsukibb
 
-import android.app.Application
 import android.util.Log
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.activity.MainActivity
@@ -27,8 +26,6 @@ class TbbApplication : DaggerApplication() {
     ]
   )
   interface Component : AndroidInjector<TbbApplication> {
-
-    fun inject(application: Application)
     @dagger.Component.Builder
     abstract class Builder : AndroidInjector.Builder<TbbApplication>() {
       abstract fun plus(appModule: AppModule): Builder
