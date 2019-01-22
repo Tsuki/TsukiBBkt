@@ -1,25 +1,23 @@
 package com.sukitsuki.tsukibb.activity
 
+//import com.sukitsuki.tsukibb.module.ExoPlayerModule
+import android.app.Application
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_DETECT_ACCESS_UNITS
 import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
@@ -32,34 +30,37 @@ import com.sukitsuki.tsukibb.model.EpisodesItem
 import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.SeasonsItem
 import com.sukitsuki.tsukibb.repository.TbbRepository
+import dagger.Binds
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
+import dagger.multibindings.IntoMap
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import javax.inject.Inject
 
 
-class AnimeDetailActivity : AppCompatActivity(),
-  View.OnClickListener,
-//  PlaybackPreparer,
-  PlayerControlView.VisibilityListener {
-  override fun onClick(v: View?) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.VisibilityListener {
+
+  @dagger.Subcomponent(modules = [])
+  interface Component : AndroidInjector<AnimeDetailActivity> {
+    @dagger.Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<AnimeDetailActivity>()
   }
 
-//  override fun preparePlayback() {
-//    initializePlayer()
-//    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//  }
-
-//  private fun initializePlayer() {
-//    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//  }
-
-  override fun onVisibilityChange(visibility: Int) {
-    Log.d(tag, "visibility: $visibility")
+  @dagger.Module(subcomponents = [Component::class])
+  abstract class Module {
+    @Binds
+    @IntoMap
+    @ClassKey(AnimeDetailActivity::class)
+    abstract fun bind(builder: Component.Builder): AndroidInjector.Factory<*>
   }
+
 
   //  @Inject
   lateinit var exoPlayer: SimpleExoPlayer
-
+  @Inject
+  lateinit var app: Application
   private val tag: String = this.javaClass.simpleName
   private var toolbar: ActionBar? = null
   private lateinit var progressBar: ProgressBar
@@ -90,7 +91,8 @@ class AnimeDetailActivity : AppCompatActivity(),
     playerView.requestFocus()
 
 //    DaggerAnimeDetailActivityComponent.builder().build().inject(this)
-    exoPlayer = ExoPlayerFactory.newSimpleInstance(applicationContext, DefaultTrackSelector())
+    Log.d(this.javaClass.simpleName, "" + exoPlayer)
+//    exoPlayer = ExoPlayerFactory.newSimpleInstance(applicationContext, DefaultTrackSelector())
     playerView.player = exoPlayer
 
     doAsync {
@@ -109,6 +111,10 @@ class AnimeDetailActivity : AppCompatActivity(),
     }
   }
 
+
+  override fun onVisibilityChange(visibility: Int) {
+    Log.d(tag, "visibility: $visibility")
+  }
 
   override fun onOptionsItemSelected(item: MenuItem?): Boolean {
     when (item?.itemId) {
