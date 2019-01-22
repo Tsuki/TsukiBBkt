@@ -2,8 +2,10 @@ package com.sukitsuki.tsukibb
 
 import android.app.Activity
 import android.app.Application
-import com.sukitsuki.tsukibb.component.ApplicationComponent
-import com.sukitsuki.tsukibb.component.DaggerApplicationComponent
+import com.sukitsuki.tsukibb.component.AppComponent
+import com.sukitsuki.tsukibb.component.DaggerAppComponent
+import com.sukitsuki.tsukibb.module.AppModule
+import com.sukitsuki.tsukibb.module.ExoPlayerModule
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -20,15 +22,21 @@ class TbbApplication : Application(), HasActivityInjector {
     return dispatchingAndroidInjector
   }
 
-  private lateinit var applicationComponent: ApplicationComponent
+  private lateinit var applicationComponent: AppComponent
   override fun onCreate() {
     super.onCreate()
     JodaTimeAndroid.init(this)
-    applicationComponent = DaggerApplicationComponent.builder().build()
+    applicationComponent = DaggerAppComponent.builder()
+      .application(this)
+      .appModule(AppModule(this))
+      .exoPlayerModule(ExoPlayerModule())
+      .build()
     applicationComponent.inject(this)
+//    applicationComponent = DaggerApplicationComponent.builder().build()
+//    applicationComponent.inject(this)
   }
 
-  fun getApplicationComponent(): ApplicationComponent {
+  fun getApplicationComponent(): AppComponent {
     return applicationComponent
   }
 }
