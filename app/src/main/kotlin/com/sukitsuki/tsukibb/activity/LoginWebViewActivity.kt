@@ -14,6 +14,7 @@ import okhttp3.*
 
 class LoginWebViewActivity : AppCompatActivity() {
   private val url = "https://ebb.io/account/login"
+  private val telegramUrl = "https://oauth.telegram.org/auth?bot_id=639045451&origin=https%3A%2F%2Febb.io"
   private lateinit var webView: WebView
   private lateinit var cookies: List<Cookie>
 
