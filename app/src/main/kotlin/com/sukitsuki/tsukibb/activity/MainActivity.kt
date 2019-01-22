@@ -42,12 +42,8 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
   }
 
-  @Inject
-  lateinit var exoPlayer: SimpleExoPlayer
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Log.d("exoPlayer", "exoPlayer: " + exoPlayer)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_main)
     val toolbar: Toolbar = findViewById(R.id.toolbar)

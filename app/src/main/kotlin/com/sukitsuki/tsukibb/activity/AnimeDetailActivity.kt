@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.ProgressBar
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -29,14 +28,38 @@ import com.sukitsuki.tsukibb.model.EpisodesItem
 import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.SeasonsItem
 import com.sukitsuki.tsukibb.repository.TbbRepository
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
+import dagger.multibindings.IntoMap
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import javax.inject.Inject
 
 
-class AnimeDetailActivity : AppCompatActivity(), PlayerControlView.VisibilityListener {
+class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.VisibilityListener {
 
+  @dagger.Subcomponent(modules = [])
+  interface Component : AndroidInjector<AnimeDetailActivity> {
 
-  //  @Inject
+    @dagger.Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<AnimeDetailActivity>()
+  }
+
+  @dagger.Module(subcomponents = [Component::class])
+  abstract class Module {
+    @dagger.Binds
+    @IntoMap
+    @ClassKey(AnimeDetailActivity::class)
+    abstract fun bind(builder: Component.Builder): AndroidInjector.Factory<*>
+  }
+
+  @Inject
+  fun logInjection() {
+    Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
+  }
+
+  @Inject
   lateinit var exoPlayer: SimpleExoPlayer
 
   private val tag: String = this.javaClass.simpleName

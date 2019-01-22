@@ -2,6 +2,7 @@ package com.sukitsuki.tsukibb
 
 import android.app.Application
 import android.util.Log
+import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.activity.MainActivity
 import com.sukitsuki.tsukibb.module.AppModule
 import com.sukitsuki.tsukibb.module.ExoPlayerModule
@@ -20,6 +21,7 @@ class TbbApplication : DaggerApplication() {
     modules = [
       AndroidInjectionModule::class
       , MainActivity.Module::class
+      , AnimeDetailActivity.Module::class
       , AppModule::class
       , ExoPlayerModule::class
     ]
