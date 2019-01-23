@@ -14,6 +14,7 @@
 - [ ] Full screen player function
 - [ ] Picture in picture player
 - [ ] Save player history
+- [ ] Restore play offset
 - [ ] Google login
 - [ ] Telegram login WIP
 - [ ] Concatenating Source
