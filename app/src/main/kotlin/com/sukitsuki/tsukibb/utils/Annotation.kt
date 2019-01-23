@@ -17,6 +17,7 @@ annotation class App
 @Retention(RUNTIME)
 annotation class ExoPlayer
 
+@MustBeDocumented
 @Target(FUNCTION, PROPERTY_GETTER, PROPERTY_SETTER)
 @Retention(RUNTIME)
 @MapKey

@@ -29,7 +29,7 @@ class HomeFragment : DaggerFragment() {
   private lateinit var recyclerView: RecyclerView
   private lateinit var viewAdapter: RecyclerView.Adapter<*>
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var animeListViewModel: AnimeListViewModel
+  //  private lateinit var animeListViewModel: AnimeListViewModel
   private var animeListAdapter: AnimeListAdapter = AnimeListAdapter()
 
   @FragmentScope
@@ -41,6 +41,9 @@ class HomeFragment : DaggerFragment() {
 
   @Inject
   lateinit var viewModeFactory: DaggerViewModelFactory
+
+  @Inject
+  lateinit var animeListViewModel: AnimeListViewModel
 
   @Inject
   fun logInjection() {

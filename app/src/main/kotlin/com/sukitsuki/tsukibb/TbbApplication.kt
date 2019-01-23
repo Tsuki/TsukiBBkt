@@ -5,10 +5,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.activity.MainActivity
-import com.sukitsuki.tsukibb.module.AppModule
-import com.sukitsuki.tsukibb.module.ExoPlayerModule
-import com.sukitsuki.tsukibb.module.FragmentModule
-import com.sukitsuki.tsukibb.module.ViewModelModule
+import com.sukitsuki.tsukibb.module.*
 import com.sukitsuki.tsukibb.utils.NotificationListener
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
@@ -27,9 +24,10 @@ class TbbApplication : DaggerApplication() {
       , MainActivity.Module::class
       , AnimeDetailActivity.Module::class
       , AppModule::class
-      , ViewModelModule::class
       , ExoPlayerModule::class
       , FragmentModule::class
+      , ViewModelFactoryModule::class
+      , ViewModelModule::class
     ]
   )
   interface Component : AndroidInjector<TbbApplication> {
