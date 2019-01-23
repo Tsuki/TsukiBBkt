@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.AnimeListAdapter
+import com.sukitsuki.tsukibb.module.ViewModelModule
+import com.sukitsuki.tsukibb.utils.FragmentScope
 import com.sukitsuki.tsukibb.viewmodel.AnimeListViewModel
 import com.sukitsuki.tsukibb.viewmodel.DaggerViewModelFactory
+import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -28,8 +32,20 @@ class HomeFragment : DaggerFragment() {
   private lateinit var animeListViewModel: AnimeListViewModel
   private var animeListAdapter: AnimeListAdapter = AnimeListAdapter()
 
+  @FragmentScope
+  @dagger.Subcomponent(modules = [ViewModelModule::class])
+  interface Component : AndroidInjector<HomeFragment> {
+    @dagger.Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<HomeFragment>()
+  }
+
   @Inject
   lateinit var viewModeFactory: DaggerViewModelFactory
+
+  @Inject
+  fun logInjection() {
+    Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

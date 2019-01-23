@@ -18,6 +18,7 @@ annotation class App
 annotation class ExoPlayer
 
 @Target(FUNCTION, PROPERTY_GETTER, PROPERTY_SETTER)
+@Retention(RUNTIME)
 @MapKey
 annotation class ViewModelKey(val value: KClass<out ViewModel>)
 

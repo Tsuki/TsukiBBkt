@@ -7,6 +7,7 @@ import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.activity.MainActivity
 import com.sukitsuki.tsukibb.module.AppModule
 import com.sukitsuki.tsukibb.module.ExoPlayerModule
+import com.sukitsuki.tsukibb.module.FragmentModule
 import com.sukitsuki.tsukibb.module.ViewModelModule
 import com.sukitsuki.tsukibb.utils.NotificationListener
 import dagger.android.AndroidInjectionModule
@@ -26,8 +27,9 @@ class TbbApplication : DaggerApplication() {
       , MainActivity.Module::class
       , AnimeDetailActivity.Module::class
       , AppModule::class
-      , ExoPlayerModule::class
       , ViewModelModule::class
+      , ExoPlayerModule::class
+      , FragmentModule::class
     ]
   )
   interface Component : AndroidInjector<TbbApplication> {
