@@ -5,7 +5,7 @@ import org.junit.Test
 
 class TbbRepositoryKtTest {
 
-  private val repository: TbbRepository = TbbRepository.instance
+  private lateinit var repository: TbbRepository
 
   @Test
   fun test_fetchHPData() {

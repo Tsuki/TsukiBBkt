@@ -1,25 +1,34 @@
 package com.sukitsuki.tsukibb.utils
 
+import androidx.lifecycle.ViewModel
+import dagger.MapKey
 import javax.inject.Qualifier
 import javax.inject.Scope
+import kotlin.annotation.AnnotationRetention.RUNTIME
+import kotlin.annotation.AnnotationTarget.*
+import kotlin.reflect.KClass
 
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
+@Retention(RUNTIME)
 annotation class App
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
+@Retention(RUNTIME)
 annotation class ExoPlayer
 
+@Target(FUNCTION, PROPERTY_GETTER, PROPERTY_SETTER)
+@MapKey
+annotation class ViewModelKey(val value: KClass<out ViewModel>)
+
 @Scope
-@Retention(AnnotationRetention.RUNTIME)
+@Retention(RUNTIME)
 annotation class ActivityScope
 
 @Scope
-@Retention(AnnotationRetention.RUNTIME)
+@Retention(RUNTIME)
 annotation class ApplicationScope
 
 @Scope
-@Retention(AnnotationRetention.RUNTIME)
+@Retention(RUNTIME)
 annotation class FragmentScope

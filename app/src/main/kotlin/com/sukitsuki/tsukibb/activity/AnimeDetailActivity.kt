@@ -82,6 +82,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   private lateinit var mViewPager: ViewPager
   private lateinit var mAnimeList: AnimeList
   private lateinit var mPicasso: Picasso
+  private lateinit var mTbbRepository: TbbRepository
   private var fragment = mutableListOf<Fragment>()
   private var getListSuccess = false
 
@@ -107,8 +108,8 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     mPlayerView.player = exoPlayer
 
     doAsync {
-      mSeason = TbbRepository.instance.fetchSeason(mAnimeList.animeId).toFuture().get()
-      mPageSp = TbbRepository.instance.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
+      mSeason = mTbbRepository.fetchSeason(mAnimeList.animeId).toFuture().get()
+      mPageSp = mTbbRepository.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
       getListSuccess = mSeason.status == 200
       uiThread {
         mSeason.list.seasons.forEach { i: SeasonsItem ->

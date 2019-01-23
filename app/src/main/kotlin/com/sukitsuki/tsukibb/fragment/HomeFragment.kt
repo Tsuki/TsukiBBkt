@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.AnimeListAdapter
-import com.sukitsuki.tsukibb.model.AnimeListViewModel
+import com.sukitsuki.tsukibb.viewmodel.AnimeListViewModel
 
 
 class HomeFragment : Fragment() {

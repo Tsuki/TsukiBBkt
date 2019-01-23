@@ -1,9 +1,5 @@
-package com.sukitsuki.tsukibb.model
+package com.sukitsuki.tsukibb.utils
 
 import androidx.lifecycle.MutableLiveData
-
-interface Nullable {
-  val isNull: Boolean
-}
 
 fun <T : Any?> MutableLiveData<T>.default(initialValue: T) = apply { setValue(initialValue) }

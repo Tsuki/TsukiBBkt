@@ -11,7 +11,6 @@ data class User(
   val nickname: String = "",
 
   @SerializedName("photo_url")
-  val photoUrl: String = "",
+  val photoUrl: String = ""
 
-  override val isNull: Boolean = false
-) : Nullable
+)
