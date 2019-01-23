@@ -8,14 +8,14 @@
 - [x] Anime detail activity layout
 - [x] Complete player HLS source
 - [x] Dagger dependence injection refactor
+- [x] Player notification service
+- [x] Split screen application
 - [ ] Butterknife view bind refactor
-- [ ] Player notification service
 - [ ] Full screen player function
 - [ ] Picture in picture player
-- [ ] Split screen application
 - [ ] Save player history
 - [ ] Google login
-- [ ] Telegram login
+- [ ] Telegram login WIP
 - [ ] Concatenating Source
 - [ ] Enhance player control
 - [ ] Enhance player gesture
