@@ -28,6 +28,7 @@
 - [ ] Search by cate
 - [ ] List Layout
 - [ ] Theme preference
+- [ ] Download storage
 
 
 
