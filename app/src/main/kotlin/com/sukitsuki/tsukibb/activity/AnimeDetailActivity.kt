@@ -1,11 +1,14 @@
 package com.sukitsuki.tsukibb.activity
 
+import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -138,26 +141,46 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     return super.onOptionsItemSelected(item)
   }
 
+  private var mCurrentEpisodesItem: EpisodesItem = EpisodesItem()
   fun openEpisodesItem(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
     if (getListSuccess) {
-      val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
-      httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")
-      val defaultHlsExtractorFactory =
-        DefaultHlsExtractorFactory(FLAG_DETECT_ACCESS_UNITS and FLAG_ALLOW_NON_IDR_KEYFRAMES)
-      val hlsMediaSource = HlsMediaSource.Factory(httpDataSourceFactory)
-        .setExtractorFactory(defaultHlsExtractorFactory)
-        .setAllowChunklessPreparation(true)
-        .createMediaSource(Uri.parse(episodesItem.sl))
-      exoPlayer.playWhenReady = true
-      descriptionAdapter.contentTitle = mAnimeList.nameChi
-      descriptionAdapter.contentText = "${seasonsItem.seasonTitle} - ${episodesItem.title}"
-      doAsync {
-        descriptionAdapter.largeIcon =
-          mPicasso.load("https://seaside.ebb.io/${seasonsItem.animeId}x${seasonsItem.id}.jpg").get()
+      if (mCurrentEpisodesItem == episodesItem) {
+        return
       }
-      playerNotificationManager
-      exoPlayer.prepare(hlsMediaSource)
+      if (exoPlayer.playWhenReady) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this@AnimeDetailActivity, R.style.AppTheme)
+        builder.setMessage(getString(R.string.alert_sure_to_change))
+          .setPositiveButton("Yes") { _, which ->
+            if (which == DialogInterface.BUTTON_POSITIVE) replace(episodesItem, seasonsItem)
+          }
+          .setNegativeButton("No", null).show()
+      } else {
+        replace(episodesItem, seasonsItem)
+      }
+    } else {
+      Toast.makeText(applicationContext, R.string.noti_cannot_load_video_source, Toast.LENGTH_LONG).show()
     }
+  }
+
+  private fun replace(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
+    val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
+    httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")
+    val defaultHlsExtractorFactory =
+      DefaultHlsExtractorFactory(FLAG_DETECT_ACCESS_UNITS and FLAG_ALLOW_NON_IDR_KEYFRAMES)
+    val hlsMediaSource = HlsMediaSource.Factory(httpDataSourceFactory)
+      .setExtractorFactory(defaultHlsExtractorFactory)
+      .setAllowChunklessPreparation(true)
+      .createMediaSource(Uri.parse(episodesItem.sl))
+    exoPlayer.playWhenReady = true
+    descriptionAdapter.contentTitle = mAnimeList.nameChi
+    descriptionAdapter.contentText = "${seasonsItem.seasonTitle} - ${episodesItem.title}"
+    doAsync {
+      descriptionAdapter.largeIcon =
+        mPicasso.load("https://seaside.ebb.io/${seasonsItem.animeId}x${seasonsItem.id}.jpg").get()
+    }
+    playerNotificationManager
+    exoPlayer.prepare(hlsMediaSource)
+    mCurrentEpisodesItem = episodesItem
   }
 
 
