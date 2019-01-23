@@ -21,6 +21,14 @@
 - [ ] Enhance player control
 - [ ] Enhance player gesture
 - [ ] Enhance player timeline preview
+- [ ] Config shared preference
+- [ ] Config in SQLite
+- [ ] Cookie store
+- [ ] Search by tag
+- [ ] Search by cate
+- [ ] List Layout
+- [ ] Theme preference
+
 
 
 
