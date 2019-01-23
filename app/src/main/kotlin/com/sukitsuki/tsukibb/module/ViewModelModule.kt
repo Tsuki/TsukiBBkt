@@ -4,10 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sukitsuki.tsukibb.utils.ViewModelKey
 import com.sukitsuki.tsukibb.viewmodel.AnimeListViewModel
-import com.sukitsuki.tsukibb.viewmodel.ViewModelFactory
+import com.sukitsuki.tsukibb.viewmodel.DaggerViewModelFactory
 import dagger.Binds
 import dagger.multibindings.IntoMap
 
+@dagger.Module(includes = [])
 abstract class ViewModelModule {
 
   @Binds
@@ -16,5 +17,5 @@ abstract class ViewModelModule {
   abstract fun bindCodeDetailViewModel(viewModel: AnimeListViewModel): ViewModel
 
   @Binds
-  abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+  abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory
 }

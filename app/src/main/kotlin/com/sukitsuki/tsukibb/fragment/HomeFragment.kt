@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DimenRes
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,19 +16,25 @@ import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.AnimeListAdapter
 import com.sukitsuki.tsukibb.viewmodel.AnimeListViewModel
+import com.sukitsuki.tsukibb.viewmodel.DaggerViewModelFactory
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : DaggerFragment() {
   private lateinit var recyclerView: RecyclerView
   private lateinit var viewAdapter: RecyclerView.Adapter<*>
   private lateinit var viewManager: RecyclerView.LayoutManager
   private lateinit var animeListViewModel: AnimeListViewModel
   private var animeListAdapter: AnimeListAdapter = AnimeListAdapter()
 
+  @Inject
+  lateinit var viewModeFactory: DaggerViewModelFactory
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     animeListViewModel = activity?.run {
-      ViewModelProviders.of(this).get(AnimeListViewModel::class.java)
+      ViewModelProviders.of(this, viewModeFactory).get(AnimeListViewModel::class.java)
     } ?: throw Exception("Invalid Activity")
   }
 
