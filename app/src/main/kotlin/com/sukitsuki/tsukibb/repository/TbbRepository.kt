@@ -12,7 +12,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 
-interface TbbRepository : Repository {
+interface TbbRepository {
   @POST("logout")
   fun logout(): Observable<String>
 

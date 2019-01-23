@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.AnimeListAdapter
-import com.sukitsuki.tsukibb.module.ViewModelModule
-import com.sukitsuki.tsukibb.utils.FragmentScope
 import com.sukitsuki.tsukibb.viewmodel.AnimeListViewModel
 import com.sukitsuki.tsukibb.viewmodel.DaggerViewModelFactory
 import dagger.android.AndroidInjector
@@ -32,8 +30,7 @@ class HomeFragment : DaggerFragment() {
   //  private lateinit var animeListViewModel: AnimeListViewModel
   private var animeListAdapter: AnimeListAdapter = AnimeListAdapter()
 
-  @FragmentScope
-  @dagger.Subcomponent(modules = [ViewModelModule::class])
+  @dagger.Subcomponent(modules = [])
   interface Component : AndroidInjector<HomeFragment> {
     @dagger.Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<HomeFragment>()
