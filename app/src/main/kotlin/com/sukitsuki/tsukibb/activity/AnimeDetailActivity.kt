@@ -2,12 +2,12 @@ package com.sukitsuki.tsukibb.activity
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.SurfaceView
-import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
@@ -70,44 +70,43 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   lateinit var descriptionAdapter: DescriptionAdapter
   @Inject
   lateinit var mTbbRepository: TbbRepository
+  @Inject
+  lateinit var mCurrentEpisodesItem: EpisodesItem
 
-  private val tag: String = this.javaClass.simpleName
+  @BindView(R.id.playerProgressBar)
+  lateinit var mProgressBar: ProgressBar
+  @BindView(R.id.sessionTab)
+  lateinit var mTabLayout: TabLayout
+  @BindView(R.id.playerView)
+  lateinit var mPlayerView: PlayerView
+  @BindView(R.id.episodesListView)
+  lateinit var mViewPager: ViewPager
+
+  private val mResultCodeForFullscreenVideoActivity: Int = 100
   private var toolbar: ActionBar? = null
-  private lateinit var mProgressBar: ProgressBar
-  private lateinit var mTabLayout: TabLayout
-  private lateinit var mPlayerView: PlayerView
-
-  @BindView(R.id.exo_controller)
-  lateinit var mControlView: View
+  private var fragment = mutableListOf<Fragment>()
+  private var getListSuccess = false
 
   private lateinit var mSeason: Season
   private lateinit var mPageSp: String
-  private lateinit var mViewPager: ViewPager
   private lateinit var mAnimeList: AnimeList
   private lateinit var mPicasso: Picasso
-  private var fragment = mutableListOf<Fragment>()
-  private var getListSuccess = false
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val intent = this.intent
     mAnimeList = intent.getParcelableExtra("animeList")
     setContentView(R.layout.activity_anime_detail)
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     ButterKnife.bind(this)
-//    Log.d(this.javaClass.simpleName, "onCreate: $mControlView")
-//    ButterKnife.bind(this, mControlView)
     mPicasso = Picasso.get()
     toolbar = supportActionBar
     toolbar?.setDisplayHomeAsUpEnabled(true)
     toolbar?.title = mAnimeList.nameChi
+    Log.d(this.javaClass.simpleName, "mCurrentEpisodesItem: ${mCurrentEpisodesItem.hashCode()}")
+    Log.d(this.javaClass.simpleName, "descriptionAdapter: $descriptionAdapter")
 
-    mProgressBar = findViewById(R.id.playerProgressBar)
-    mTabLayout = findViewById(R.id.sessionTab)
-    mViewPager = findViewById(R.id.episodesListView)
-
-    mPlayerView = findViewById(R.id.playerView)
-
-    setupPlayerView()
     doAsync {
       mSeason = mTbbRepository.fetchSeason(mAnimeList.animeId).toFuture().get()
       mPageSp = mTbbRepository.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
@@ -134,7 +133,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
 
 
   override fun onVisibilityChange(visibility: Int) {
-    Log.d(tag, "visibility: $visibility")
+    Log.d(this.javaClass.simpleName, "visibility: $visibility")
   }
 
   override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -145,7 +144,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
         return true
       }
       else -> {
-        Log.d(tag, "itemId" + item?.itemId?.let { resources.getResourceName(it).split("\\/") })
+        Log.d(this.javaClass.simpleName, "itemId" + item?.itemId?.let { resources.getResourceName(it).split("\\/") })
       }
     }
     return super.onOptionsItemSelected(item)
@@ -154,11 +153,9 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   @OnClick(R.id.exo_fullscreen_button)
   internal fun fullscreen() {
     val intent = Intent(applicationContext, FullscreenVideoActivity::class.java)
-    startActivity(intent)
-//    ButterKnife.apply(headerViews, ALPHA_FADE)
+    startActivityForResult(intent, mResultCodeForFullscreenVideoActivity)
   }
 
-  private var mCurrentEpisodesItem: EpisodesItem = EpisodesItem()
   fun openEpisodesItem(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
     if (getListSuccess) {
       if (mCurrentEpisodesItem == episodesItem) {
@@ -180,6 +177,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   }
 
   private fun replace(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
+    setupPlayerView()
     val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
     httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")
     val defaultHlsExtractorFactory =
@@ -200,6 +198,11 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     mCurrentEpisodesItem = episodesItem
   }
 
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    setupPlayerView()
+    mPlayerView.player = exoPlayer
+  }
 
   inner class EpisodesListFragmentAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
     override fun getPageTitle(position: Int): CharSequence? {

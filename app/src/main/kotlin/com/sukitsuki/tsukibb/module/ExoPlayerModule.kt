@@ -7,6 +7,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.adapter.DescriptionAdapter
+import com.sukitsuki.tsukibb.model.EpisodesItem
 import dagger.Provides
 import javax.inject.Singleton
 
@@ -23,6 +24,12 @@ class ExoPlayerModule {
   @Singleton
   fun providesDescriptionAdapter(app: Application): DescriptionAdapter {
     return DescriptionAdapter(app)
+  }
+
+  @Provides
+  @Singleton
+  fun providesCurrentEpisodesItem(): EpisodesItem {
+    return EpisodesItem()
   }
 
   @Provides
