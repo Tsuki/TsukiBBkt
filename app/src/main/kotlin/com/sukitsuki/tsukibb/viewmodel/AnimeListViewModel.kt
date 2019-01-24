@@ -8,8 +8,9 @@ import com.sukitsuki.tsukibb.utils.default
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class AnimeListViewModel(repository: TbbRepository) : ViewModel() {
+class AnimeListViewModel @Inject constructor(repository: TbbRepository) : ViewModel() {
   var animeList = MutableLiveData<List<AnimeList>>().default(emptyList())
   private var disposable: Disposable
 
