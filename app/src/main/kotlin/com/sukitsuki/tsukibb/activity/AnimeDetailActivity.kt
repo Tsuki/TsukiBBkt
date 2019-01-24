@@ -29,7 +29,6 @@ import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_DETECT_ACCESS_UNITS
 import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
@@ -51,7 +50,7 @@ import org.jetbrains.anko.uiThread
 import javax.inject.Inject
 
 
-class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.VisibilityListener, Player.EventListener {
+class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
 
   @dagger.Subcomponent(modules = [])
   interface Component : AndroidInjector<AnimeDetailActivity> {
@@ -128,7 +127,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   private fun setupPlayerView() {
     exoPlayer.clearVideoSurface()
     exoPlayer.setVideoSurfaceView(mPlayerView.videoSurfaceView as SurfaceView)
-    mPlayerView.setControllerVisibilityListener(this)
     mPlayerView.requestFocus()
   }
 
@@ -138,10 +136,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     } else {
       mProgressBar.visibility = View.INVISIBLE
     }
-  }
-
-  override fun onVisibilityChange(visibility: Int) {
-    Log.d(this.javaClass.simpleName, "visibility: $visibility")
   }
 
   override fun onOptionsItemSelected(item: MenuItem?): Boolean {

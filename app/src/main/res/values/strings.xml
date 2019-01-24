@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">TsukiBB</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="nav_header_title">Guest</string>

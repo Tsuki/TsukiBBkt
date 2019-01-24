@@ -12,6 +12,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        resValue "string", "app_name", "TsukiBB"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -47,14 +48,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            resValue "string", "app_name", "TsukiBBDebug"
             applicationIdSuffix ".debug"
             resValue("string", "PORT_NUMBER", "8081")
         }
     }
     splits {
         abi {
-            def assembleReleaseTask = ['assembleRelease', ':app:assembleRelease']
-            enable gradle.startParameter.taskNames.any { assembleReleaseTask.contains(it) }
+//            def assembleReleaseTask = ['assembleRelease', ':app:assembleRelease']
+//            enable gradle.startParameter.taskNames.any { assembleReleaseTask.contains(it) }
+            enable false
             reset()
             include 'x86', 'armeabi-v7a'
             universalApk true

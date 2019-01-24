@@ -49,3 +49,8 @@
 
 # OkHttp platform used only on JVM and when Conscrypt dependency is available.
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
+
+#-keep class com.google.android.exoplayer2.** {*;}
+#-keep class com.google.android.exoplayer2.ext.** { *; }
+#-keep class com.google.android.exoplayer2.util.** { *; }
+-keep class com.google.android.exoplayer2.source.hls.** { *; }
