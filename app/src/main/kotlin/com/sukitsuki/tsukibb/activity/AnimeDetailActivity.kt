@@ -158,7 +158,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
     httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")
     val defaultHlsExtractorFactory =
-      DefaultHlsExtractorFactory(FLAG_DETECT_ACCESS_UNITS and FLAG_ALLOW_NON_IDR_KEYFRAMES)
+      DefaultHlsExtractorFactory(FLAG_DETECT_ACCESS_UNITS or FLAG_ALLOW_NON_IDR_KEYFRAMES)
     val hlsMediaSource = HlsMediaSource.Factory(httpDataSourceFactory)
       .setExtractorFactory(defaultHlsExtractorFactory)
       .setAllowChunklessPreparation(true)
