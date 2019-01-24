@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.SurfaceView
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
@@ -20,6 +21,8 @@ import androidx.viewpager.widget.ViewPager
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Player.STATE_BUFFERING
 import com.google.android.exoplayer2.Player.STATE_READY
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES
@@ -48,7 +51,7 @@ import org.jetbrains.anko.uiThread
 import javax.inject.Inject
 
 
-class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.VisibilityListener {
+class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.VisibilityListener, Player.EventListener {
 
   @dagger.Subcomponent(modules = [])
   interface Component : AndroidInjector<AnimeDetailActivity> {
@@ -70,8 +73,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   lateinit var descriptionAdapter: DescriptionAdapter
   @Inject
   lateinit var mTbbRepository: TbbRepository
-  @Inject
-  lateinit var mCurrentEpisodesItem: EpisodesItem
 
   @BindView(R.id.playerProgressBar)
   lateinit var mProgressBar: ProgressBar
@@ -83,6 +84,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   lateinit var mViewPager: ViewPager
 
   private val mResultCodeForFullscreenVideoActivity: Int = 100
+  private var mCurrentEpisodesItem: EpisodesItem = EpisodesItem()
   private var toolbar: ActionBar? = null
   private var fragment = mutableListOf<Fragment>()
   private var getListSuccess = false
@@ -104,9 +106,9 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     toolbar = supportActionBar
     toolbar?.setDisplayHomeAsUpEnabled(true)
     toolbar?.title = mAnimeList.nameChi
-    Log.d(this.javaClass.simpleName, "mCurrentEpisodesItem: ${mCurrentEpisodesItem.hashCode()}")
-    Log.d(this.javaClass.simpleName, "descriptionAdapter: $descriptionAdapter")
-
+    mPlayerView.player = exoPlayer
+    exoPlayer.addListener(this@AnimeDetailActivity)
+    setupPlayerView()
     doAsync {
       mSeason = mTbbRepository.fetchSeason(mAnimeList.animeId).toFuture().get()
       mPageSp = mTbbRepository.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
@@ -128,9 +130,15 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     exoPlayer.setVideoSurfaceView(mPlayerView.videoSurfaceView as SurfaceView)
     mPlayerView.setControllerVisibilityListener(this)
     mPlayerView.requestFocus()
-    mPlayerView.player = exoPlayer
   }
 
+  override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+    if (playWhenReady && playbackState == STATE_BUFFERING) {
+      mProgressBar.visibility = View.VISIBLE
+    } else {
+      mProgressBar.visibility = View.INVISIBLE
+    }
+  }
 
   override fun onVisibilityChange(visibility: Int) {
     Log.d(this.javaClass.simpleName, "visibility: $visibility")
@@ -177,7 +185,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   }
 
   private fun replace(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
-    setupPlayerView()
     val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
     httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")
     val defaultHlsExtractorFactory =
@@ -201,7 +208,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     setupPlayerView()
-    mPlayerView.player = exoPlayer
   }
 
   inner class EpisodesListFragmentAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
