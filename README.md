@@ -10,8 +10,8 @@
 - [x] Dagger dependence injection refactor
 - [x] Player notification service
 - [x] Split screen application
-- [ ] Butterknife view bind refactor
-- [ ] Full screen player function
+- [x] Butterknife view bind refactor
+- [x] Full screen player function
 - [ ] Picture in picture player
 - [ ] Save player history
 - [ ] Restore play offset
@@ -29,6 +29,7 @@
 - [ ] List Layout
 - [ ] Theme preference
 - [ ] Download storage
+- [ ] Network error handling
 
 
 
