@@ -37,28 +37,24 @@ android {
             keyAlias "key1"
             keyPassword System.getenv("KEYPWD")
         }
-        debug {
-            storeFile file("key.jks")
-            storePassword System.getenv("KSTOREPWD")
-            keyAlias "key0"
-            keyPassword System.getenv("KSTOREPWD")
-        }
     }
     buildTypes {
         release {
-            shrinkResources true
             minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            signingConfig signingConfigs.debug
+            applicationIdSuffix ".debug"
             resValue("string", "PORT_NUMBER", "8081")
         }
     }
     splits {
         abi {
-            enable gradle.startParameter.taskNames.contains("assembleRelease")
+            def assembleReleaseTask = ['assembleRelease', ':app:assembleRelease']
+            enable gradle.startParameter.taskNames.any { assembleReleaseTask.contains(it) }
             reset()
             include 'x86', 'armeabi-v7a'
             universalApk true
