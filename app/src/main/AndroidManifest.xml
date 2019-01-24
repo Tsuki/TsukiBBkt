@@ -41,5 +41,9 @@
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true" />
         <activity android:name=".activity.LoginWebViewActivity" />
+        <activity
+            android:name=".activity.FullscreenVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
     </application>
+
 </manifest>

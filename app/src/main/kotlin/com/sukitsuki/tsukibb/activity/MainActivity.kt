@@ -10,6 +10,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.material.navigation.NavigationView
 import com.sukitsuki.tsukibb.R
@@ -28,7 +29,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
   }
 
   @Inject
+  lateinit var exoPlayer: SimpleExoPlayer
+  @Inject
   lateinit var playerNotificationManager: PlayerNotificationManager
+
   @Inject
   fun logInjection() {
     Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
@@ -116,5 +120,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
   override fun onDestroy() {
     super.onDestroy()
     playerNotificationManager.setPlayer(null)
+    exoPlayer.release()
   }
 }
