@@ -5,6 +5,7 @@ import android.os.Handler
 import android.view.View
 import android.widget.ImageView
 import butterknife.BindView
+import butterknife.ButterKnife
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.sukitsuki.tsukibb.R
@@ -25,10 +26,11 @@ class FullscreenVideoActivity : DaggerActivity() {
 
   @BindView(R.id.enclosing_layout)
   lateinit var mContentView: View
-  @BindView(R.id.playerView)
+
+  @BindView(R.id.fullscreen_player_view)
   lateinit var playerView: PlayerView
   //  from playerView
-  @BindView(R.id.exo_controller)
+//  @BindView(R.id.exo_controller)
   lateinit var controlView: View
   //  from controlView
   @BindView(R.id.exo_fullscreen_icon)
@@ -51,7 +53,9 @@ class FullscreenVideoActivity : DaggerActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_fullscreen_video)
+    ButterKnife.bind(this)
     fullscreenIcon.setImageResource(R.drawable.exo_controls_fullscreen_exit)
+    playerView.player = exoPlayer
   }
 
   override fun onPostCreate(savedInstanceState: Bundle?) {

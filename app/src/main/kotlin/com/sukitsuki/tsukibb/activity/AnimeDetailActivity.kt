@@ -1,10 +1,13 @@
 package com.sukitsuki.tsukibb.activity
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.SurfaceView
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
@@ -14,6 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
+import com.google.android.exoplayer2.Player.STATE_READY
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_DETECT_ACCESS_UNITS
@@ -69,6 +76,10 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   private lateinit var mProgressBar: ProgressBar
   private lateinit var mTabLayout: TabLayout
   private lateinit var mPlayerView: PlayerView
+
+  @BindView(R.id.exo_controller)
+  lateinit var mControlView: View
+
   private lateinit var mSeason: Season
   private lateinit var mPageSp: String
   private lateinit var mViewPager: ViewPager
@@ -82,6 +93,9 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     val intent = this.intent
     mAnimeList = intent.getParcelableExtra("animeList")
     setContentView(R.layout.activity_anime_detail)
+    ButterKnife.bind(this)
+//    Log.d(this.javaClass.simpleName, "onCreate: $mControlView")
+//    ButterKnife.bind(this, mControlView)
     mPicasso = Picasso.get()
     toolbar = supportActionBar
     toolbar?.setDisplayHomeAsUpEnabled(true)
@@ -92,12 +106,8 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     mViewPager = findViewById(R.id.episodesListView)
 
     mPlayerView = findViewById(R.id.playerView)
-    mPlayerView.setControllerVisibilityListener(this)
-    mPlayerView.requestFocus()
 
-    Log.d(this.javaClass.simpleName, "" + exoPlayer)
-    mPlayerView.player = exoPlayer
-
+    setupPlayerView()
     doAsync {
       mSeason = mTbbRepository.fetchSeason(mAnimeList.animeId).toFuture().get()
       mPageSp = mTbbRepository.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
@@ -112,6 +122,14 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
         mTabLayout.setupWithViewPager(mViewPager)
       }
     }
+  }
+
+  private fun setupPlayerView() {
+    exoPlayer.clearVideoSurface()
+    exoPlayer.setVideoSurfaceView(mPlayerView.videoSurfaceView as SurfaceView)
+    mPlayerView.setControllerVisibilityListener(this)
+    mPlayerView.requestFocus()
+    mPlayerView.player = exoPlayer
   }
 
 
@@ -133,13 +151,20 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     return super.onOptionsItemSelected(item)
   }
 
+  @OnClick(R.id.exo_fullscreen_button)
+  internal fun fullscreen() {
+    val intent = Intent(applicationContext, FullscreenVideoActivity::class.java)
+    startActivity(intent)
+//    ButterKnife.apply(headerViews, ALPHA_FADE)
+  }
+
   private var mCurrentEpisodesItem: EpisodesItem = EpisodesItem()
   fun openEpisodesItem(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
     if (getListSuccess) {
       if (mCurrentEpisodesItem == episodesItem) {
         return
       }
-      if (exoPlayer.playWhenReady) {
+      if (exoPlayer.playWhenReady && exoPlayer.playbackState == STATE_READY) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this@AnimeDetailActivity)
         builder.setMessage(getString(R.string.alert_sure_to_change))
           .setPositiveButton("Yes") { _, which ->

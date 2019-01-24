@@ -24,4 +24,5 @@
     <string name="menu_setting">setting</string>
     <string name="noti_cannot_load_video_source">Cannot load video source</string>
     <string name="alert_sure_to_change">Are you sure change video?</string>
+    <string name="exo_fullscreen_icon">Exo Fullscreen Icon</string>
 </resources>
