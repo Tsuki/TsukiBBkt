@@ -5,7 +5,7 @@ import com.sukitsuki.tsukibb.viewmodel.ViewModelFactory
 import dagger.Binds
 import javax.inject.Singleton
 
-@dagger.Module(includes = [])
+@dagger.Module(includes = [ViewModelModule::class])
 abstract class ViewModelFactoryModule {
 
   @Binds

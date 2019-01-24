@@ -8,7 +8,7 @@ import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 
 @Module(
-  includes = [ViewModelModule::class],
+  includes = [ViewModelFactoryModule::class],
   subcomponents = [HomeFragment.Component::class]
 )
 abstract class FragmentModule {
