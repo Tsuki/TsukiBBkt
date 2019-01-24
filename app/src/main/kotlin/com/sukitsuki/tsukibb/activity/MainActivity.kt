@@ -10,14 +10,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.material.navigation.NavigationView
 import com.sukitsuki.tsukibb.R
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
-import dagger.multibindings.ClassKey
-import dagger.multibindings.IntoMap
 import javax.inject.Inject
 
 
@@ -30,16 +27,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     abstract class Builder : AndroidInjector.Builder<MainActivity>()
   }
 
-  @dagger.Module(subcomponents = [Component::class])
-  abstract class Module {
-    @dagger.Binds
-    @IntoMap
-    @ClassKey(MainActivity::class)
-    abstract fun bind(builder: Component.Builder): AndroidInjector.Factory<*>
-  }
-
-  @Inject
-  lateinit var exoPlayer: SimpleExoPlayer
   @Inject
   lateinit var playerNotificationManager: PlayerNotificationManager
   @Inject

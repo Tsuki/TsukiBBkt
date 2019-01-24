@@ -1,13 +1,15 @@
 package com.sukitsuki.tsukibb.module
 
 import androidx.lifecycle.ViewModelProvider
-import com.sukitsuki.tsukibb.viewmodel.DaggerViewModelFactory
+import com.sukitsuki.tsukibb.viewmodel.ViewModelFactory
 import dagger.Binds
+import javax.inject.Singleton
 
 @dagger.Module(includes = [])
 abstract class ViewModelFactoryModule {
 
   @Binds
-  abstract fun bindViewModelFactory(viewModelFactory: DaggerViewModelFactory): ViewModelProvider.Factory
+  @Singleton
+  abstract fun bindViewModelFactory(viewModelFactory: ViewModelFactory): ViewModelProvider.Factory
 
 }

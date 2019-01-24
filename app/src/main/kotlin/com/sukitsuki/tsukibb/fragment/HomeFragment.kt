@@ -17,7 +17,7 @@ import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.AnimeListAdapter
 import com.sukitsuki.tsukibb.viewmodel.AnimeListViewModel
-import com.sukitsuki.tsukibb.viewmodel.DaggerViewModelFactory
+import com.sukitsuki.tsukibb.viewmodel.ViewModelFactory
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class HomeFragment : DaggerFragment() {
   private lateinit var recyclerView: RecyclerView
   private lateinit var viewAdapter: RecyclerView.Adapter<*>
   private lateinit var viewManager: RecyclerView.LayoutManager
-  //  private lateinit var animeListViewModel: AnimeListViewModel
+  private lateinit var animeListViewModel: AnimeListViewModel
   private var animeListAdapter: AnimeListAdapter = AnimeListAdapter()
 
   @dagger.Subcomponent(modules = [])
@@ -37,26 +37,18 @@ class HomeFragment : DaggerFragment() {
   }
 
   @Inject
-  lateinit var viewModeFactory: DaggerViewModelFactory
+  lateinit var viewModeFactory: ViewModelFactory
 
-  @Inject
-  lateinit var animeListViewModel: AnimeListViewModel
 
   @Inject
   fun logInjection() {
     Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    animeListViewModel = activity?.run {
-      ViewModelProviders.of(this, viewModeFactory).get(AnimeListViewModel::class.java)
-    } ?: throw Exception("Invalid Activity")
-  }
-
   override fun onAttach(context: Context?) {
-    viewManager = GridLayoutManager(context, 3)
     super.onAttach(context)
+    viewManager = GridLayoutManager(context, 3)
+    animeListViewModel = ViewModelProviders.of(this@HomeFragment, viewModeFactory).get(AnimeListViewModel::class.java)
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

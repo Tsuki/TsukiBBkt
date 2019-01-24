@@ -36,8 +36,6 @@ import com.sukitsuki.tsukibb.model.SeasonsItem
 import com.sukitsuki.tsukibb.repository.TbbRepository
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
-import dagger.multibindings.ClassKey
-import dagger.multibindings.IntoMap
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import javax.inject.Inject
@@ -52,14 +50,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
     abstract class Builder : AndroidInjector.Builder<AnimeDetailActivity>()
   }
 
-  @dagger.Module(subcomponents = [Component::class])
-  abstract class Module {
-    @dagger.Binds
-    @IntoMap
-    @ClassKey(AnimeDetailActivity::class)
-    abstract fun bind(builder: Component.Builder): AndroidInjector.Factory<*>
-  }
-
   @Inject
   fun logInjection() {
     Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
@@ -71,6 +61,8 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   lateinit var playerNotificationManager: PlayerNotificationManager
   @Inject
   lateinit var descriptionAdapter: DescriptionAdapter
+  @Inject
+  lateinit var mTbbRepository: TbbRepository
 
   private val tag: String = this.javaClass.simpleName
   private var toolbar: ActionBar? = null
@@ -82,7 +74,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), PlayerControlView.Visibil
   private lateinit var mViewPager: ViewPager
   private lateinit var mAnimeList: AnimeList
   private lateinit var mPicasso: Picasso
-  private lateinit var mTbbRepository: TbbRepository
   private var fragment = mutableListOf<Fragment>()
   private var getListSuccess = false
 

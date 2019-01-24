@@ -1,21 +1,20 @@
 package com.sukitsuki.tsukibb.module
 
+import androidx.lifecycle.ViewModel
+import com.sukitsuki.tsukibb.repository.TbbRepository
 import com.sukitsuki.tsukibb.utils.ViewModelKey
 import com.sukitsuki.tsukibb.viewmodel.AnimeListViewModel
-import dagger.Binds
+import dagger.Provides
 import dagger.multibindings.IntoMap
 
 @dagger.Module(includes = [])
-abstract class ViewModelModule {
+class ViewModelModule {
 
-//  @Binds
-//  @IntoMap
-//  @ViewModelKey(AnimeListViewModel::class)
-//  abstract fun bindAnimeListViewModel(viewModel: AnimeListViewModel): ViewModel
 
-  @Binds
+  //TODO change to binds
+  @Provides
   @IntoMap
   @ViewModelKey(AnimeListViewModel::class)
-  abstract fun bindAnimeListViewModel(viewModel: AnimeListViewModel): AnimeListViewModel
+  fun provideAnimeListViewModel(repository: TbbRepository): ViewModel = AnimeListViewModel(repository)
 
 }
