@@ -106,7 +106,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/exo_fullscreen_icon"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_fullscreen_expand" />
+                app:srcCompat="@drawable/exo_controls_fullscreen_enter" />
 
         </FrameLayout>
 

@@ -1,29 +1,23 @@
 <resources>
-    <string name="app_name">TsukiBB</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="app_name" translatable="false">TsukiBB</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title">Guest</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">設定</string>
+    <string name="action_settings">Setting</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
-    <string name="communicate">Communicate</string>
-    <string name="anime_list">動畫列表</string>
+    <string name="communities">Communities</string>
+    <string name="anime_list">Gallery</string>
     <string name="placeholder" translatable="false">Placeholder</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_history">History</string>
-    <string name="menu_login">login</string>
-    <string name="menu_logout">logout</string>
-    <string name="menu_download">download</string>
-    <string name="menu_setting">setting</string>
+    <string name="menu_login">Login</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_download">Download</string>
+    <string name="menu_setting">Preference</string>
     <string name="exo_player_channel_name" translatable="false">exo_player_channel_name</string>
     <string name="noti_cannot_load_video_source">Cannot load video source</string>
     <string name="alert_sure_to_change">Are you sure change video?</string>
-    <string name="exo_fullscreen_icon">Exo Fullscreen Icon</string>
+    <string name="exo_fullscreen_icon" translatable="false">Fullscreen Icon</string>
 </resources>

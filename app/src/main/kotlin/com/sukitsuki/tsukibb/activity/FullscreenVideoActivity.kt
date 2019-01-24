@@ -31,10 +31,6 @@ class FullscreenVideoActivity : DaggerActivity() {
 
   @BindView(R.id.fullscreen_player_view)
   lateinit var playerView: PlayerView
-  //  from playerView
-//  @BindView(R.id.exo_controller)
-  lateinit var controlView: View
-  //  from controlView
   @BindView(R.id.exo_fullscreen_icon)
   lateinit var fullscreenIcon: ImageView
 

@@ -24,6 +24,7 @@
 - [ ] Config shared preference
 - [ ] Config in SQLite
 - [ ] Cookie store
+- [ ] Free text search
 - [ ] Search by tag
 - [ ] Search by cate
 - [ ] List Layout

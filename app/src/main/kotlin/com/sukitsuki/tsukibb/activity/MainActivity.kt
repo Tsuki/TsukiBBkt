@@ -4,12 +4,13 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.material.navigation.NavigationView
@@ -32,6 +33,12 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
   lateinit var exoPlayer: SimpleExoPlayer
   @Inject
   lateinit var playerNotificationManager: PlayerNotificationManager
+  @BindView(R.id.toolbar)
+  lateinit var toolbar: Toolbar
+  @BindView(R.id.drawer_layout)
+  lateinit var drawerLayout: DrawerLayout
+  @BindView(R.id.nav_view)
+  lateinit var navView: NavigationView
 
   @Inject
   fun logInjection() {
@@ -42,11 +49,9 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_main)
-    val toolbar: Toolbar = findViewById(R.id.toolbar)
+    ButterKnife.bind(this)
+    isLogged(false)
     setSupportActionBar(toolbar)
-
-    val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-    val navView: NavigationView = findViewById(R.id.nav_view)
     val toggle = ActionBarDrawerToggle(
       this, drawerLayout, toolbar,
       R.string.navigation_drawer_open,
@@ -68,32 +73,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     }
   }
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    menuInflater.inflate(R.menu.main, menu)
-    return true
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    return when (item.itemId) {
-      R.id.action_settings -> {
-        val intent = Intent(this, LoginWebViewActivity::class.java)
-        this.startActivity(intent)
-        true
-      }
-      else -> super.onOptionsItemSelected(item)
-    }
-  }
-
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     // Handle navigation view item clicks here.
     when (item.itemId) {
       R.id.nav_home -> {
-      }
-      R.id.nav_gallery -> {
       }
       R.id.nav_favorite -> {
       }
@@ -112,9 +95,23 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
         return false
       }
     }
-    val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
     drawerLayout.closeDrawer(GravityCompat.START)
     return true
+  }
+
+  private fun isLogged(boolean: Boolean) {
+    if (boolean) {
+      navView.menu.findItem(R.id.nav_login).isVisible = false
+      navView.menu.findItem(R.id.nav_logout).isVisible = true
+    } else {
+      navView.menu.findItem(R.id.nav_login).isVisible = true
+      navView.menu.findItem(R.id.nav_logout).isVisible = false
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    isLogged(false)
   }
 
   override fun onDestroy() {
