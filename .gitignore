@@ -2,10 +2,14 @@
 .gradle
 /local.properties
 /.idea/caches
+.idea/dictionaries
 /.idea/libraries
+/.idea/shelf
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
+.idea/tasks.xml
+.idea/gradle.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
 /captures
@@ -18,11 +22,6 @@ output.json
 proguard/
 *.log
 .navigation/
-captures/
-.idea/tasks.xml
-.idea/gradle.xml
-.idea/assetWizardSettings.xml
-.idea/dictionaries
 google-services.json
 freeline.py
 freeline/
