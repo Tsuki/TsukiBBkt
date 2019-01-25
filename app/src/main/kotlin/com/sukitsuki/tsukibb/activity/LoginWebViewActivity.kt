@@ -2,7 +2,6 @@ package com.sukitsuki.tsukibb.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -10,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sukitsuki.tsukibb.BuildConfig
 import com.sukitsuki.tsukibb.R
 import okhttp3.*
+import timber.log.Timber
 
 
 class LoginWebViewActivity : AppCompatActivity() {
@@ -60,12 +60,12 @@ class LoginWebViewActivity : AppCompatActivity() {
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
-      Log.d(this.javaClass.simpleName, "url:$url")
+      Timber.d("url:$url")
       if (url == "https://oauth.telegram.org/close") {
         val cookieString = CookieManager.getInstance().getCookie(url)
         cookies = HttpUrl.parse(url)?.let { parseCookies(it, cookieString) }!!
         cookies = cookies.filter { (it.name() == "stel_ssid") or (it.name() == "stel_token") }
-        cookies.let { Log.d(this.javaClass.simpleName, it.joinToString("\n")) }
+        cookies.let { Timber.d(it.joinToString("\n")) }
         setResult(RESULT_OK, null)
         finish()
 

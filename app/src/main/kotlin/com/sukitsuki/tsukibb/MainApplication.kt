@@ -1,6 +1,5 @@
 package com.sukitsuki.tsukibb
 
-import android.util.Log
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.sukitsuki.tsukibb.module.*
@@ -9,6 +8,7 @@ import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import net.danlew.android.joda.JodaTimeAndroid
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,7 +35,7 @@ class MainApplication : DaggerApplication() {
 
   @Inject
   fun logInjection() {
-    Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
+    Timber.d("Injecting ${this::class.java.simpleName}")
   }
 
   @Inject
@@ -49,8 +49,9 @@ class MainApplication : DaggerApplication() {
 
   override fun onCreate() {
     super.onCreate()
+    Timber.plant(Timber.DebugTree())
     JodaTimeAndroid.init(this)
-    Log.d(this.javaClass.simpleName, "" + exoPlayer)
+    Timber.d("$exoPlayer")
     playerNotificationManager.setPlayer(exoPlayer)
     playerNotificationManager.setNotificationListener(NotificationListener())
   }

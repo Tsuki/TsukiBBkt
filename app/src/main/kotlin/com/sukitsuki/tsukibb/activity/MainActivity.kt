@@ -3,7 +3,6 @@ package com.sukitsuki.tsukibb.activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -18,6 +17,7 @@ import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.preference.PreferenceActivity
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -43,7 +43,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
 
   @Inject
   fun logInjection() {
-    Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
+    Timber.d("Injecting ${this::class.java.simpleName}")
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

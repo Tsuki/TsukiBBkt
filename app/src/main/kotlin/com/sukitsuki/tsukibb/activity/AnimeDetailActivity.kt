@@ -7,7 +7,6 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.SurfaceView
 import android.view.View
@@ -49,6 +48,7 @@ import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -63,7 +63,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
 
   @Inject
   fun logInjection() {
-    Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
+    Timber.d("Injecting ${this::class.java.simpleName}")
   }
 
   @Inject
@@ -147,7 +147,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
         return true
       }
       else -> {
-        Log.d(this.javaClass.simpleName, "itemId" + item?.itemId?.let { resources.getResourceName(it).split("\\/") })
+        Timber.d("itemId${item?.itemId?.let { resources.getResourceName(it).split("\\/") }}")
       }
     }
     return super.onOptionsItemSelected(item)
@@ -181,7 +181,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
 
   @Suppress("DEPRECATION")
   private fun enterPIPMode() {
-    Log.d(this.javaClass.simpleName, "enterPIPMode: ")
+    Timber.d("enterPIPMode: ")
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val params = PictureInPictureParams.Builder()
       this.enterPictureInPictureMode(params.build())

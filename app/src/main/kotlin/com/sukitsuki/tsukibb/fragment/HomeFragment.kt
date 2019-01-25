@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,7 @@ import com.sukitsuki.tsukibb.viewmodel.AnimeListViewModel
 import com.sukitsuki.tsukibb.viewmodel.ViewModelFactory
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -42,7 +42,7 @@ class HomeFragment : DaggerFragment() {
 
   @Inject
   fun logInjection() {
-    Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
+    Timber.d("Injecting ${this::class.java.simpleName}")
   }
 
   override fun onAttach(context: Context) {
