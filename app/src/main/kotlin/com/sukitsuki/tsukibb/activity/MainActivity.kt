@@ -15,6 +15,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.material.navigation.NavigationView
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.preference.PreferenceActivity
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -90,6 +91,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
       R.id.nav_download -> {
       }
       R.id.nav_setting -> {
+        this.startActivity(Intent(this, PreferenceActivity::class.java))
       }
       else -> {
         return false
