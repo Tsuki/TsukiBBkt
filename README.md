@@ -12,12 +12,15 @@
 - [x] Split screen application
 - [x] Butterknife view bind refactor
 - [x] Full screen player function
-- [ ] Picture in picture player
+- [x] Picture in picture player
 - [ ] Save player history
 - [ ] Restore play offset
+- [ ] Toolbar add favorite icon
 - [ ] Google login
 - [ ] Telegram login WIP
-- [ ] Concatenating Source
+- [ ] Concatenating Source playback
+- [ ] Support danmaku from SsaSubtitle 
+- [ ] MergingMediaSource with SsaSubtitle
 - [ ] Enhance player control
 - [ ] Enhance player gesture
 - [ ] Enhance player timeline preview
@@ -31,6 +34,7 @@
 - [ ] Theme preference
 - [ ] Download storage
 - [ ] Network error handling
+- [ ] Exo Add DefaultBandwidthMeter
 
 
 
@@ -49,6 +53,7 @@
 | **Dagger2**                      | **Dependency injection** |
 | **Butterknife**                  | **Dependency injection** |
 | **DataBinding**                  | **Data Binding**         |
+| **Timber**                       | **Logging**              |
 | **Lifecycle/LiveData/ViewModel** | **View Model**           |
 | **ExoPlayer**                    | **Player**               |
 | **MaterialPreferenceLibrary**    | **Preference**           |
