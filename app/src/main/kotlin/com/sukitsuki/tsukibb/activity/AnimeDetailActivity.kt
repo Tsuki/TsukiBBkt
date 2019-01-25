@@ -1,11 +1,9 @@
 package com.sukitsuki.tsukibb.activity
 
-import android.app.PictureInPictureParams
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.SurfaceView
@@ -179,27 +177,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     }
   }
 
-  @Suppress("DEPRECATION")
-  private fun enterPIPMode() {
-    Timber.d("enterPIPMode: ")
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      val params = PictureInPictureParams.Builder()
-      this.enterPictureInPictureMode(params.build())
-    } else {
-      this.enterPictureInPictureMode()
-    }
-  }
-
-  override fun onBackPressed() {
-    enterPIPMode()
-    super.onBackPressed()
-  }
-
-  override fun onUserLeaveHint() {
-    super.onUserLeaveHint()
-    enterPIPMode()
-  }
-
   private fun replace(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
     val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
     httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")
@@ -212,6 +189,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     exoPlayer.playWhenReady = true
     descriptionAdapter.contentTitle = mAnimeList.nameChi
     descriptionAdapter.contentText = "${seasonsItem.seasonTitle} - ${episodesItem.title}"
+    descriptionAdapter.animeList = mAnimeList
     doAsync {
       descriptionAdapter.largeIcon =
         mPicasso.load("https://seaside.ebb.io/${seasonsItem.animeId}x${seasonsItem.id}.jpg").get()

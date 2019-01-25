@@ -1,6 +1,8 @@
 package com.sukitsuki.tsukibb.activity
 
+import android.app.PictureInPictureParams
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -75,5 +77,20 @@ class FullscreenVideoActivity : DaggerActivity() {
   private fun delayedHide() {
     mHideHandler.removeCallbacks(mHideRunnable)
     mHideHandler.postDelayed(mHideRunnable, uiAnimationDelay)
+  }
+
+  @Suppress("DEPRECATION")
+  private fun enterPIPMode() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      val params = PictureInPictureParams.Builder()
+      this.enterPictureInPictureMode(params.build())
+    } else {
+      this.enterPictureInPictureMode()
+    }
+  }
+
+  override fun onUserLeaveHint() {
+    super.onUserLeaveHint()
+    enterPIPMode()
   }
 }
