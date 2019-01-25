@@ -27,7 +27,7 @@ class EpisodesListFragment : ListFragment() {
     return inflater.inflate(R.layout.view_episodes_item, container, false)
   }
 
-  override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
+  override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
     val animeDetailActivity = activity as AnimeDetailActivity
     animeDetailActivity.openEpisodesItem(mItems[position], mSeasonsItem.copy(episodes = emptyList()))
     super.onListItemClick(l, v, position, id)

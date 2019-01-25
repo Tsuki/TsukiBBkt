@@ -226,7 +226,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     setupPlayerView()
   }
 
-  inner class EpisodesListFragmentAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
+  inner class EpisodesListFragmentAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     override fun getPageTitle(position: Int): CharSequence? {
       return mSeason.list.seasons[position].seasonTitle
     }

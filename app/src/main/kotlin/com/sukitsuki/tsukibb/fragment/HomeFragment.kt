@@ -45,7 +45,7 @@ class HomeFragment : DaggerFragment() {
     Log.d(this::class.java.simpleName, "Injecting ${this::class.java.simpleName}")
   }
 
-  override fun onAttach(context: Context?) {
+  override fun onAttach(context: Context) {
     super.onAttach(context)
     viewManager = GridLayoutManager(context, 3)
     animeListViewModel = ViewModelProviders.of(this@HomeFragment, viewModeFactory).get(AnimeListViewModel::class.java)
