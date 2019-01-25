@@ -95,18 +95,32 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    val intent = this.intent
-    mAnimeList = intent.getParcelableExtra("animeList")
     setContentView(R.layout.activity_anime_detail)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     ButterKnife.bind(this)
     mPicasso = Picasso.get()
     toolbar = supportActionBar
     toolbar?.setDisplayHomeAsUpEnabled(true)
-    toolbar?.title = mAnimeList.nameChi
     mPlayerView.player = exoPlayer
     exoPlayer.addListener(this@AnimeDetailActivity)
     setupPlayerView()
+    initAnimeList()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    Timber.d("onResume: $mAnimeList")
+    Timber.d("onResume: getParcelableExtra ${intent.getParcelableExtra("animeList") as AnimeList}")
+    if (mAnimeList != intent.getParcelableExtra("animeList")) {
+      Timber.d("onResume: reinit")
+      initAnimeList()
+    }
+  }
+
+  private fun initAnimeList() {
+    Timber.d("initAnimeList: getParcelableExtra")
+    mAnimeList = intent.getParcelableExtra("animeList")
+    toolbar?.title = mAnimeList.nameChi
     doAsync {
       mSeason = mTbbRepository.fetchSeason(mAnimeList.animeId).toFuture().get()
       mPageSp = mTbbRepository.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
