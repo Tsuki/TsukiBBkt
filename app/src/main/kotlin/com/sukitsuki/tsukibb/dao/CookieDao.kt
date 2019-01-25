@@ -26,7 +26,10 @@ interface CookieDao {
   fun findLiveByDomain(domain: String): LiveData<List<Cookie>>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertCookie(cookie: Cookie)
+  fun insertCookie(cookie: Cookie): Long
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insertCookie(vararg cookie: Cookie): List<Long>
 
   @Update
   fun updateCookie(vararg cookies: Cookie)

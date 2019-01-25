@@ -1,7 +1,9 @@
 package com.sukitsuki.tsukibb.module
 
 import com.google.gson.GsonBuilder
+import com.sukitsuki.tsukibb.AppDatabase
 import com.sukitsuki.tsukibb.AppEnum
+import com.sukitsuki.tsukibb.repository.CookieRepository
 import com.sukitsuki.tsukibb.repository.TbbRepository
 import dagger.Module
 import dagger.Provides
@@ -23,12 +25,13 @@ class RepositoryModule {
 
   @Singleton
   @Provides
-  fun providesOkHttpClient(): OkHttpClient {
+  fun providesOkHttpClient(cookieRepository: CookieRepository): OkHttpClient {
     val cacheSize = 10 * 1024 * 1024L // 10MB
     val builder = OkHttpClient.Builder()
+      .cookieJar(cookieRepository)
       .addInterceptor(Interceptor { chain ->
         val original = chain.request()
-
+        //TODO Cache
         val request = original.newBuilder()
           .method(original.method(), original.body())
           // FIXME change to login method
@@ -63,4 +66,9 @@ class RepositoryModule {
   @Singleton
   @Provides
   fun providesTbbRepository(retrofit: Retrofit): TbbRepository = retrofit.create(TbbRepository::class.java)
+
+  @Singleton
+  @Provides
+  fun providesCookieRepository(database: AppDatabase): CookieRepository = CookieRepository(database.cookieDao())
+
 }

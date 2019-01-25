@@ -14,5 +14,4 @@ abstract class ViewModelModule {
   @ViewModelKey(AnimeListViewModel::class)
   abstract fun bindAnimeListViewModel(viewModel: AnimeListViewModel): ViewModel
 
-
 }
