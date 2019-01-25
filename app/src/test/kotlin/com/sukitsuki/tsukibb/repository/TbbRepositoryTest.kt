@@ -1,11 +1,27 @@
 package com.sukitsuki.tsukibb.repository
 
+import com.sukitsuki.tsukibb.module.RepositoryModule
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TbbRepositoryKtTest {
+class TbbRepositoryTest {
 
-  private lateinit var repository: TbbRepository
+  @Singleton
+  @dagger.Component(modules = [RepositoryModule::class])
+  interface TestComponent {
+    fun inject(test: TbbRepositoryTest)
+  }
+
+  @Inject
+  lateinit var repository: TbbRepository
+
+  @Before
+  fun setUp() {
+    DaggerTbbRepositoryTest_TestComponent.create().inject(this)
+  }
 
   @Test
   fun test_fetchHPData() {
