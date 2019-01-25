@@ -41,9 +41,9 @@ import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.adapter.DescriptionAdapter
 import com.sukitsuki.tsukibb.fragment.EpisodesListFragment
 import com.sukitsuki.tsukibb.model.AnimeList
-import com.sukitsuki.tsukibb.model.EpisodesItem
 import com.sukitsuki.tsukibb.model.Season
-import com.sukitsuki.tsukibb.model.SeasonsItem
+import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem
+import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem.EpisodesItem
 import com.sukitsuki.tsukibb.repository.TbbRepository
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
@@ -199,6 +199,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     super.onUserLeaveHint()
     enterPIPMode()
   }
+
   private fun replace(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
     val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
     httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")

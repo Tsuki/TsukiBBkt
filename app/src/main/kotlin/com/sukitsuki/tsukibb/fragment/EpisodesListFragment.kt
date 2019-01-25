@@ -9,8 +9,8 @@ import androidx.fragment.app.ListFragment
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.EpisodesListAdapter
-import com.sukitsuki.tsukibb.model.EpisodesItem
-import com.sukitsuki.tsukibb.model.SeasonsItem
+import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem
+import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem.EpisodesItem
 
 
 class EpisodesListFragment : ListFragment() {

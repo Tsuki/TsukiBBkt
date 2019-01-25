@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.sukitsuki.tsukibb.R
-import com.sukitsuki.tsukibb.model.EpisodesItem
+import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem.EpisodesItem
 
 
 class EpisodesListAdapter(context: Context, resource: Int, items: List<EpisodesItem>) :

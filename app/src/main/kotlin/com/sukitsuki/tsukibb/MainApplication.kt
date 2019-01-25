@@ -16,7 +16,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 
-class TbbApplication : DaggerApplication() {
+class MainApplication : DaggerApplication() {
 
   @Singleton
   @dagger.Component(
@@ -28,9 +28,9 @@ class TbbApplication : DaggerApplication() {
       , FragmentModule::class
     ]
   )
-  interface Component : AndroidInjector<TbbApplication> {
+  interface Component : AndroidInjector<MainApplication> {
     @dagger.Component.Builder
-    abstract class Builder : AndroidInjector.Builder<TbbApplication>() {
+    abstract class Builder : AndroidInjector.Builder<MainApplication>() {
       abstract fun plus(appModule: AppModule): Builder
     }
   }
@@ -46,7 +46,7 @@ class TbbApplication : DaggerApplication() {
   lateinit var playerNotificationManager: PlayerNotificationManager
 
   override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-    return DaggerTbbApplication_Component.builder().plus(AppModule(this)).create(this)
+    return DaggerMainApplication_Component.builder().plus(AppModule(this)).create(this)
   }
 
   override fun onCreate() {

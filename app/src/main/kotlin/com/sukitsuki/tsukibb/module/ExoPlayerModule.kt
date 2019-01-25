@@ -7,7 +7,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.adapter.DescriptionAdapter
-import com.sukitsuki.tsukibb.model.EpisodesItem
+import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem.EpisodesItem
 import dagger.Provides
 import javax.inject.Singleton
 
