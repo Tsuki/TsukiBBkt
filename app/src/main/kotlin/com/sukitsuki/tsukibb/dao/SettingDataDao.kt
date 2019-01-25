@@ -20,7 +20,7 @@ interface SettingDataDao {
   fun insertSetting(settingData: SettingData)
 
   @Update
-  fun updateSetting(vararg users: SettingData)
+  fun updateSetting(vararg setting: SettingData)
 
   @Query("DELETE from settings")
   fun deleteAll()

@@ -13,6 +13,7 @@ class AppModule(var app: Application) {
   @Singleton
   @Provides
   fun providesApplication(): Application {
+    app.cacheDir
     return app
   }
 

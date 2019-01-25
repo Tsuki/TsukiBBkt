@@ -24,6 +24,7 @@ class RepositoryModule {
   @Singleton
   @Provides
   fun providesOkHttpClient(): OkHttpClient {
+    val cacheSize = 10 * 1024 * 1024L // 10MB
     val builder = OkHttpClient.Builder()
       .addInterceptor(Interceptor { chain ->
         val original = chain.request()

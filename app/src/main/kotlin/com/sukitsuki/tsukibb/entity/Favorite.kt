@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "favorites", indices = [Index(value = ["anime_id"], unique = true)])
 data class Favorite(
   @PrimaryKey(autoGenerate = true) val id: Long? = null
-  , @ColumnInfo(name = "anime_id") val animeId: Int
-  , @ColumnInfo(name = "aired") val aired: Int
-  , @ColumnInfo(name = "nameChi") val nameChi: String
+  , @ColumnInfo(name = "anime_id") val animeId: Int = -1
+  , @ColumnInfo(name = "aired") val aired: Int = -1
+  , @ColumnInfo(name = "name_chi") val nameChi: String = ""
 )
