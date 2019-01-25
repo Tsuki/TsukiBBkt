@@ -8,9 +8,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "settings", indices = [Index(value = ["key_k"], unique = true)])
 data class SettingData(
-  @PrimaryKey(autoGenerate = true) val id: Long? = null,
-  @ColumnInfo(name = "key_k") val key: String = "",
-  @ColumnInfo(name = "value_v") val value: String = ""
-) {
-  constructor() : this(null, "", "")
-}
+  @PrimaryKey(autoGenerate = true) val id: Long? = null
+  , @ColumnInfo(name = "key_k") val key: String = ""
+)
