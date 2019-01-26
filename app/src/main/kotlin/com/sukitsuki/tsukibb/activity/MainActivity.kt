@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -69,6 +70,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     loginDialog = AlertDialog.Builder(this@MainActivity)
       .setItems(arrayOf("Google", "Telegram")) { _, i ->
         // Must use putExtras rather than 3nd arg, then bundle is activity options not extras
+        if (i == 0) {
+          Toast.makeText(this@MainActivity.applicationContext, "Not support now", Toast.LENGTH_LONG).show()
+          return@setItems
+        }
         this.startActivity(Intent(this, LoginWebViewActivity::class.java)
           .apply { this.putExtras(bundleOf("login" to i)) })
       }
