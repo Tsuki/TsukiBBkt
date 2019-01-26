@@ -27,7 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
   abstract fun settingDataDao(): SettingDataDao
   abstract fun cookieDao(): CookieDao
   abstract fun favoriteDao(): FavoriteDao
-  abstract fun histroyDao(): HistoryDao
+  abstract fun historyDao(): HistoryDao
 
   companion object : SingletonHolder<AppDatabase, Context>({
     Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, "TbbDatabase.db")
