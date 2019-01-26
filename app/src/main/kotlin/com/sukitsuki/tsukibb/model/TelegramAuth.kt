@@ -13,17 +13,30 @@ data class TelegramAuth(
   val user: TelegramUser
 ) {
   data class TelegramUser(
-    @SerializedName("auth_date")
-    val authDate: Int = 0,
     @SerializedName("id")
-    val id: Int = 0,
-    @SerializedName("first_name")
-    val firstName: String = "",
-    @SerializedName("hash")
-    val hash: String = "",
-    @SerializedName("username")
+    val id: String = "0"
+    , @SerializedName("first_name")
+    val firstName: String = ""
+    , @SerializedName("last_name")
+    val lastName: String? = ""
+    , @SerializedName("username")
     val username: String = ""
-  )
+    , @SerializedName("auth_date")
+    val authDate: String = "0"
+    , @SerializedName("hash")
+    val hash: String = ""
+  ) {
+    fun toMap(): Map<String, String?> {
+      return mapOf(
+        "id" to id
+        , "first_name" to firstName
+        , "last_name" to lastName
+        , "username" to username
+        , "auth_date" to authDate
+        , "hash" to hash
+      )
+    }
+  }
 }
 
 

@@ -1,10 +1,7 @@
 package com.sukitsuki.tsukibb.repository
 
 import com.sukitsuki.tsukibb.AppConst.EbbUserAgent
-import com.sukitsuki.tsukibb.model.AnimeList
-import com.sukitsuki.tsukibb.model.HpData
-import com.sukitsuki.tsukibb.model.Season
-import com.sukitsuki.tsukibb.model.User
+import com.sukitsuki.tsukibb.model.*
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import retrofit2.http.*
@@ -54,13 +51,15 @@ interface TbbRepository {
   @POST("_/report_comment")
   fun reportCommentAbuse(@Body e: Any): Observable<String>
 
+  //  "https://ebb.io/auth/telegram?id=**&first_name=**&username=**&auth_date=unix&hash=**"
+  @Headers("accept-encoding: gzip, deflate, br")
   @GET("auth/telegram")
-  fun authTelegram(@QueryMap e: Any): Observable<String>
+  fun authTelegram(@QueryMap e: Map<String, String?>): Observable<String>
 
   @GET("auth/google")
   fun authGoogle(@QueryMap e: Any): Observable<String>
 
   data class TimeLineBody(val year: String, val season: String)
 
-  data class SearchBody(var query: String)
+  data class SearchBody(val query: String)
 }

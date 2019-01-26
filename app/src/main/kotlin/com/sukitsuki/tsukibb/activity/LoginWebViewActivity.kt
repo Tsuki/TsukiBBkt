@@ -5,18 +5,22 @@ import android.os.Bundle
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.gson.GsonBuilder
 import com.sukitsuki.tsukibb.AppConst
 import com.sukitsuki.tsukibb.AppDatabase
 import com.sukitsuki.tsukibb.BuildConfig
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.entity.Cookie
+import com.sukitsuki.tsukibb.model.TelegramAuth
 import com.sukitsuki.tsukibb.repository.TbbRepository
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import okhttp3.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,6 +38,7 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
   private val googleUrl = "https://ebb.io/auth/google"
   private val telegramUrl = "https://oauth.telegram.org/auth?bot_id=639045451&origin=https%3A%2F%2Febb.io"
   private val telegramAuthUrl = "https://oauth.telegram.org/auth/get?bot_id=639045451&lang=en"
+  private val gson by lazy { GsonBuilder().serializeNulls().create() }
 
   private lateinit var cookieManager: CookieManager
   private var method: Int = -1
@@ -56,18 +61,16 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
     setContentView(R.layout.activity_web_view)
     ButterKnife.bind(this)
     cookieManager = CookieManager.getInstance()
-//    cookieManager.removeAllCookies(null)
-//    cookieManager.removeSessionCookies(null)
+    cookieManager.removeAllCookies(null)
+    cookieManager.removeSessionCookies(null)
+    // TODO Load cookie from SQLite
     cookieManager.flush()
     webView.settings.javaScriptEnabled = true
     webView.settings.userAgentString = AppConst.FakeUserAgent
-//    webView.settings.javaScriptCanOpenWindowsAutomatically = true
-//    webView.settings.useWideViewPort = true
-//    webView.settings.setSupportMultipleWindows(true)
 
     WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
     webView.webViewClient = LoginWebViewClient()
-//    webView.webChromeClient = LoginWebViewClient()
+    //  webView.webChromeClient = LoginWebViewClient()
     when (method) {
       0 -> webView.loadUrl(googleUrl)
       1 -> webView.loadUrl(telegramUrl)
@@ -89,36 +92,28 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
         } ?: emptyList()
 
         val mediaType = MediaType.parse("application/x-www-form-urlencoded")
-        val body = RequestBody.create(mediaType, "origin=https://Febb.io")
+        val body = RequestBody.create(mediaType, "origin=https://ebb.io")
         val request = Request.Builder()
-          .url(telegramAuthUrl)
+          .url(telegramAuthUrl).post(body)
           .addHeader("origin", "https://oauth.telegram.org")
-          .addHeader("content-type", "application/x-www-form-urlencoded")
           .addHeader("accept", "*/*")
           .addHeader("x-requested-with", "XMLHttpRequest")
           .build()
         doAsync {
           appDatabase.cookieDao().insertCookie(*cookies.map(::Cookie).toTypedArray())
           val response = okHttpClient.newCall(request).execute()
-          response.body()
+          val telegramAuth = response.body()!!.let {
+            gson.fromJson(it.string(), TelegramAuth::class.java)
+          }
+          val authTelegram = mTbbRepository.authTelegram(telegramAuth.user.toMap())
+          authTelegram.first("").blockingGet()
+          uiThread {
+            Toast.makeText(this@LoginWebViewActivity, "Login success", Toast.LENGTH_LONG).show()
+          }
         }
 
         setResult(RESULT_OK, null)
         finish()
-//        cookies = HttpUrl.parse(url)?.let { okhttp3.Cookie.parse(it, cookieString) }!!
-//        cookies = cookies.filter { (it.domain() == "telegram") }
-//        cookies.let { Timber.d(it.joinToString("\n")) }
-
-//        val client = OkHttpClient()
-//
-//
-//          .url("https://oauth.telegram.org/auth/get?bot_id=639045451&lang=en")
-//          .post(body)
-//          .addHeader("cookie", cookieString)
-//          .build()
-//        val response = client.newCall(request).execute()
-
-//        "https://ebb.io/auth/telegram?id=**&first_name=**&username=**&auth_date=unix&hash=**"
       }
       super.onPageFinished(view, url)
     }
