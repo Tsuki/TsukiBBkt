@@ -79,12 +79,12 @@ class FullscreenVideoActivity : DaggerActivity() {
     mHideHandler.postDelayed(mHideRunnable, uiAnimationDelay)
   }
 
-  @Suppress("DEPRECATION")
   private fun enterPIPMode() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val params = PictureInPictureParams.Builder()
       this.enterPictureInPictureMode(params.build())
     } else {
+      @Suppress("DEPRECATION")
       this.enterPictureInPictureMode()
     }
   }

@@ -21,8 +21,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Player.STATE_BUFFERING
-import com.google.android.exoplayer2.Player.STATE_READY
+import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_DETECT_ACCESS_UNITS
@@ -144,10 +143,11 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   }
 
   override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-    if (playWhenReady && playbackState == STATE_BUFFERING) {
-      mProgressBar.visibility = View.VISIBLE
-    } else {
-      mProgressBar.visibility = View.INVISIBLE
+    when (playbackState) {
+      STATE_IDLE -> return
+      STATE_BUFFERING -> mProgressBar.visibility = View.VISIBLE
+      STATE_READY -> mProgressBar.visibility = View.INVISIBLE
+      STATE_ENDED -> exoPlayer.playWhenReady = false
     }
   }
 
