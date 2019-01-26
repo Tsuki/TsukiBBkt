@@ -1,6 +1,5 @@
 package com.sukitsuki.tsukibb.repository
 
-import android.webkit.CookieManager
 import com.sukitsuki.tsukibb.dao.CookieDao
 import com.sukitsuki.tsukibb.entity.Cookie
 import io.reactivex.android.schedulers.AndroidSchedulers
