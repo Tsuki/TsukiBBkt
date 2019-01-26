@@ -20,15 +20,15 @@ class CookieRepository @Inject constructor(
     cookieDao.getAll().blockingFirst().map(Cookie::toOkHttpCookie).groupBy(okhttp3.Cookie::domain)
 
   init {
-    updateFromSQLite()
+    subscribeFromSQLite()
   }
 
-  private fun updateFromSQLite(): Disposable? {
+  private fun subscribeFromSQLite(): Disposable? {
     return cookieDao.getAll()
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .doOnError { Timber.w(it) }
-      .doOnNext { Timber.d("updateFromSQLite") }
+      .doOnNext { Timber.d("subscribeFromSQLite") }
       .map { it.map(Cookie::toOkHttpCookie) }
       .map { it.groupBy { cookie -> cookie.domain() } }
       .onErrorReturn { emptyMap() }
@@ -36,6 +36,7 @@ class CookieRepository @Inject constructor(
   }
 
   private fun saveCookieToSQLite(cookies: List<okhttp3.Cookie>) {
+    Timber.d("saveCookieToSQLite")
     cookieDao.insertCookie(*(cookies.map { Cookie(it) }.toTypedArray()))
   }
 
