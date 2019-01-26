@@ -1,8 +1,8 @@
 package com.sukitsuki.tsukibb.module
 
 import android.app.Application
-import androidx.room.Room
 import com.sukitsuki.tsukibb.AppDatabase
+import com.sukitsuki.tsukibb.AppDatabase.Companion.AppDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -16,7 +16,6 @@ class AppModule(var app: Application) {
 
   @Singleton
   @Provides
-  fun providesAppDatabase(application: Application): AppDatabase =
-    Room.databaseBuilder(application.applicationContext, AppDatabase::class.java, "TbbDatabase.db").build()
+  fun providesAppDatabase(application: Application): AppDatabase = AppDatabase(application)
 
 }

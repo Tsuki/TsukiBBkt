@@ -1,6 +1,6 @@
 package com.sukitsuki.tsukibb
 
-import android.content.Context
+import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -12,7 +12,6 @@ import com.sukitsuki.tsukibb.entity.Cookie
 import com.sukitsuki.tsukibb.entity.Favorite
 import com.sukitsuki.tsukibb.entity.History
 import com.sukitsuki.tsukibb.entity.SettingData
-import com.sukitsuki.tsukibb.utils.SingletonHolder
 
 
 @Database(
@@ -21,7 +20,7 @@ import com.sukitsuki.tsukibb.utils.SingletonHolder
     , Cookie::class
     , Favorite::class
     , History::class
-  ], version = 1, exportSchema = true
+  ], version = 2, exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
   abstract fun settingDataDao(): SettingDataDao
@@ -29,9 +28,13 @@ abstract class AppDatabase : RoomDatabase() {
   abstract fun favoriteDao(): FavoriteDao
   abstract fun historyDao(): HistoryDao
 
-  companion object : SingletonHolder<AppDatabase, Context>({
-    Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, "TbbDatabase.db")
-      .allowMainThreadQueries().build()
-  })
+  companion object {
+    val AppDatabase = fun(it: Application): AppDatabase {
+      return Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, "TbbDatabase.db")
+        .addMigrations(MIGRATION_1_2)
+//      .fallbackToDestructiveMigration()
+        .build()
+    }
+  }
 
 }
