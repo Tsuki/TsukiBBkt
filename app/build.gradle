@@ -50,7 +50,7 @@ android {
         debug {
             resValue "string", "app_name", "TsukiBBDebug"
             applicationIdSuffix ".debug"
-            resValue("string", "PORT_NUMBER", "8081")
+//            resValue("string", "PORT_NUMBER", "8080")
         }
     }
     splits {
@@ -145,7 +145,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 
     implementation "org.jetbrains.anko:anko:$anko_version"
-    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
+//    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     implementation 'com.github.wajda:lzstring4java:0.1'
     implementation 'net.danlew:android.joda:2.10.1.1'

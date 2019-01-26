@@ -3,19 +3,21 @@ package com.sukitsuki.tsukibb.module
 import com.google.gson.GsonBuilder
 import com.sukitsuki.tsukibb.AppDatabase
 import com.sukitsuki.tsukibb.AppEnum
+import com.sukitsuki.tsukibb.MainApplication
 import com.sukitsuki.tsukibb.repository.CookieRepository
 import com.sukitsuki.tsukibb.repository.TbbRepository
+import com.sukitsuki.tsukibb.utils.Interceptors
 import dagger.Module
 import dagger.Provides
-import okhttp3.Interceptor
+import io.reactivex.disposables.CompositeDisposable
+import okhttp3.Cache
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import rufus.lzstring4java.LZString
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -25,28 +27,14 @@ class RepositoryModule {
 
   @Singleton
   @Provides
-  fun providesOkHttpClient(cookieRepository: CookieRepository): OkHttpClient {
+  fun providesOkHttpClient(cookieRepository: CookieRepository, app: MainApplication): OkHttpClient {
     val cacheSize = 10 * 1024 * 1024L // 10MB
     val builder = OkHttpClient.Builder()
+      .cache(Cache(app.applicationContext.cacheDir, cacheSize))
       .cookieJar(cookieRepository)
-      .addInterceptor(Interceptor { chain ->
-        val original = chain.request()
-        //TODO Cache
-        val request = original.newBuilder()
-          .method(original.method(), original.body())
-          // FIXME change to login method
-          .addHeader("user-agent", AppEnum.EbbUserAgent)
-          .build()
-        val response = chain.proceed(request)
-        val body = response.body()
-        val newBody = ResponseBody.create(body?.contentType(), LZString.decompressFromUTF16(body?.string()))
-        return@Interceptor response.newBuilder().body(newBody).build()
-      })
+      .addInterceptor(HttpLoggingInterceptor().apply { level = BASIC })
+      .addInterceptor(Interceptors.decode)
       .readTimeout(30, TimeUnit.SECONDS)
-
-    val loggingInterceptor = HttpLoggingInterceptor()
-    loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
-    builder.addInterceptor(loggingInterceptor)
     return builder.build()
   }
 
@@ -69,6 +57,11 @@ class RepositoryModule {
 
   @Singleton
   @Provides
-  fun providesCookieRepository(database: AppDatabase): CookieRepository = CookieRepository(database.cookieDao())
+  fun providesCookieRepository(database: AppDatabase, compositeDisposable: CompositeDisposable): CookieRepository =
+    CookieRepository(database.cookieDao(), compositeDisposable)
+
+  @Singleton
+  @Provides
+  fun providesCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
 }

@@ -1,15 +1,13 @@
 package com.sukitsuki.tsukibb.repository
 
+import com.sukitsuki.tsukibb.AppEnum.EbbUserAgent
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.HpData
 import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.User
 import io.reactivex.Maybe
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 
 interface TbbRepository {
@@ -28,6 +26,7 @@ interface TbbRepository {
   @GET("anime_list")
   fun fetchAnimeList(): Observable<List<AnimeList>>
 
+  @Headers("User-Agent: $EbbUserAgent")
   @GET("season_list/{season_list}")
   fun fetchSeason(@Path("season_list") season_list: Int): Observable<Season>
 
