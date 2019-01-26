@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.sukitsuki.tsukibb.dao.CookieDao
 import com.sukitsuki.tsukibb.dao.FavoriteDao
-import com.sukitsuki.tsukibb.dao.HistroyDao
+import com.sukitsuki.tsukibb.dao.HistoryDao
 import com.sukitsuki.tsukibb.dao.SettingDataDao
 import com.sukitsuki.tsukibb.entity.Cookie
 import com.sukitsuki.tsukibb.entity.Favorite
@@ -27,10 +27,11 @@ abstract class AppDatabase : RoomDatabase() {
   abstract fun settingDataDao(): SettingDataDao
   abstract fun cookieDao(): CookieDao
   abstract fun favoriteDao(): FavoriteDao
-  abstract fun histroyDao(): HistroyDao
+  abstract fun histroyDao(): HistoryDao
 
   companion object : SingletonHolder<AppDatabase, Context>({
-    Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, "TbbDatabase.db").build()
+    Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, "TbbDatabase.db")
+      .allowMainThreadQueries().build()
   })
 
 }
