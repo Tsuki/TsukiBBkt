@@ -18,9 +18,9 @@ data class TelegramAuth(
     , @SerializedName("first_name")
     val firstName: String = ""
     , @SerializedName("last_name")
-    val lastName: String? = ""
+    val lastName: String? = null
     , @SerializedName("username")
-    val username: String = ""
+    val username: String? = null
     , @SerializedName("auth_date")
     val authDate: String = "0"
     , @SerializedName("hash")
@@ -34,7 +34,7 @@ data class TelegramAuth(
         , "username" to username
         , "auth_date" to authDate
         , "hash" to hash
-      )
+      ).filterValues { it != null }
     }
   }
 }

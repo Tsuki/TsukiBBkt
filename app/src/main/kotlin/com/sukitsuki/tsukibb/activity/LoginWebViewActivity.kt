@@ -83,6 +83,21 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
 
     override fun onPageFinished(view: WebView?, url: String?) {
       Timber.d("url:$url")
+      when (method) {
+        0 -> processGoogleLogin(url)
+        1 -> processTelegramLogin(url)
+        else -> finish()
+      }
+      processTelegramLogin(url)
+      super.onPageFinished(view, url)
+    }
+
+
+    private fun processGoogleLogin(url: String?) {
+
+    }
+
+    private fun processTelegramLogin(url: String?) {
       if (url == "https://oauth.telegram.org/close") {
         val cookieString = CookieManager.getInstance().getCookie(url)
         Timber.d("cookieString:$cookieString")
@@ -105,6 +120,7 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
           val telegramAuth = response.body()!!.let {
             gson.fromJson(it.string(), TelegramAuth::class.java)
           }
+          Timber.d("telegramAuth.user ${telegramAuth.user}")
           val authTelegram = mTbbRepository.authTelegram(telegramAuth.user.toMap())
           authTelegram.first("").blockingGet()
           uiThread {
@@ -115,7 +131,6 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
         setResult(RESULT_OK, null)
         finish()
       }
-      super.onPageFinished(view, url)
     }
   }
 
