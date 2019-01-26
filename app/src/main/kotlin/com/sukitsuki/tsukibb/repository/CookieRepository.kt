@@ -30,7 +30,7 @@ class CookieRepository @Inject constructor(
       .doOnError { Timber.w(it) }
       .doOnNext { Timber.d("subscribeFromSQLite") }
       .map { it.map(Cookie::toOkHttpCookie) }
-      .map { it.groupBy { cookie -> cookie.domain() } }
+      .map { it.groupBy(okhttp3.Cookie::domain) }
       .onErrorReturn { emptyMap() }
       .subscribe { cookies = it }.addTo(compositeDisposable)
   }
