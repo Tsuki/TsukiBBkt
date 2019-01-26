@@ -20,7 +20,7 @@ import com.sukitsuki.tsukibb.entity.SettingData
     , Cookie::class
     , Favorite::class
     , History::class
-  ], version = 2, exportSchema = true
+  ], version = 3, exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
   abstract fun settingDataDao(): SettingDataDao
@@ -31,8 +31,8 @@ abstract class AppDatabase : RoomDatabase() {
   companion object {
     val AppDatabase = fun(it: Application): AppDatabase {
       return Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, "TbbDatabase.db")
-        .addMigrations(MIGRATION_1_2)
-//      .fallbackToDestructiveMigration()
+        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+        // .fallbackToDestructiveMigration()
         .build()
     }
   }

@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "cookies", indices = [Index(value = ["name", "domain", "path"], unique = true)])
+@Entity(tableName = "cookies", indices = [Index(value = ["name", "domain", "path", "secure", "http_only"], unique = true)])
 data class Cookie(
 //  FIXME id may overflow
   @PrimaryKey(autoGenerate = true) val id: Long? = null
