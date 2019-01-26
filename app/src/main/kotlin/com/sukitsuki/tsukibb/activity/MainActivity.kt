@@ -5,7 +5,9 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import butterknife.BindView
@@ -41,6 +43,8 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
   @BindView(R.id.nav_view)
   lateinit var navView: NavigationView
 
+  private lateinit var loginDialog: AlertDialog
+
   @Inject
   fun logInjection() {
     Timber.d("Injecting ${this::class.java.simpleName}")
@@ -62,6 +66,13 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     toggle.syncState()
 
     navView.setNavigationItemSelectedListener(this)
+    loginDialog = AlertDialog.Builder(this@MainActivity)
+      .setItems(arrayOf("Google", "Telegram")) { _, i ->
+        // Must use putExtras rather than 3nd arg, then bundle is activity options not extras
+        this.startActivity(Intent(this, LoginWebViewActivity::class.java)
+          .apply { this.putExtras(bundleOf("login" to i)) })
+      }
+      .setTitle("Login with:").create()
 
   }
 
@@ -84,7 +95,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
       R.id.nav_history -> {
       }
       R.id.nav_login -> {
-        this.startActivity(Intent(this, LoginWebViewActivity::class.java))
+        loginDialog.show()
       }
       R.id.nav_logout -> {
       }

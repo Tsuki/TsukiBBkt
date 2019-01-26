@@ -178,7 +178,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
       }
       if (exoPlayer.playWhenReady && exoPlayer.playbackState == STATE_READY) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this@AnimeDetailActivity)
-        builder.setMessage(getString(R.string.alert_sure_to_change))
+        builder.setMessage(R.string.alert_sure_to_change)
           .setPositiveButton("Yes") { _, which ->
             if (which == DialogInterface.BUTTON_POSITIVE) replace(episodesItem, seasonsItem)
           }

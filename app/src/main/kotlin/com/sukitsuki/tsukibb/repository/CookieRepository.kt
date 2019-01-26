@@ -1,5 +1,6 @@
 package com.sukitsuki.tsukibb.repository
 
+import android.webkit.CookieManager
 import com.sukitsuki.tsukibb.dao.CookieDao
 import com.sukitsuki.tsukibb.entity.Cookie
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -10,11 +11,12 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import timber.log.Timber
-import javax.inject.Inject
 
 
-class CookieRepository @Inject constructor(
-  private val cookieDao: CookieDao, private val compositeDisposable: CompositeDisposable) : CookieJar {
+class CookieRepository(
+  private val cookieDao: CookieDao,
+  private val compositeDisposable: CompositeDisposable
+) : CookieJar {
 
   private var cookies: Map<String, List<okhttp3.Cookie>> =
     cookieDao.getAll().blockingFirst().map(Cookie::toOkHttpCookie).groupBy(okhttp3.Cookie::domain)

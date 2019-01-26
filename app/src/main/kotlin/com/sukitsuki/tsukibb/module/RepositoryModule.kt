@@ -2,7 +2,7 @@ package com.sukitsuki.tsukibb.module
 
 import com.google.gson.GsonBuilder
 import com.sukitsuki.tsukibb.AppDatabase
-import com.sukitsuki.tsukibb.AppEnum
+import com.sukitsuki.tsukibb.AppConst
 import com.sukitsuki.tsukibb.MainApplication
 import com.sukitsuki.tsukibb.repository.CookieRepository
 import com.sukitsuki.tsukibb.repository.TbbRepository
@@ -46,7 +46,7 @@ class RepositoryModule {
       .addConverterFactory(ScalarsConverterFactory.create())
       .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create()))
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .baseUrl(AppEnum.BASE_URL)
+      .baseUrl(AppConst.BASE_URL)
       .client(httpClient)
       .build()
   }
