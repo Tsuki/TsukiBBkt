@@ -45,19 +45,20 @@ data class Cookie(
     cookie.hostOnly()
   )
 
-  fun toOkHttpCookie(cookie: Cookie): okhttp3.Cookie {
+  fun toOkHttpCookie(): okhttp3.Cookie {
     return okhttp3.Cookie.Builder().apply {
-      this.name(cookie.name)
-      this.value(cookie.value)
-      this.expiresAt(cookie.expiresAt)
-      this.domain(cookie.domain)
-      this.path(cookie.path)
-      if (cookie.secure) this.secure()
-      if (cookie.httpOnly) this.httpOnly()
-      if (cookie.hostOnly) this.hostOnlyDomain(cookie.domain)
-      cookie.httpOnly
-      cookie.persistent
-      cookie.hostOnly
+      this.name(this@Cookie.name)
+      this.value(this@Cookie.value)
+      this.expiresAt(this@Cookie.expiresAt)
+      this.domain(this@Cookie.domain)
+      this.path(this@Cookie.path)
+      if (this@Cookie.secure) this.secure()
+      if (this@Cookie.httpOnly) this.httpOnly()
+      if (this@Cookie.hostOnly) this.hostOnlyDomain(this@Cookie.domain)
+      this@Cookie.httpOnly
+      this@Cookie.persistent
+      this@Cookie.hostOnly
     }.build()
   }
+
 }
