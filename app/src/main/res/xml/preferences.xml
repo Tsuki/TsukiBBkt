@@ -1,5 +1,4 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- To make Preferences floating, you must wrap them inside PreferenceCategory -->
     <PreferenceCategory android:title="Maintenance">
@@ -7,14 +6,10 @@
             android:defaultValue="test"
             android:icon="@drawable/ic_about"
             android:key="about"
-            android:title="About"
-            app:legacySummary="false"
-            app:tintIcon="?colorAccent" />
+            android:title="About" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="is_login"
-            android:title="Logout"
-            app:legacySummary="false"
-            app:tintIcon="?colorAccent" />
+            android:title="Logout" />
     </PreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

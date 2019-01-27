@@ -1,10 +1,5 @@
 package com.sukitsuki.tsukibb
 
-import android.content.Context
-import android.graphics.Color
-import android.preference.PreferenceManager
-import android.preference.PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES
-import com.anggrayudi.materialpreference.util.SaveDir
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.sukitsuki.tsukibb.module.*
@@ -58,30 +53,5 @@ class MainApplication : DaggerApplication() {
     JodaTimeAndroid.init(this)
     playerNotificationManager.setPlayer(exoPlayer)
     playerNotificationManager.setNotificationListener(NotificationListener())
-    PreferenceManager.setDefaultValues(this, R.xml.preferences, true)
-    /*
-       DO NOT USE THIS METHOD to set your preferences' default value. It is inefficient!!!
-       PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-       USE THE FOLLOWING TECHNIQUE INSTEAD
-        */
-    val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-    if (!preferences.getBoolean(KEY_HAS_SET_DEFAULT_VALUES, false)) {
-      preferences.edit().putBoolean(KEY_HAS_SET_DEFAULT_VALUES, true).apply()
-      setDefaultPreferenceValues(this)
-    }
-  }
-
-  companion object {
-
-    fun setDefaultPreferenceValues(context: Context) {
-      val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-      preferences.edit()
-        .putBoolean("auto_update", true)
-        .putBoolean("wifi_only", true)
-        .putString("update_interval", "Weekly")
-        .putString("backupLocation", SaveDir.DOWNLOADS)
-        .putInt("themeColor", Color.parseColor("#37474F"))
-        .apply()
-    }
   }
 }

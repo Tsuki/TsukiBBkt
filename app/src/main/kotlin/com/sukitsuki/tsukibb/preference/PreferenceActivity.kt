@@ -1,37 +1,43 @@
 package com.sukitsuki.tsukibb.preference
 
 import android.os.Bundle
-import com.anggrayudi.materialpreference.PreferenceActivityMaterial
-import com.anggrayudi.materialpreference.PreferenceFragmentMaterial
 import com.sukitsuki.tsukibb.R
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerAppCompatActivity
 
-class PreferenceActivity : PreferenceActivityMaterial() {
+private const val TITLE_TAG = "settingsActivityTitle"
 
-  override fun onBackStackChanged() {
-    preferenceFragment = supportFragmentManager.findFragmentByTag(TAG) as PreferenceFragment
-    title = preferenceFragment.preferenceFragmentTitle
+class PreferenceActivity : DaggerAppCompatActivity() {
+
+  @dagger.Subcomponent(modules = [])
+  interface Component : AndroidInjector<PreferenceActivity> {
+
+    @dagger.Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<PreferenceActivity>()
   }
-
-  override fun onBuildPreferenceFragment(rootKey: String?): PreferenceFragmentMaterial {
-    return PreferenceFragment.newInstance(rootKey)
-  }
-
-  private lateinit var preferenceFragment: PreferenceFragment
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_preference)
     if (savedInstanceState == null) {
-      preferenceFragment = PreferenceFragment.newInstance(null)
-      supportFragmentManager.beginTransaction().add(R.id.setting_fragment, preferenceFragment, TAG)
+      supportFragmentManager
+        .beginTransaction()
+        .replace(R.id.setting_fragment, InitPreferenceFragment())
         .commit()
     } else {
-      preferenceFragment = supportFragmentManager.findFragmentByTag(TAG) as PreferenceFragment
-      title = preferenceFragment.preferenceFragmentTitle
+      title = savedInstanceState.getCharSequence(TITLE_TAG)
     }
+    supportFragmentManager.addOnBackStackChangedListener {
+      if (supportFragmentManager.backStackEntryCount == 0) {
+        title = TITLE_TAG
+      }
+    }
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }
 
-  companion object {
-    private const val TAG = "PreferenceActivity"
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    // Save current activity title so we can set it again after a configuration change
+    outState.putCharSequence(TITLE_TAG, title)
   }
 }

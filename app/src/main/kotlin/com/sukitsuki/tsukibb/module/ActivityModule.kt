@@ -4,6 +4,7 @@ import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.activity.FullscreenVideoActivity
 import com.sukitsuki.tsukibb.activity.LoginWebViewActivity
 import com.sukitsuki.tsukibb.activity.MainActivity
+import com.sukitsuki.tsukibb.preference.PreferenceActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector
@@ -16,6 +17,7 @@ import dagger.multibindings.IntoMap
     , AnimeDetailActivity.Component::class
     , FullscreenVideoActivity.Component::class
     , LoginWebViewActivity.Component::class
+    , PreferenceActivity.Component::class
   ]
 )
 abstract class ActivityModule {
@@ -39,5 +41,10 @@ abstract class ActivityModule {
   @IntoMap
   @ClassKey(LoginWebViewActivity::class)
   abstract fun bindLoginWebViewActivity(builder: LoginWebViewActivity.Component.Builder): AndroidInjector.Factory<*>
+
+  @Binds
+  @IntoMap
+  @ClassKey(PreferenceActivity::class)
+  abstract fun bindPreferenceActivity(builder: PreferenceActivity.Component.Builder): AndroidInjector.Factory<*>
 
 }
