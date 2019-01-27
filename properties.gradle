@@ -1,0 +1,4 @@
+ext {
+    storepassword = 'password'
+    keypassword = 'password'
+}

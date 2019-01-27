@@ -1,20 +1,26 @@
 package com.sukitsuki.tsukibb.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import com.sukitsuki.tsukibb.BuildConfig
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.model.AnimeList
 
 
-class AnimeListAdapter : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
+class AnimeListAdapter(val context: Context) : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
   var onItemClick: ((AnimeList) -> Unit)? = null
   var dataSet: List<AnimeList> = emptyList()
+  private val picasso by lazy {
+    Picasso.Builder(context).downloader(OkHttp3Downloader(context, Long.MAX_VALUE)).build()
+  }
+
   fun loadDataSet(newDataSet: List<AnimeList>) {
     dataSet = newDataSet
     this.notifyDataSetChanged()
@@ -30,7 +36,6 @@ class AnimeListAdapter : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val anime = dataSet[position]
-    val picasso = Picasso.get()
     picasso.setIndicatorsEnabled(BuildConfig.DEBUG)
     picasso.load("https://seaside.ebb.io/${anime.animeId}x${anime.seasonId}.jpg").into(holder.animeImage)
     holder.textView.text = anime.nameChi

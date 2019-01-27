@@ -28,7 +28,7 @@ class HomeFragment : DaggerFragment() {
   private lateinit var viewAdapter: RecyclerView.Adapter<*>
   private lateinit var viewManager: RecyclerView.LayoutManager
   private lateinit var animeListViewModel: AnimeListViewModel
-  private var animeListAdapter: AnimeListAdapter = AnimeListAdapter()
+  private lateinit var animeListAdapter: AnimeListAdapter
 
   @dagger.Subcomponent(modules = [])
   interface Component : AndroidInjector<HomeFragment> {
@@ -47,6 +47,7 @@ class HomeFragment : DaggerFragment() {
 
   override fun onAttach(context: Context) {
     super.onAttach(context)
+    animeListAdapter = AnimeListAdapter(context)
     viewManager = GridLayoutManager(context, 3)
     animeListViewModel = ViewModelProviders.of(this@HomeFragment, viewModeFactory).get(AnimeListViewModel::class.java)
   }
