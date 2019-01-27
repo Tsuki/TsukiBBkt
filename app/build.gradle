@@ -24,6 +24,8 @@ android {
     sourceSets {
         // Change to kotlin director
         main.java.srcDirs = ['src/main/kotlin']
+        main.java.srcDirs += 'build/generated/source/kaptKotlin/debug'
+        main.java.srcDirs += 'build/generated/source/kaptKotlin/release'
         test.java.srcDirs = ['src/test/kotlin']
         androidTest.java.srcDirs = ['src/androidTest/kotlin']
     }
@@ -80,6 +82,10 @@ android {
 
 ext.anko_version = '0.10.8'
 ext.exo_version = '2.9.3'
+kapt {
+    correctErrorTypes = true
+    useBuildCache = true
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -145,7 +151,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 
     implementation "org.jetbrains.anko:anko:$anko_version"
-//    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
+    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     implementation 'com.github.wajda:lzstring4java:0.1'
     implementation 'net.danlew:android.joda:2.10.1.1'

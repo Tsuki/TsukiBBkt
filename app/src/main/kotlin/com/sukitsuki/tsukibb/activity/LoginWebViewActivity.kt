@@ -1,6 +1,8 @@
 package com.sukitsuki.tsukibb.activity
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.webkit.CookieManager
 import android.webkit.WebView
@@ -48,6 +50,8 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
   @Inject
   lateinit var appDatabase: AppDatabase
   @Inject
+  lateinit var sharedPreferences: SharedPreferences
+  @Inject
   lateinit var okHttpClient: OkHttpClient
 
   @BindView(R.id.webview)
@@ -81,20 +85,33 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
 
   inner class LoginWebViewClient : WebViewClient() {
 
-    override fun onPageFinished(view: WebView?, url: String?) {
+    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
       Timber.d("url:$url")
       when (method) {
         0 -> processGoogleLogin(url)
         1 -> processTelegramLogin(url)
         else -> finish()
       }
-      processTelegramLogin(url)
-      super.onPageFinished(view, url)
+      super.onPageStarted(view, url, favicon)
     }
 
-
     private fun processGoogleLogin(url: String?) {
-
+      if (url == "https://ebb.io/#") {
+        val cookieString = CookieManager.getInstance().getCookie(url)
+        Timber.d("cookieString $cookieString")
+        val cookies = HttpUrl.parse(url)?.let {
+          cookieString.split(";").mapNotNull { cs -> okhttp3.Cookie.parse(it, cs) }
+        } ?: emptyList()
+        doAsync {
+          appDatabase.cookieDao().insertCookie(*cookies.map(::Cookie).toTypedArray())
+          sharedPreferences.edit().putBoolean("is_login", true).apply()
+          uiThread {
+            Toast.makeText(this@LoginWebViewActivity, "Login success", Toast.LENGTH_LONG).show()
+          }
+        }
+        setResult(RESULT_OK, null)
+        finish()
+      }
     }
 
     private fun processTelegramLogin(url: String?) {
@@ -123,11 +140,11 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
           Timber.d("telegramAuth.user ${telegramAuth.user}")
           val authTelegram = mTbbRepository.authTelegram(telegramAuth.user.toMap())
           authTelegram.first("").blockingGet()
+          sharedPreferences.edit().putBoolean("is_login", true).apply()
           uiThread {
             Toast.makeText(this@LoginWebViewActivity, "Login success", Toast.LENGTH_LONG).show()
           }
         }
-
         setResult(RESULT_OK, null)
         finish()
       }

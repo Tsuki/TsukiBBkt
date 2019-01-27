@@ -10,7 +10,7 @@ class PreferenceFragment : PreferenceFragmentMaterial() {
 
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     addPreferencesFromResource(R.xml.preferences)
-//    findPreference(PrefKey)!!.summary
+    findPreference(PrefKey.ABOUT)!!.summary
   }
 
   companion object {

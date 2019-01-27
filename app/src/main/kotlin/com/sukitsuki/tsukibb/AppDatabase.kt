@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.sukitsuki.tsukibb.AppConst.DatabaseName
 import com.sukitsuki.tsukibb.dao.CookieDao
 import com.sukitsuki.tsukibb.dao.FavoriteDao
 import com.sukitsuki.tsukibb.dao.HistoryDao
@@ -30,7 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
 
   companion object {
     val AppDatabase = fun(it: Application): AppDatabase {
-      return Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, "TbbDatabase.db")
+      return Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, DatabaseName)
         .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
         // .fallbackToDestructiveMigrationFrom(1)
         // .fallbackToDestructiveMigration()
