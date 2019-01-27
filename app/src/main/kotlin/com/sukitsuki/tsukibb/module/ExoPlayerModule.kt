@@ -1,6 +1,9 @@
 package com.sukitsuki.tsukibb.module
 
 import android.app.Application
+import com.google.android.exoplayer2.DefaultLoadControl
+import com.google.android.exoplayer2.DefaultLoadControl.*
+import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -17,7 +20,20 @@ class ExoPlayerModule {
   @Provides
   @Singleton
   fun providesExoPlayer(app: Application): SimpleExoPlayer {
-    return ExoPlayerFactory.newSimpleInstance(app.applicationContext, DefaultTrackSelector())
+    val loadControl = DefaultLoadControl.Builder()
+      .setBackBuffer(30 * 1000, false)
+      .setBufferDurationsMs(
+        DEFAULT_MIN_BUFFER_MS,
+        5 * 60 * 1000,
+        DEFAULT_BUFFER_FOR_PLAYBACK_MS,
+        DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
+      )
+    return ExoPlayerFactory.newSimpleInstance(
+      app.applicationContext,
+      DefaultRenderersFactory(app.applicationContext),
+      DefaultTrackSelector(),
+      loadControl.createDefaultLoadControl()
+    )
   }
 
   @Provides
