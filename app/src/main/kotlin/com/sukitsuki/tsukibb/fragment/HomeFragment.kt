@@ -48,7 +48,9 @@ class HomeFragment : DaggerFragment() {
   override fun onAttach(context: Context) {
     super.onAttach(context)
     animeListAdapter = AnimeListAdapter(context)
-    viewManager = GridLayoutManager(context, 3)
+    val gridLayoutManager = GridLayoutManager(context, 3)
+    gridLayoutManager.initialPrefetchItemCount = 6
+    viewManager = gridLayoutManager
     animeListViewModel = ViewModelProviders.of(this@HomeFragment, viewModeFactory).get(AnimeListViewModel::class.java)
   }
 
