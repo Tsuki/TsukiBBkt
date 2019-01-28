@@ -70,7 +70,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     toggle.syncState()
     drawerLayout.addDrawerListener(toggle)
 
-    fragmentManager = supportFragmentManager
+    fragmentManager = this.supportFragmentManager
 
     navView.setNavigationItemSelectedListener(this@MainActivity)
     loginDialog = AlertDialog.Builder(this@MainActivity)
@@ -124,7 +124,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
         return false
       }
     }
-    item.isChecked = true
     drawerLayout.closeDrawer(GravityCompat.START)
     return true
   }

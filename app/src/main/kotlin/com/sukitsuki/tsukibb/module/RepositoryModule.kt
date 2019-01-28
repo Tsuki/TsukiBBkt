@@ -1,8 +1,8 @@
 package com.sukitsuki.tsukibb.module
 
 import com.google.gson.GsonBuilder
-import com.sukitsuki.tsukibb.AppDatabase
 import com.sukitsuki.tsukibb.AppConst
+import com.sukitsuki.tsukibb.AppDatabase
 import com.sukitsuki.tsukibb.MainApplication
 import com.sukitsuki.tsukibb.repository.CookieRepository
 import com.sukitsuki.tsukibb.repository.FavoriteRepository
@@ -14,7 +14,7 @@ import io.reactivex.disposables.CompositeDisposable
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.*
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -63,7 +63,7 @@ class RepositoryModule {
 
   @Singleton
   @Provides
-  fun providesFavoriteRepository(database: AppDatabase, compositeDisposable: CompositeDisposable): FavoriteRepository =
+  fun providesFavoriteRepository(database: AppDatabase): FavoriteRepository =
     FavoriteRepository(database.favoriteDao())
 
   @Singleton
