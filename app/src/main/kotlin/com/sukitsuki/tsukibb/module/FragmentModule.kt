@@ -10,18 +10,21 @@ import dagger.multibindings.IntoMap
 
 @Module(
   includes = [ViewModelFactoryModule::class],
-  subcomponents = [HomeFragment.Component::class]
+  subcomponents = [
+    HomeFragment.Component::class
+    , FavoriteFragment.Component::class
+  ]
 )
 abstract class FragmentModule {
 
   @Binds
   @IntoMap
   @ClassKey(HomeFragment::class)
-  abstract fun bind(builder: HomeFragment.Component.Builder): AndroidInjector.Factory<*>
+  abstract fun bindHomeFragment(builder: HomeFragment.Component.Builder): AndroidInjector.Factory<*>
 
   @Binds
   @IntoMap
   @ClassKey(FavoriteFragment::class)
-  abstract fun bind(builder: FavoriteFragment.Component.Builder): AndroidInjector.Factory<*>
+  abstract fun bindFavoriteFragment(builder: FavoriteFragment.Component.Builder): AndroidInjector.Factory<*>
 
 }

@@ -35,8 +35,8 @@ abstract class AppDatabase : RoomDatabase() {
   companion object {
     val AppDatabase = fun(it: Application): AppDatabase {
       return Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, DatabaseName)
-        .fallbackToDestructiveMigrationFrom(4)
-        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+        .fallbackToDestructiveMigrationFrom(3, 4)
+//        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
         // .fallbackToDestructiveMigration()
         .build()
     }

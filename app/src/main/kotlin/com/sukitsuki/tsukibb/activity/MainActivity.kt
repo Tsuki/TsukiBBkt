@@ -17,6 +17,8 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.material.navigation.NavigationView
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.fragment.FavoriteFragment
+import com.sukitsuki.tsukibb.fragment.HomeFragment
 import com.sukitsuki.tsukibb.preference.PreferenceActivity
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
@@ -65,12 +67,12 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
       R.string.navigation_drawer_open,
       R.string.navigation_drawer_close
     )
-    drawerLayout.addDrawerListener(toggle)
     toggle.syncState()
+    drawerLayout.addDrawerListener(toggle)
 
     fragmentManager = supportFragmentManager
 
-    navView.setNavigationItemSelectedListener(this)
+    navView.setNavigationItemSelectedListener(this@MainActivity)
     loginDialog = AlertDialog.Builder(this@MainActivity)
       .setItems(arrayOf("Google", "Telegram")) { _, i ->
         // Must use putExtras rather than 3nd arg, then bundle is activity options not extras
@@ -91,13 +93,18 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     // Handle navigation view item clicks here.
+    Timber.d("onNavigationItemSelected: ${item.itemId}")
     when (item.itemId) {
       R.id.nav_home -> {
+        Timber.d("onNavigationItemSelected: nav_home")
         val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_home, HomeFragment())
         transaction.commit()
       }
       R.id.nav_favorite -> {
+        Timber.d("onNavigationItemSelected: R.id.nav_favorite")
         val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_home, FavoriteFragment())
         transaction.commit()
       }
       R.id.nav_history -> {
@@ -120,6 +127,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
         return false
       }
     }
+    item.isChecked = true
     drawerLayout.closeDrawer(GravityCompat.START)
     return true
   }
