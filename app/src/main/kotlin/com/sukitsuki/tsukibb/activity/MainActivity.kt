@@ -93,16 +93,13 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     // Handle navigation view item clicks here.
-    Timber.d("onNavigationItemSelected: ${item.itemId}")
     when (item.itemId) {
       R.id.nav_home -> {
-        Timber.d("onNavigationItemSelected: nav_home")
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_home, HomeFragment())
         transaction.commit()
       }
       R.id.nav_favorite -> {
-        Timber.d("onNavigationItemSelected: R.id.nav_favorite")
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_home, FavoriteFragment())
         transaction.commit()
