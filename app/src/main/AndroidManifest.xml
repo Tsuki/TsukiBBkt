@@ -35,19 +35,22 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activity.AnimeDetailActivity"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".activity.LoginWebViewActivity" />
+
         <activity
             android:name=".activity.FullscreenVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
             android:theme="@style/FullscreenTheme" />
-        <activity android:name=".preference.PreferenceActivity" />
-    </application>
 
+        <activity android:name=".preference.PreferenceActivity" />
+
+    </application>
 </manifest>

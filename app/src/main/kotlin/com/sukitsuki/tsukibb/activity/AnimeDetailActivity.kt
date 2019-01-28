@@ -113,6 +113,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     super.onResume()
     Timber.d("onResume: $mAnimeList")
     Timber.d("onResume: getParcelableExtra ${intent.getParcelableExtra("animeList") as AnimeList}")
+    setupPlayerView()
     if (mAnimeList != intent.getParcelableExtra("animeList")) {
       Timber.d("onResume: reinit")
       initAnimeList()

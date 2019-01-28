@@ -7,18 +7,21 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.sukitsuki.tsukibb.R
 import dagger.android.AndroidInjector
 import dagger.android.DaggerActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 
-class FullscreenVideoActivity : DaggerActivity() {
+class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
   private val uiAnimationDelay = 300L
 
   @dagger.Subcomponent(modules = [])
@@ -30,7 +33,8 @@ class FullscreenVideoActivity : DaggerActivity() {
 
   @BindView(R.id.enclosing_layout)
   lateinit var mContentView: View
-
+  @BindView(R.id.playerProgressBar)
+  lateinit var mProgressBar: ProgressBar
   @BindView(R.id.fullscreen_player_view)
   lateinit var playerView: PlayerView
   @BindView(R.id.exo_fullscreen_icon)
@@ -57,12 +61,25 @@ class FullscreenVideoActivity : DaggerActivity() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     ButterKnife.bind(this)
     fullscreenIcon.setImageResource(R.drawable.exo_controls_fullscreen_exit)
+    onPlayerStateChanged(exoPlayer.playWhenReady, exoPlayer.playbackState)
+    exoPlayer.addListener(this@FullscreenVideoActivity)
     playerView.player = exoPlayer
   }
 
   override fun onPostCreate(savedInstanceState: Bundle?) {
     super.onPostCreate(savedInstanceState)
     delayedHide()
+  }
+
+  override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+    Timber.d("onPlayerStateChanged: $playbackState")
+    when (playbackState) {
+      Player.STATE_IDLE -> return
+      Player.STATE_BUFFERING -> mProgressBar.visibility = View.VISIBLE
+      Player.STATE_READY -> mProgressBar.visibility = View.INVISIBLE
+      Player.STATE_ENDED -> exoPlayer.playWhenReady = false
+    }
+    Timber.d("onPlayerStateChanged: ${mProgressBar.visibility}")
   }
 
   @OnClick(R.id.exo_fullscreen_button)
