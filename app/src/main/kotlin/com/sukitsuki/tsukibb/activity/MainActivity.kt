@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -43,7 +44,9 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
   @BindView(R.id.nav_view)
   lateinit var navView: NavigationView
 
+
   private lateinit var loginDialog: AlertDialog
+  private lateinit var fragmentManager: FragmentManager
 
   @Inject
   fun logInjection() {
@@ -65,6 +68,8 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     drawerLayout.addDrawerListener(toggle)
     toggle.syncState()
 
+    fragmentManager = supportFragmentManager
+
     navView.setNavigationItemSelectedListener(this)
     loginDialog = AlertDialog.Builder(this@MainActivity)
       .setItems(arrayOf("Google", "Telegram")) { _, i ->
@@ -73,7 +78,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
           .apply { this.putExtras(bundleOf("login" to i)) })
       }
       .setTitle("Login with:").create()
-
   }
 
   override fun onBackPressed() {
@@ -89,10 +93,16 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     // Handle navigation view item clicks here.
     when (item.itemId) {
       R.id.nav_home -> {
+        val transaction = fragmentManager.beginTransaction()
+        transaction.commit()
       }
       R.id.nav_favorite -> {
+        val transaction = fragmentManager.beginTransaction()
+        transaction.commit()
       }
       R.id.nav_history -> {
+        val transaction = fragmentManager.beginTransaction()
+        transaction.commit()
       }
       R.id.nav_login -> {
         loginDialog.show()
@@ -100,6 +110,8 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
       R.id.nav_logout -> {
       }
       R.id.nav_download -> {
+        val transaction = fragmentManager.beginTransaction()
+        transaction.commit()
       }
       R.id.nav_setting -> {
         this.startActivity(Intent(this, PreferenceActivity::class.java))

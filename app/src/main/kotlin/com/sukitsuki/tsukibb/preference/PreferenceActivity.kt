@@ -5,6 +5,7 @@ import com.sukitsuki.tsukibb.R
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 
+
 private const val TITLE_TAG = "settingsActivityTitle"
 
 class PreferenceActivity : DaggerAppCompatActivity() {

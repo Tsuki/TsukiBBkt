@@ -1,5 +1,6 @@
 package com.sukitsuki.tsukibb.module
 
+import com.sukitsuki.tsukibb.fragment.FavoriteFragment
 import com.sukitsuki.tsukibb.fragment.HomeFragment
 import dagger.Binds
 import dagger.Module
@@ -18,5 +19,9 @@ abstract class FragmentModule {
   @ClassKey(HomeFragment::class)
   abstract fun bind(builder: HomeFragment.Component.Builder): AndroidInjector.Factory<*>
 
+  @Binds
+  @IntoMap
+  @ClassKey(FavoriteFragment::class)
+  abstract fun bind(builder: FavoriteFragment.Component.Builder): AndroidInjector.Factory<*>
 
 }
