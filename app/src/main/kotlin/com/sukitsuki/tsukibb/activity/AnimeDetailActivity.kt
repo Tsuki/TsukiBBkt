@@ -32,7 +32,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.tabs.TabLayout
-import com.squareup.picasso.Picasso
+import com.sukitsuki.tsukibb.GlideApp
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.adapter.DescriptionAdapter
 import com.sukitsuki.tsukibb.fragment.EpisodesListFragment
@@ -90,14 +90,13 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   private lateinit var mSeason: Season
   private lateinit var mPageSp: String
   private lateinit var mAnimeList: AnimeList
-  private lateinit var mPicasso: Picasso
+  private val mImageLoader by lazy { GlideApp.with(this) }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_anime_detail)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     ButterKnife.bind(this)
-    mPicasso = Picasso.get()
     toolbar = supportActionBar
     toolbar?.setDisplayHomeAsUpEnabled(true)
     mPlayerView.player = exoPlayer
@@ -205,8 +204,9 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     descriptionAdapter.contentText = "${seasonsItem.seasonTitle} - ${episodesItem.title}"
     descriptionAdapter.animeList = mAnimeList
     doAsync {
-      descriptionAdapter.largeIcon =
-        mPicasso.load("https://seaside.ebb.io/${seasonsItem.animeId}x${seasonsItem.id}.jpg").get()
+      val request = mImageLoader.asBitmap()
+        .load("https://seaside.ebb.io/${seasonsItem.animeId}x${seasonsItem.id}.jpg").submit()
+      descriptionAdapter.largeIcon = request.get()
     }
     playerNotificationManager
     exoPlayer.prepare(hlsMediaSource)

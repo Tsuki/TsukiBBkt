@@ -54,3 +54,6 @@
 #-keep class com.google.android.exoplayer2.ext.** { *; }
 #-keep class com.google.android.exoplayer2.util.** { *; }
 -keep class com.google.android.exoplayer2.source.hls.** { *; }
+
+-keep public class  extends com.bumptech.glide.module.AppGlideModule
+-keep class com.bumptech.glide.GeneratedAppGlideModuleImpl

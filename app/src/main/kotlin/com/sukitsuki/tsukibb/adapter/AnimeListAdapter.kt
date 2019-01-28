@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.OkHttp3Downloader
-import com.squareup.picasso.Picasso
-import com.sukitsuki.tsukibb.BuildConfig
+import com.sukitsuki.tsukibb.GlideApp
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.model.AnimeList
 
@@ -17,9 +15,7 @@ import com.sukitsuki.tsukibb.model.AnimeList
 class AnimeListAdapter(val context: Context) : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
   var onItemClick: ((AnimeList) -> Unit)? = null
   var dataSet: List<AnimeList> = emptyList()
-  private val picasso by lazy {
-    Picasso.Builder(context).downloader(OkHttp3Downloader(context, Long.MAX_VALUE)).build()
-  }
+  private val mImageLoader by lazy { GlideApp.with(context) }
 
   fun loadDataSet(newDataSet: List<AnimeList>) {
     dataSet = newDataSet
@@ -36,8 +32,8 @@ class AnimeListAdapter(val context: Context) : RecyclerView.Adapter<AnimeListAda
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val anime = dataSet[position]
-    picasso.setIndicatorsEnabled(BuildConfig.DEBUG)
-    picasso.load("https://seaside.ebb.io/${anime.animeId}x${anime.seasonId}.jpg").into(holder.animeImage)
+    val url = "https://seaside.ebb.io/${anime.animeId}x${anime.seasonId}.jpg"
+    mImageLoader.load(url).centerCrop().into(holder.animeImage)
     holder.textView.text = anime.nameChi
   }
 
