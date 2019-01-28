@@ -15,4 +15,5 @@
     <string name="menu_setting">設定</string>
     <string name="noti_cannot_load_video_source">無法加載視頻源</string>
     <string name="alert_sure_to_change">你確定改變視頻?</string>
+    <string name="bookmark">bookmark</string>
 </resources>

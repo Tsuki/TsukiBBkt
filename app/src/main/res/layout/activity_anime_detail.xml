@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSecondary"
+    android:background="@color/secondaryColor"
     android:fitsSystemWindows="true">
 
     <include
@@ -38,7 +38,7 @@
         android:id="@+id/sessionTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorSecondaryOver"
+        android:background="@color/secondaryLightColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerView"
@@ -50,9 +50,23 @@
         android:id="@+id/episodesListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/colorSecondaryOver"
+        android:background="@color/secondaryLightColor"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintTop_toBottomOf="@+id/sessionTab" />
+
+    <ImageButton
+        android:id="@+id/bookmarkButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="5dp"
+        android:background="@color/transparent"
+        android:contentDescription="@string/bookmark"
+        android:tint="@color/secondaryColor"
+        app:layout_constraintBottom_toTopOf="@+id/playerView"
+        app:layout_constraintDimensionRatio="2:3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_input_get" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
