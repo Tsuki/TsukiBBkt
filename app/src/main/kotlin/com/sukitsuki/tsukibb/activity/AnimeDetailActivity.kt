@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.SurfaceView
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import butterknife.BindColor
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -36,14 +38,17 @@ import com.google.android.material.tabs.TabLayout
 import com.sukitsuki.tsukibb.GlideApp
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.adapter.DescriptionAdapter
+import com.sukitsuki.tsukibb.entity.Favorite
 import com.sukitsuki.tsukibb.fragment.EpisodesListFragment
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem
 import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem.EpisodesItem
+import com.sukitsuki.tsukibb.repository.FavoriteRepository
 import com.sukitsuki.tsukibb.repository.TbbRepository
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import io.reactivex.disposables.CompositeDisposable
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import timber.log.Timber
@@ -72,6 +77,8 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   lateinit var descriptionAdapter: DescriptionAdapter
   @Inject
   lateinit var mTbbRepository: TbbRepository
+  @Inject
+  lateinit var mFavoriteRepository: FavoriteRepository
 
   @BindView(R.id.playerProgressBar)
   lateinit var mProgressBar: ProgressBar
@@ -83,10 +90,14 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   lateinit var mViewPager: ViewPager
   @BindView(R.id.toolbar)
   lateinit var mToolbar: Toolbar
+  @BindView(R.id.bookmarkButton)
+  lateinit var mBookmarkButton: ImageButton
 
   private val mResultCodeForFullscreenVideoActivity: Int = 100
+  private val compositeDisposable: CompositeDisposable = CompositeDisposable()
   private var mCurrentEpisodesItem: EpisodesItem = EpisodesItem()
   private var toolbar: ActionBar? = null
+  private var mFavorite: Favorite? = null
   private var fragment = mutableListOf<Fragment>()
   private var getListSuccess = false
 
@@ -120,6 +131,11 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     }
   }
 
+  override fun onDestroy() {
+    super.onDestroy()
+    compositeDisposable.clear()
+  }
+
   private fun initAnimeList() {
     Timber.d("initAnimeList: getParcelableExtra")
     mAnimeList = intent.getParcelableExtra("animeList")
@@ -128,6 +144,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
       mSeason = mTbbRepository.fetchSeason(mAnimeList.animeId).toFuture().get()
       mPageSp = mTbbRepository.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
       getListSuccess = mSeason.status == 200
+      mFavorite = mFavoriteRepository.getFavorite(mAnimeList)
       uiThread {
         mSeason.list.seasons.forEach { i: SeasonsItem ->
           val episodesListFragment = EpisodesListFragment()
@@ -136,6 +153,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
         }
         mViewPager.adapter = EpisodesListFragmentAdapter(supportFragmentManager)
         mTabLayout.setupWithViewPager(mViewPager)
+        updateBookmark()
       }
     }
   }
@@ -173,6 +191,36 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   internal fun fullscreen() {
     val intent = Intent(applicationContext, FullscreenVideoActivity::class.java)
     startActivityForResult(intent, mResultCodeForFullscreenVideoActivity)
+  }
+
+  @BindColor(R.color.colorAccent)
+  @JvmField
+  var bookmarkActive: Int = 0
+
+  @BindColor(R.color.secondaryColor)
+  @JvmField
+  var bookmarkInactive: Int = 0
+
+  @OnClick(R.id.bookmarkButton)
+  internal fun bookmark() {
+    Timber.d("bookmark: $mAnimeList")
+    doAsync {
+      if (mFavorite != null) {
+        mFavoriteRepository.deleteFavorite(mFavorite!!)
+      } else {
+        mFavoriteRepository.insertFavorite(mAnimeList)
+      }
+      mFavorite = mFavoriteRepository.getFavorite(mAnimeList)
+      uiThread { updateBookmark() }
+    }
+  }
+
+  private fun updateBookmark() {
+    if (mFavorite == null) {
+      mBookmarkButton.setColorFilter(bookmarkInactive)
+    } else {
+      mBookmarkButton.setColorFilter(bookmarkActive)
+    }
   }
 
   fun openEpisodesItem(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {

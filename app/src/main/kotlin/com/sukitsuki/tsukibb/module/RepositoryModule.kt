@@ -5,6 +5,7 @@ import com.sukitsuki.tsukibb.AppDatabase
 import com.sukitsuki.tsukibb.AppConst
 import com.sukitsuki.tsukibb.MainApplication
 import com.sukitsuki.tsukibb.repository.CookieRepository
+import com.sukitsuki.tsukibb.repository.FavoriteRepository
 import com.sukitsuki.tsukibb.repository.TbbRepository
 import com.sukitsuki.tsukibb.utils.Interceptors
 import dagger.Module
@@ -59,6 +60,11 @@ class RepositoryModule {
   @Provides
   fun providesCookieRepository(database: AppDatabase, compositeDisposable: CompositeDisposable): CookieRepository =
     CookieRepository(database.cookieDao(), compositeDisposable)
+
+  @Singleton
+  @Provides
+  fun providesFavoriteRepository(database: AppDatabase, compositeDisposable: CompositeDisposable): FavoriteRepository =
+    FavoriteRepository(database.favoriteDao())
 
   @Singleton
   @Provides
