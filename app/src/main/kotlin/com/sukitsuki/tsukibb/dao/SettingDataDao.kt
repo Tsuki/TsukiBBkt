@@ -5,7 +5,7 @@ import androidx.room.*
 import com.sukitsuki.tsukibb.entity.SettingData
 
 @Dao
-interface SettingDataDao {
+interface SettingDataDao : BaseDao<SettingData> {
 
   @Query("SELECT * from settings")
   fun getAll(): List<SettingData>

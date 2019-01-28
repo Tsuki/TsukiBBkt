@@ -11,11 +11,11 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
   }
 
   fun deleteFavorite(favorite: Favorite) {
-    return favoriteDao.deleteFavorite(favorite)
+    return favoriteDao.delete(favorite)
   }
 
   fun insertFavorite(animeList: AnimeList) {
-    favoriteDao.insertFavorite(Favorite(animeList))
+    favoriteDao.insert(Favorite(animeList))
     return
   }
 }
