@@ -5,7 +5,7 @@ import com.sukitsuki.tsukibb.entity.Cookie
 import io.reactivex.Observable
 
 @Dao
-interface CookieDao {
+interface CookieDao : BaseDao<Cookie> {
 
   @Query("SELECT * from cookies")
   fun getAll(): Observable<List<Cookie>>
@@ -16,15 +16,4 @@ interface CookieDao {
   @Query("SELECT * from cookies where domain = :domain")
   fun findByDomain(domain: String): List<Cookie>
 
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertCookie(cookie: Cookie): Long
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertCookie(vararg cookie: Cookie): List<Long>
-
-  @Update
-  fun updateCookie(vararg cookies: Cookie)
-
-  @Query("DELETE from cookies")
-  fun deleteAll()
 }

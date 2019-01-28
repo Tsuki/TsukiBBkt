@@ -103,7 +103,7 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
           cookieString.split(";").mapNotNull { cs -> okhttp3.Cookie.parse(it, cs) }
         } ?: emptyList()
         doAsync {
-          appDatabase.cookieDao().insertCookie(*cookies.map(::Cookie).toTypedArray())
+          appDatabase.cookieDao().insert(*cookies.map(::Cookie).toTypedArray())
           sharedPreferences.edit().putBoolean("is_login", true).apply()
           uiThread {
             Toast.makeText(this@LoginWebViewActivity, "Login success", Toast.LENGTH_LONG).show()
@@ -132,7 +132,7 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
           .addHeader("x-requested-with", "XMLHttpRequest")
           .build()
         doAsync {
-          appDatabase.cookieDao().insertCookie(*cookies.map(::Cookie).toTypedArray())
+          appDatabase.cookieDao().insert(*cookies.map(::Cookie).toTypedArray())
           val response = okHttpClient.newCall(request).execute()
           val telegramAuth = response.body()!!.let {
             gson.fromJson(it.string(), TelegramAuth::class.java)
