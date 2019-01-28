@@ -37,7 +37,8 @@
         </activity>
         <activity
             android:name=".activity.AnimeDetailActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.LoginWebViewActivity" />
         <activity
             android:name=".activity.FullscreenVideoActivity"

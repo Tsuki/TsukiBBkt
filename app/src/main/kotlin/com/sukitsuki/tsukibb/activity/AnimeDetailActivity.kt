@@ -12,6 +12,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -80,6 +81,8 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   lateinit var mPlayerView: PlayerView
   @BindView(R.id.episodesListView)
   lateinit var mViewPager: ViewPager
+  @BindView(R.id.toolbar)
+  lateinit var mToolbar: Toolbar
 
   private val mResultCodeForFullscreenVideoActivity: Int = 100
   private var mCurrentEpisodesItem: EpisodesItem = EpisodesItem()
@@ -97,6 +100,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     setContentView(R.layout.activity_anime_detail)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     ButterKnife.bind(this)
+    setSupportActionBar(mToolbar)
     toolbar = supportActionBar
     toolbar?.setDisplayHomeAsUpEnabled(true)
     mPlayerView.player = exoPlayer

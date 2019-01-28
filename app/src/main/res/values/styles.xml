@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorSecondary">#2962FF</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorError">#F44336</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>

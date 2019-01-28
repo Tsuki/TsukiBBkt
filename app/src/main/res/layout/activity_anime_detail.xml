@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C34D728A">
+    android:background="@color/colorSecondary"
+    android:fitsSystemWindows="true">
+
+    <include
+        android:id="@+id/appBarLayout"
+        layout="@layout/view_app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/playerView"
@@ -12,7 +19,7 @@
         app:layout_constraintDimensionRatio="h,16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
     </com.google.android.exoplayer2.ui.PlayerView>
 
@@ -31,7 +38,7 @@
         android:id="@+id/sessionTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#54FFFFFF"
+        android:background="@color/colorSecondaryOver"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerView"
@@ -43,7 +50,7 @@
         android:id="@+id/episodesListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#54FFFFFF"
+        android:background="@color/colorSecondaryOver"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintTop_toBottomOf="@+id/sessionTab" />
 
