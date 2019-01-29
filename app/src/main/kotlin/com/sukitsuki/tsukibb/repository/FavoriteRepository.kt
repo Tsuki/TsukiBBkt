@@ -6,6 +6,10 @@ import com.sukitsuki.tsukibb.model.AnimeList
 
 class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
+  fun getAllFavorite(): List<Favorite> {
+    return favoriteDao.findAll()
+  }
+
   fun getFavorite(animeList: AnimeList): Favorite? {
     return favoriteDao.findByAnimeId(animeList.animeId)
   }
