@@ -59,12 +59,11 @@ class HomeFragment : DaggerFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     // init animeListViewModel on create
-    animeListViewModel
+    ::animeListViewModel.get()
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    return inflater.inflate(R.layout.fragment_home, container, false)
-  }
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    inflater.inflate(R.layout.fragment_home, container, false)
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     ButterKnife.bind(this, view)
@@ -75,16 +74,17 @@ class HomeFragment : DaggerFragment() {
       adapter = animeListAdapter
       this.addItemDecoration(ItemOffsetDecoration(requireContext(), R.dimen.item_offset))
     }
+    swipeRefreshLayout.setOnRefreshListener { animeListViewModel.refresh(swipeRefreshLayout::setRefreshing) }
     super.onViewCreated(view, savedInstanceState)
   }
 
   class ItemOffsetDecoration(private val mItemOffset: Int) : RecyclerView.ItemDecoration() {
 
-    constructor(context: Context, @DimenRes itemOffsetId: Int) : this(context.resources.getDimensionPixelSize(itemOffsetId))
+    constructor(context: Context, @DimenRes itemOffsetId: Int) :
+      this(context.resources.getDimensionPixelSize(itemOffsetId))
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) =
       outRect.set(mItemOffset, mItemOffset, mItemOffset, mItemOffset)
-    }
   }
 }
 

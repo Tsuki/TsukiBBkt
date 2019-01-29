@@ -7,6 +7,7 @@ import com.sukitsuki.tsukibb.repository.TbbRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 class AnimeListViewModel @Inject constructor(val repository: TbbRepository) : ViewModel() {
@@ -14,14 +15,15 @@ class AnimeListViewModel @Inject constructor(val repository: TbbRepository) : Vi
   private lateinit var disposable: Disposable
 
   init {
-    refresh()
+    refresh(null)
   }
 
-  fun refresh() {
+  fun refresh(refreshing: ((Boolean) -> Unit)?) {
     disposable = repository
       .fetchAnimeList()
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
+      .doFinally { refreshing?.invoke(false);Timber.d("refresh: Finally"); }
       .subscribe { animeList.value = it }
   }
 

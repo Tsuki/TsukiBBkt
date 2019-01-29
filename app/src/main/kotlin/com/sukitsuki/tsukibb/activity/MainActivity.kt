@@ -94,19 +94,18 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     // Handle navigation view item clicks here.
+
+    val transaction by lazy { fragmentManager.beginTransaction() }
     when (item.itemId) {
       R.id.nav_home -> {
-        val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.view_content_main, mHomeFragment)
         transaction.commit()
       }
       R.id.nav_favorite -> {
-        val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.view_content_main, mFavoriteFragment)
         transaction.commit()
       }
       R.id.nav_history -> {
-        val transaction = fragmentManager.beginTransaction()
         transaction.commit()
       }
       R.id.nav_login -> {
@@ -115,7 +114,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
       R.id.nav_logout -> {
       }
       R.id.nav_download -> {
-        val transaction = fragmentManager.beginTransaction()
         transaction.commit()
       }
       R.id.nav_setting -> {
