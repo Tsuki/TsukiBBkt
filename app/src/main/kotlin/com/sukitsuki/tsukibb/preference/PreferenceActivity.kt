@@ -1,9 +1,11 @@
 package com.sukitsuki.tsukibb.preference
 
 import android.os.Bundle
+import android.view.MenuItem
 import com.sukitsuki.tsukibb.R
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import timber.log.Timber
 
 
 private const val TITLE_TAG = "settingsActivityTitle"
@@ -34,6 +36,20 @@ class PreferenceActivity : DaggerAppCompatActivity() {
       }
     }
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    when (item?.itemId) {
+      // Use android.R.id rather than packaged id
+      android.R.id.home -> {
+        onBackPressed()
+        return true
+      }
+      else -> {
+        Timber.d("itemId${item?.itemId?.let { resources.getResourceName(it).split("\\/") }}")
+      }
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   override fun onSaveInstanceState(outState: Bundle) {

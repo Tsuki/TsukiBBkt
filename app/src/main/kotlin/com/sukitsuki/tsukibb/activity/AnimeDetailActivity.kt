@@ -177,7 +177,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     when (item?.itemId) {
       // Use android.R.id rather than packaged id
       android.R.id.home -> {
-        this.finish()
+        onBackPressed()
         return true
       }
       else -> {
