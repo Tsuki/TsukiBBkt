@@ -24,7 +24,7 @@ class EpisodesListFragment : ListFragment() {
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    return inflater.inflate(R.layout.view_episodes_item, container, false)
+    return inflater.inflate(R.layout.fragment_episodes_item, container, false)
   }
 
   override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {

@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.entity.Favorite
+import com.sukitsuki.tsukibb.viewmodel.FavoriteViewModel
 import dagger.android.AndroidInjector
 
 class FavoriteFragment : Fragment() {
+  private lateinit var mItems: List<Favorite>
 
   @dagger.Subcomponent(modules = [])
   interface Component : AndroidInjector<FavoriteFragment> {
@@ -20,7 +23,7 @@ class FavoriteFragment : Fragment() {
   private lateinit var viewModel: FavoriteViewModel
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    return inflater.inflate(R.layout.favorite_fragment, container, false)
+    return inflater.inflate(R.layout.fragment_favorite, container, false)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
