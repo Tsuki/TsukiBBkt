@@ -24,11 +24,6 @@ import javax.inject.Inject
 
 
 class HomeFragment : DaggerFragment() {
-  private lateinit var recyclerView: RecyclerView
-  private lateinit var viewAdapter: RecyclerView.Adapter<*>
-  private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var animeListViewModel: AnimeListViewModel
-  private lateinit var animeListAdapter: AnimeListAdapter
 
   @dagger.Subcomponent(modules = [])
   interface Component : AndroidInjector<HomeFragment> {
@@ -39,58 +34,44 @@ class HomeFragment : DaggerFragment() {
   @Inject
   lateinit var viewModeFactory: ViewModelFactory
 
-
-  @Inject
-  fun logInjection() {
-    Timber.d("Injecting ${this::class.java.simpleName}")
+  private val animeListAdapter by lazy {
+    AnimeListAdapter(requireContext()).apply {
+      this.onItemClick = { it ->
+        val intent = Intent(context, AnimeDetailActivity::class.java)
+        intent.putExtra("animeList", it)
+        startActivity(intent)
+      }
+    }
   }
-
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-    animeListAdapter = AnimeListAdapter(context)
-    val gridLayoutManager = GridLayoutManager(context, 3)
-    gridLayoutManager.initialPrefetchItemCount = 6
-    viewManager = gridLayoutManager
-    animeListViewModel = ViewModelProviders.of(this@HomeFragment, viewModeFactory).get(AnimeListViewModel::class.java)
+  private val animeListViewModel by lazy {
+    ViewModelProviders.of(this@HomeFragment, viewModeFactory).get(AnimeListViewModel::class.java).apply {
+      this.animeList.observe(this@HomeFragment, Observer {
+        animeListAdapter.loadDataSet(it)
+      })
+    }
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    viewAdapter = animeListAdapter
     return inflater.inflate(R.layout.fragment_home, container, false)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    recyclerView = view.findViewById<RecyclerView>(R.id.anime_list_view).apply {
+    view.findViewById<RecyclerView>(R.id.anime_list_view).apply {
       setHasFixedSize(true)
-      layoutManager = viewManager
-      adapter = viewAdapter
-
+      layoutManager = GridLayoutManager(context, 3).apply { initialPrefetchItemCount = 6 }
+      adapter = animeListAdapter
+      this.addItemDecoration(ItemOffsetDecoration(requireContext(), R.dimen.item_offset))
     }
-    animeListAdapter.onItemClick = { it ->
-      val intent = Intent(context, AnimeDetailActivity::class.java)
-      intent.putExtra("animeList", it)
-      startActivity(intent)
-    }
-    animeListViewModel.animeList.observe(this, Observer {
-      animeListAdapter.loadDataSet(it)
-    })
-    val itemDecoration = ItemOffsetDecoration(context!!, R.dimen.item_offset)
-    recyclerView.addItemDecoration(itemDecoration)
+    // Init animeListViewModel
+    animeListViewModel
     super.onViewCreated(view, savedInstanceState)
   }
 
   class ItemOffsetDecoration(private val mItemOffset: Int) : RecyclerView.ItemDecoration() {
 
-    constructor(context: Context, @DimenRes itemOffsetId: Int) : this(
-      context.resources.getDimensionPixelSize(
-        itemOffsetId
-      )
-    )
+    constructor(context: Context, @DimenRes itemOffsetId: Int) : this(context.resources.getDimensionPixelSize(itemOffsetId))
 
-    override fun getItemOffsets(
-      outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
-    ) {
-      super.getItemOffsets(outRect, view, parent, state)
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
       outRect.set(mItemOffset, mItemOffset, mItemOffset, mItemOffset)
     }
   }

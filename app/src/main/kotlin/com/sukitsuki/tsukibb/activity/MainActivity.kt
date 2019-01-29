@@ -46,9 +46,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
   @BindView(R.id.nav_view)
   lateinit var navView: NavigationView
 
-
   private lateinit var loginDialog: AlertDialog
   private lateinit var fragmentManager: FragmentManager
+  private val mHomeFragment by lazy { HomeFragment() }
+  private val mFavoriteFragment by lazy { FavoriteFragment() }
 
   @Inject
   fun logInjection() {
@@ -96,12 +97,12 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     when (item.itemId) {
       R.id.nav_home -> {
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.view_content_main, HomeFragment())
+        transaction.replace(R.id.view_content_main, mHomeFragment)
         transaction.commit()
       }
       R.id.nav_favorite -> {
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.view_content_main, FavoriteFragment())
+        transaction.replace(R.id.view_content_main, mFavoriteFragment)
         transaction.commit()
       }
       R.id.nav_history -> {
@@ -124,6 +125,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
         return false
       }
     }
+    item.isChecked = true
     drawerLayout.closeDrawer(GravityCompat.START)
     return true
   }
