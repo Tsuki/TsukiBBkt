@@ -59,7 +59,9 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_main)
+    fragmentManager = this.supportFragmentManager
     ButterKnife.bind(this)
+    onNavigationItemSelected(navView.menu.findItem(R.id.nav_home))
     isLogged(false)
     setSupportActionBar(toolbar)
     val toggle = ActionBarDrawerToggle(
@@ -69,8 +71,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     )
     toggle.syncState()
     drawerLayout.addDrawerListener(toggle)
-
-    fragmentManager = this.supportFragmentManager
 
     navView.setNavigationItemSelectedListener(this@MainActivity)
     loginDialog = AlertDialog.Builder(this@MainActivity)
@@ -96,12 +96,12 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
     when (item.itemId) {
       R.id.nav_home -> {
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_home, HomeFragment())
+        transaction.replace(R.id.view_content_main, HomeFragment())
         transaction.commit()
       }
       R.id.nav_favorite -> {
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_home, FavoriteFragment())
+        transaction.replace(R.id.view_content_main, FavoriteFragment())
         transaction.commit()
       }
       R.id.nav_history -> {
