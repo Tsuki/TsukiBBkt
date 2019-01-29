@@ -4,13 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/anime_list_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/home_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="1dp"
-        android:padding="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/anime_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:padding="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

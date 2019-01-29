@@ -12,6 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.AnimeListAdapter
@@ -33,6 +36,8 @@ class HomeFragment : DaggerFragment() {
 
   @Inject
   lateinit var viewModeFactory: ViewModelFactory
+  @BindView(R.id.home_refresh_layout)
+  lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
   private val animeListAdapter by lazy {
     AnimeListAdapter(requireContext()).apply {
@@ -62,6 +67,8 @@ class HomeFragment : DaggerFragment() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    ButterKnife.bind(this, view)
+    Timber.d("onViewCreated: $swipeRefreshLayout")
     view.findViewById<RecyclerView>(R.id.anime_list_view).apply {
       setHasFixedSize(true)
       layoutManager = GridLayoutManager(context, 3).apply { initialPrefetchItemCount = 6 }
