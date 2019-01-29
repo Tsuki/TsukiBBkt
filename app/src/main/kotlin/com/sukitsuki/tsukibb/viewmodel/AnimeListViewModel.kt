@@ -11,9 +11,13 @@ import javax.inject.Inject
 
 class AnimeListViewModel @Inject constructor(val repository: TbbRepository) : ViewModel() {
   var animeList = MutableLiveData<List<AnimeList>>().apply { value = emptyList() }
-  private var disposable: Disposable
+  private lateinit var disposable: Disposable
 
   init {
+    refresh()
+  }
+
+  fun refresh() {
     disposable = repository
       .fetchAnimeList()
       .subscribeOn(Schedulers.io())
@@ -24,6 +28,6 @@ class AnimeListViewModel @Inject constructor(val repository: TbbRepository) : Vi
 
   override fun onCleared() {
     super.onCleared()
-    disposable.dispose()
+    if (::disposable.isInitialized) disposable.dispose()
   }
 }

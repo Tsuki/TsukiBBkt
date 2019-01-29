@@ -51,6 +51,12 @@ class HomeFragment : DaggerFragment() {
     }
   }
 
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    // init animeListViewModel on create
+    animeListViewModel
+  }
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.fragment_home, container, false)
   }
@@ -62,8 +68,6 @@ class HomeFragment : DaggerFragment() {
       adapter = animeListAdapter
       this.addItemDecoration(ItemOffsetDecoration(requireContext(), R.dimen.item_offset))
     }
-    // Init animeListViewModel
-    animeListViewModel
     super.onViewCreated(view, savedInstanceState)
   }
 
