@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.AnimeListAdapter
+import com.sukitsuki.tsukibb.utils.ViewModelFactory
 import com.sukitsuki.tsukibb.viewmodel.AnimeListViewModel
-import com.sukitsuki.tsukibb.viewmodel.ViewModelFactory
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
 import timber.log.Timber

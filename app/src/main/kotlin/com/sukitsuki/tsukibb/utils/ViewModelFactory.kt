@@ -1,4 +1,4 @@
-package com.sukitsuki.tsukibb.viewmodel
+package com.sukitsuki.tsukibb.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
