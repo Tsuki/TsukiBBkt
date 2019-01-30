@@ -50,9 +50,7 @@ class HomeFragment : DaggerFragment() {
   }
   private val animeListViewModel by lazy {
     ViewModelProviders.of(this@HomeFragment, viewModeFactory).get(AnimeListViewModel::class.java).apply {
-      this.animeList.observe(this@HomeFragment, Observer {
-        animeListAdapter.loadDataSet(it)
-      })
+      this.animeList.observe(this@HomeFragment, Observer { animeListAdapter.loadDataSet(it) })
     }
   }
 

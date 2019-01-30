@@ -17,12 +17,12 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.sukitsuki.tsukibb.R
 import dagger.android.AndroidInjector
 import dagger.android.DaggerActivity
+import org.jetbrains.anko.sdk27.coroutines.onSystemUiVisibilityChange
 import timber.log.Timber
 import javax.inject.Inject
 
 
 class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
-  private val uiAnimationDelay = 300L
 
   @dagger.Subcomponent(modules = [])
   interface Component : AndroidInjector<FullscreenVideoActivity> {
@@ -44,7 +44,7 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
   lateinit var exoPlayer: SimpleExoPlayer
 
   private val mHideHandler = Handler()
-  private val mHideRunnable = Runnable { hide() }
+  private val mHideRunnable = Runnable { mHideHandler.postDelayed(mHidePart2Runnable, 300L) }
   private val mHidePart2Runnable = Runnable {
     mContentView.systemUiVisibility = (
       View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -58,12 +58,13 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_fullscreen_video)
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     ButterKnife.bind(this)
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     fullscreenIcon.setImageResource(R.drawable.exo_controls_fullscreen_exit)
     onPlayerStateChanged(exoPlayer.playWhenReady, exoPlayer.playbackState)
     exoPlayer.addListener(this@FullscreenVideoActivity)
     playerView.player = exoPlayer
+    window.decorView.onSystemUiVisibilityChange { if ((it and View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) delayedHide(1000L) }
   }
 
   override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -72,14 +73,12 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
   }
 
   override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-    Timber.d("onPlayerStateChanged: $playbackState")
     when (playbackState) {
       Player.STATE_IDLE -> return
       Player.STATE_BUFFERING -> mProgressBar.visibility = View.VISIBLE
       Player.STATE_READY -> mProgressBar.visibility = View.INVISIBLE
       Player.STATE_ENDED -> exoPlayer.playWhenReady = false
     }
-    Timber.d("onPlayerStateChanged: ${mProgressBar.visibility}")
   }
 
   @OnClick(R.id.exo_fullscreen_button)
@@ -87,19 +86,14 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
     finish()
   }
 
-  private fun hide() {
-    mHideHandler.postDelayed(mHidePart2Runnable, 100L)
-  }
-
-  private fun delayedHide() {
+  private fun delayedHide(uiAnimationDelay: Long = 1000L) {
     mHideHandler.removeCallbacks(mHideRunnable)
     mHideHandler.postDelayed(mHideRunnable, uiAnimationDelay)
   }
 
   private fun enterPIPMode() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      val params = PictureInPictureParams.Builder()
-      this.enterPictureInPictureMode(params.build())
+      this.enterPictureInPictureMode(PictureInPictureParams.Builder().build())
     } else {
       @Suppress("DEPRECATION")
       this.enterPictureInPictureMode()
@@ -108,6 +102,6 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
 
   override fun onUserLeaveHint() {
     super.onUserLeaveHint()
-    enterPIPMode()
+    // enterPIPMode()
   }
 }
