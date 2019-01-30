@@ -3,10 +3,11 @@ package com.sukitsuki.tsukibb.repository
 import com.sukitsuki.tsukibb.dao.FavoriteDao
 import com.sukitsuki.tsukibb.entity.Favorite
 import com.sukitsuki.tsukibb.model.AnimeList
+import io.reactivex.Observable
 
 class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
-  fun getAllFavorite(): List<Favorite> {
+  fun getAllFavorite(): Observable<List<Favorite>> {
     return favoriteDao.findAll()
   }
 
