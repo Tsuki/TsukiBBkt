@@ -23,7 +23,7 @@ import com.sukitsuki.tsukibb.utils.DateTypeConverter
     , Cookie::class
     , Favorite::class
     , History::class
-  ], version = 4, exportSchema = true
+  ], version = 6, exportSchema = true
 )
 @TypeConverters(DateTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -35,8 +35,8 @@ abstract class AppDatabase : RoomDatabase() {
   companion object {
     val AppDatabase = fun(it: Application): AppDatabase {
       return Room.databaseBuilder(it.applicationContext, AppDatabase::class.java, DatabaseName)
-        .fallbackToDestructiveMigrationFrom(3, 4)
-//        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+        .fallbackToDestructiveMigrationFrom(4, 5)
+        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
         // .fallbackToDestructiveMigration()
         .build()
     }

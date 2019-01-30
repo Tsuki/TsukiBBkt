@@ -2,6 +2,7 @@ package com.sukitsuki.tsukibb.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.sukitsuki.tsukibb.entity.Favorite
 import kotlinx.android.parcel.Parcelize
 
 
@@ -37,4 +38,13 @@ data class AnimeList(
 
   @SerializedName("season_title")
   val seasonTitle: String
-) : Parcelable
+) : Parcelable {
+  constructor(favorite: Favorite) : this(
+    favorite.aired,
+    favorite.animeId,
+    favorite.episodeTitle,
+    0, 0, "", favorite.nameChi, "",
+    favorite.seasonId,
+    favorite.seasonTitle
+  )
+}
