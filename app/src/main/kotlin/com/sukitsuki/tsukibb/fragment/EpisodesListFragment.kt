@@ -19,7 +19,7 @@ class EpisodesListFragment : ListFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     mSeasonsItem = arguments?.get("SeasonsItem") as SeasonsItem
     mItems = mSeasonsItem.episodes.sortedByDescending { it.title }
-    listAdapter = EpisodesListAdapter(context!!, R.layout.item_episode, mItems)
+    listAdapter = EpisodesListAdapter(requireContext(), R.layout.item_episode, mItems)
     super.onCreate(savedInstanceState)
   }
 
