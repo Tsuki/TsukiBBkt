@@ -151,7 +151,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'com.google.code.gson:gson:2.8.5'
-    api 'com.google.guava:guava:27.0.1-android'
+    // api 'com.google.guava:guava:27.0.1-android'
 
     implementation 'io.reactivex.rxjava2:rxjava:2.2.5'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
