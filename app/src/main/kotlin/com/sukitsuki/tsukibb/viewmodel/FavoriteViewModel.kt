@@ -3,7 +3,6 @@ package com.sukitsuki.tsukibb.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sukitsuki.tsukibb.entity.Favorite
-import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.repository.FavoriteRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

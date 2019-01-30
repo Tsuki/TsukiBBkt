@@ -1,7 +1,10 @@
 package com.sukitsuki.tsukibb.repository
 
 import com.sukitsuki.tsukibb.AppConst.EbbUserAgent
-import com.sukitsuki.tsukibb.model.*
+import com.sukitsuki.tsukibb.model.AnimeList
+import com.sukitsuki.tsukibb.model.HpData
+import com.sukitsuki.tsukibb.model.Season
+import com.sukitsuki.tsukibb.model.User
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import retrofit2.http.*

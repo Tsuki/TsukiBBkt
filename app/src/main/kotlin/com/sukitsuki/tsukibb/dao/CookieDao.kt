@@ -1,6 +1,7 @@
 package com.sukitsuki.tsukibb.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Query
 import com.sukitsuki.tsukibb.entity.Cookie
 import io.reactivex.Observable
 

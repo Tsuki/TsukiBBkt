@@ -1,7 +1,6 @@
 package com.sukitsuki.tsukibb.activity
 
 import android.app.PictureInPictureParams
-import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -18,7 +17,6 @@ import com.sukitsuki.tsukibb.R
 import dagger.android.AndroidInjector
 import dagger.android.DaggerActivity
 import org.jetbrains.anko.sdk27.coroutines.onSystemUiVisibilityChange
-import timber.log.Timber
 import javax.inject.Inject
 
 

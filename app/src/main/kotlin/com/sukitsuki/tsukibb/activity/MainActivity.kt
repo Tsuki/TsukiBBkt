@@ -22,7 +22,6 @@ import com.sukitsuki.tsukibb.fragment.HomeFragment
 import com.sukitsuki.tsukibb.preference.PreferenceActivity
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
-import timber.log.Timber
 import javax.inject.Inject
 
 
