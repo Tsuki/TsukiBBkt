@@ -72,8 +72,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   @Inject
   lateinit var exoPlayer: SimpleExoPlayer
   @Inject
-  lateinit var playerNotificationManager: PlayerNotificationManager
-  @Inject
   lateinit var descriptionAdapter: DescriptionAdapter
   @Inject
   lateinit var mTbbRepository: TbbRepository
@@ -109,7 +107,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_anime_detail)
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     ButterKnife.bind(this)
     setSupportActionBar(mToolbar)
     toolbar = supportActionBar
@@ -205,22 +202,16 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   internal fun bookmark() {
     Timber.d("bookmark: $mAnimeList")
     doAsync {
-      if (mFavorite != null) {
-        mFavoriteRepository.deleteFavorite(mFavorite!!)
-      } else {
-        mFavoriteRepository.insertFavorite(mAnimeList)
-      }
+      mFavorite?.let { mFavoriteRepository.deleteFavorite(mFavorite!!) }
+        ?: run { mFavoriteRepository.insertFavorite(mAnimeList) }
       mFavorite = mFavoriteRepository.getFavorite(mAnimeList)
       uiThread { updateBookmark() }
     }
   }
 
   private fun updateBookmark() {
-    if (mFavorite == null) {
-      mBookmarkButton.setColorFilter(bookmarkInactive)
-    } else {
-      mBookmarkButton.setColorFilter(bookmarkActive)
-    }
+    mFavorite?.let { mBookmarkButton.setColorFilter(bookmarkActive) }
+      ?: run { mBookmarkButton.setColorFilter(bookmarkInactive) }
   }
 
   fun openEpisodesItem(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
@@ -252,7 +243,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
       .setExtractorFactory(defaultHlsExtractorFactory)
       .setAllowChunklessPreparation(true)
       .createMediaSource(Uri.parse(episodesItem.sl))
-    exoPlayer.playWhenReady = true
     descriptionAdapter.contentTitle = mAnimeList.nameChi
     descriptionAdapter.contentText = "${seasonsItem.seasonTitle} - ${episodesItem.title}"
     descriptionAdapter.animeList = mAnimeList
@@ -261,8 +251,8 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
         .load("https://seaside.ebb.io/${seasonsItem.animeId}x${seasonsItem.id}.jpg").submit()
       descriptionAdapter.largeIcon = request.get()
     }
-    playerNotificationManager
     exoPlayer.prepare(hlsMediaSource)
+    exoPlayer.playWhenReady = true
     mCurrentEpisodesItem = episodesItem
   }
 

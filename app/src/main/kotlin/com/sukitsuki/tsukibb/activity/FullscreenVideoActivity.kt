@@ -59,7 +59,6 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_fullscreen_video)
     ButterKnife.bind(this)
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     fullscreenIcon.setImageResource(R.drawable.exo_controls_fullscreen_exit)
     onPlayerStateChanged(exoPlayer.playWhenReady, exoPlayer.playbackState)
     exoPlayer.addListener(this@FullscreenVideoActivity)

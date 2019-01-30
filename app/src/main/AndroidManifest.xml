@@ -18,6 +18,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +40,7 @@
         <activity
             android:name=".activity.AnimeDetailActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".activity.LoginWebViewActivity" />
@@ -47,6 +49,7 @@
             android:name=".activity.FullscreenVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:resizeableActivity="true"
+            android:screenOrientation="sensorLandscape"
             android:supportsPictureInPicture="true"
             android:theme="@style/FullscreenTheme" />
 
