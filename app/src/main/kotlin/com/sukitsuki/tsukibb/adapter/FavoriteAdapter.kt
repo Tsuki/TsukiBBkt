@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.entity.Favorite
-import timber.log.Timber
 
-class FavoriteAdapter(context: Context, private val resource: Int, private var items: List<Favorite>) :
+class FavoriteAdapter(context: Context, private val resource: Int, items: List<Favorite>) :
   ArrayAdapter<Favorite>(context, resource, items) {
 
   private lateinit var mViewHolder: FavoriteAdapter.ViewHolder
@@ -17,14 +15,13 @@ class FavoriteAdapter(context: Context, private val resource: Int, private var i
 
   fun notifyDataSetChanged(items: List<Favorite>) {
     this.clear()
-    Timber.d("notifyDataSetChanged: ${items.size}")
     this.addAll(items)
   }
 
   override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
     val item = getItem(position)
     if (convertView == null) {
-      inflate = LayoutInflater.from(context).inflate(R.layout.item_favorite, parent, false)
+      inflate = LayoutInflater.from(context).inflate(resource, parent, false)
       mViewHolder = FavoriteAdapter.ViewHolder()
       inflate.tag = mViewHolder
     } else {

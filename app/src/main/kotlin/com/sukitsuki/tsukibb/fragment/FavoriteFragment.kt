@@ -12,15 +12,12 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.adapter.FavoriteAdapter
-import com.sukitsuki.tsukibb.entity.Favorite
-import com.sukitsuki.tsukibb.repository.FavoriteRepository
-import com.sukitsuki.tsukibb.viewmodel.FavoriteViewModel
 import com.sukitsuki.tsukibb.utils.ViewModelFactory
+import com.sukitsuki.tsukibb.viewmodel.FavoriteViewModel
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import timber.log.Timber
 import javax.inject.Inject
 
 class FavoriteFragment : DaggerFragment() {
@@ -55,10 +52,6 @@ class FavoriteFragment : DaggerFragment() {
     ButterKnife.bind(this, view)
     viewModel.favorites.observe(viewLifecycleOwner, Observer { favoriteAdapter.notifyDataSetChanged(it) })
     listView.adapter = favoriteAdapter
-  }
-
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
   }
 
 }

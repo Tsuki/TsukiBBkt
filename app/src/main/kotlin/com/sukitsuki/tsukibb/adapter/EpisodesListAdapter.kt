@@ -11,14 +11,14 @@ import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem.EpisodesItem
 
 
-class EpisodesListAdapter(context: Context, resource: Int, items: List<EpisodesItem>) :
+class EpisodesListAdapter(context: Context, private val resource: Int, items: List<EpisodesItem>) :
   ArrayAdapter<EpisodesItem>(context, resource, items) {
   private lateinit var mViewHolder: ViewHolder
   private lateinit var inflate: View
   override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
     val item = getItem(position)
     if (convertView == null) {
-      inflate = LayoutInflater.from(context).inflate(R.layout.item_episode, parent, false)
+      inflate = LayoutInflater.from(context).inflate(resource, parent, false)
       mViewHolder = ViewHolder(inflate.findViewById(R.id.episodesTitle), inflate.findViewById(R.id.episodesDuration))
       inflate.tag = mViewHolder
     } else {
