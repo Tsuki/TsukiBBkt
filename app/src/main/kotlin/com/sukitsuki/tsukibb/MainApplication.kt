@@ -38,11 +38,6 @@ class MainApplication : DaggerApplication() {
   }
 
   @Inject
-  fun logInjection() {
-    Timber.d("Injecting ${this::class.java.simpleName}")
-  }
-
-  @Inject
   lateinit var exoPlayer: SimpleExoPlayer
   @Inject
   lateinit var playerNotificationManager: PlayerNotificationManager

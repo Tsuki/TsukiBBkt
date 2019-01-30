@@ -51,11 +51,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
   private val mHomeFragment by lazy { HomeFragment() }
   private val mFavoriteFragment by lazy { FavoriteFragment() }
 
-  @Inject
-  fun logInjection() {
-    Timber.d("Injecting ${this::class.java.simpleName}")
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
