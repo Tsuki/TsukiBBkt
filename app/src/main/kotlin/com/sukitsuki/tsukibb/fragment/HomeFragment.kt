@@ -65,7 +65,6 @@ class HomeFragment : DaggerFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     ButterKnife.bind(this, view)
-    Timber.d("onViewCreated: $swipeRefreshLayout")
     view.findViewById<RecyclerView>(R.id.anime_list_view).apply {
       setHasFixedSize(true)
       layoutManager = GridLayoutManager(context, 3).apply { initialPrefetchItemCount = 6 }

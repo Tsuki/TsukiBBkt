@@ -17,7 +17,7 @@ class FavoriteViewModel @Inject constructor(val repository: FavoriteRepository) 
     refresh(null)
   }
 
-  fun refresh(refreshing: ((Boolean) -> Unit)?): Disposable? {
+  private fun refresh(refreshing: ((Boolean) -> Unit)?): Disposable? {
     return repository
       .getAllFavorite()
       .subscribeOn(Schedulers.io())
