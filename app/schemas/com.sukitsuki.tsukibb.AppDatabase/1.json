@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "218efe88f6e604f4b5b873305113f06f",
+    "identityHash": "d9bbf29a6a151075a5c7df654af365f5",
     "entities": [
       {
         "tableName": "settings",
@@ -118,21 +118,23 @@
         },
         "indices": [
           {
-            "name": "index_cookies_name_domain_path",
+            "name": "index_cookies_name_domain_path_secure_http_only",
             "unique": true,
             "columnNames": [
               "name",
               "domain",
-              "path"
+              "path",
+              "secure",
+              "http_only"
             ],
-            "createSql": "CREATE UNIQUE INDEX `index_cookies_name_domain_path` ON `${TABLE_NAME}` (`name`, `domain`, `path`)"
+            "createSql": "CREATE UNIQUE INDEX `index_cookies_name_domain_path_secure_http_only` ON `${TABLE_NAME}` (`name`, `domain`, `path`, `secure`, `http_only`)"
           }
         ],
         "foreignKeys": []
       },
       {
         "tableName": "favorites",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `anime_id` INTEGER NOT NULL, `aired` INTEGER NOT NULL, `name_chi` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `anime_id` INTEGER NOT NULL, `season_title` TEXT NOT NULL, `season_id` INTEGER NOT NULL, `aired` INTEGER NOT NULL, `name_chi` TEXT NOT NULL, `last_updated` INTEGER NOT NULL, `episode_title` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -147,6 +149,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "seasonTitle",
+            "columnName": "season_title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seasonId",
+            "columnName": "season_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "aired",
             "columnName": "aired",
             "affinity": "INTEGER",
@@ -155,6 +169,18 @@
           {
             "fieldPath": "nameChi",
             "columnName": "name_chi",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "last_updated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "episodeTitle",
+            "columnName": "episode_title",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -253,7 +279,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"218efe88f6e604f4b5b873305113f06f\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d9bbf29a6a151075a5c7df654af365f5\")"
     ]
   }
 }

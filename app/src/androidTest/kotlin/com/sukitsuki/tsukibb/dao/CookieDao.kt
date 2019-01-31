@@ -33,22 +33,22 @@ class CookieDaoTest {
 
   @Test
   fun testInsert() {
-    cookieDao.insertCookie(Cookie(name = "test", domain = "https://www.google.com", path = "/"))
-    cookieDao.insertCookie(Cookie(name = "test2", domain = "https://www.google.com", path = "/"))
-    cookieDao.insertCookie(Cookie(name = "test3", domain = "https://www.google.com", path = "/"))
-    cookieDao.insertCookie(Cookie(name = "test3", domain = "https://www.google.com", path = "/"))
-    val list = cookieDao.getAll()
+    cookieDao.insert(Cookie(name = "test", domain = "https://www.google.com", path = "/"))
+    cookieDao.insert(Cookie(name = "test2", domain = "https://www.google.com", path = "/"))
+    cookieDao.insert(Cookie(name = "test3", domain = "https://www.google.com", path = "/"))
+    cookieDao.insert(Cookie(name = "test3", domain = "https://www.google.com", path = "/"))
+    val list = cookieDao.getAll().blockingFirst()
     Timber.d("testInsert: ${list.joinToString("\n")}")
     Assert.assertEquals(3, list.size)
   }
 
   @Test
   fun testGroup() {
-    cookieDao.insertCookie(Cookie(name = "test", domain = "https://www.google.com", path = "/"))
-    cookieDao.insertCookie(Cookie(name = "test2", domain = "https://www.google.com", path = "/"))
-    cookieDao.insertCookie(Cookie(name = "test3", domain = "https://www.google.com", path = "/"))
-    cookieDao.insertCookie(Cookie(name = "test3", domain = "https://www.google.com", path = "/"))
-    val list = cookieDao.getAll()
+    cookieDao.insert(Cookie(name = "test", domain = "https://www.google.com", path = "/"))
+    cookieDao.insert(Cookie(name = "test2", domain = "https://www.google.com", path = "/"))
+    cookieDao.insert(Cookie(name = "test3", domain = "https://www.google.com", path = "/"))
+    cookieDao.insert(Cookie(name = "test3", domain = "https://www.google.com", path = "/"))
+    val list = cookieDao.getAll().blockingFirst()
     Timber.d("testGroup: ${list.groupBy { it.domain }}")
     Assert.assertEquals(3, list.size)
     Assert.assertEquals(1, list.groupBy { it.domain }.keys.size)
