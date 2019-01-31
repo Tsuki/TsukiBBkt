@@ -1,5 +1,6 @@
 package com.sukitsuki.tsukibb.activity
 
+import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -49,10 +50,12 @@ import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.RuntimePermissions
 import timber.log.Timber
 import javax.inject.Inject
 
-
+@RuntimePermissions
 class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
 
   @dagger.Subcomponent(modules = [])
@@ -200,6 +203,15 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
       mFavorite = mFavoriteRepository.getFavorite(mAnimeList)
       uiThread { updateBookmark() }
     }
+  }
+
+  @NeedsPermission(
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    maxSdkVersion = 18)
+  @OnClick(R.id.exo_screenshot)
+  internal fun screenshot() {
+    Timber.d("screenshot: ")
   }
 
   private fun updateBookmark() {
