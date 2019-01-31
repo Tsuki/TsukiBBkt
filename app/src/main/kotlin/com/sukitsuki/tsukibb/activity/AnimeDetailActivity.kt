@@ -187,7 +187,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   @JvmField
   var bookmarkActive: Int = 0
 
-  @BindColor(R.color.secondaryColor)
+  @BindColor(R.color.primaryTextColor)
   @JvmField
   var bookmarkInactive: Int = 0
 

@@ -13,6 +13,7 @@ import butterknife.ButterKnife
 import com.sukitsuki.tsukibb.R
 import com.sukitsuki.tsukibb.activity.AnimeDetailActivity
 import com.sukitsuki.tsukibb.adapter.FavoriteAdapter
+import com.sukitsuki.tsukibb.entity.Favorite
 import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.utils.ViewModelFactory
 import com.sukitsuki.tsukibb.viewmodel.FavoriteViewModel
@@ -52,7 +53,7 @@ class FavoriteFragment : DaggerFragment() {
       layoutManager = LinearLayoutManager(requireContext())
       adapter = favoriteAdapter
     }
-    viewModel.favorites.observe(viewLifecycleOwner, Observer { favoriteAdapter.dataSet = it })
+    viewModel.favorites.observe(viewLifecycleOwner, Observer { favoriteAdapter.loadDataSet(it.sortedByDescending(Favorite::lastUpdated)) })
   }
 
 }

@@ -13,7 +13,7 @@ import com.sukitsuki.tsukibb.model.AnimeList
 
 
 class AnimeListAdapter(val context: Context) : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
-  var onItemClick: ((AnimeList) -> Unit)? = null
+  lateinit var onItemClick: ((AnimeList) -> Unit)
   var dataSet: List<AnimeList> = emptyList()
   private val mImageLoader by lazy { GlideApp.with(context) }
 
@@ -43,7 +43,7 @@ class AnimeListAdapter(val context: Context) : RecyclerView.Adapter<AnimeListAda
 
     init {
       v.setOnClickListener {
-        onItemClick?.invoke(dataSet[adapterPosition])
+        onItemClick.invoke(dataSet[adapterPosition])
       }
     }
   }

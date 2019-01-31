@@ -9,6 +9,10 @@
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorError">@color/colorError</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <!-- Text colors -->
+        <!--<item name="android:textColorTertiary">#A81D1D</item>-->
+        <!--<item name="android:textColor">#A81D1D</item>-->
+        <!--<item name="android:textColorPrimary">@color/primaryTextColor</item>-->
     </style>
 
     <style name="AppTheme.NoActionBar">

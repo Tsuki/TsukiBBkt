@@ -19,6 +19,10 @@ class FavoriteAdapter(context: Context, private val resource: Int) : RecyclerVie
   lateinit var onItemClick: ((Favorite) -> Unit)
   private val mImageLoader by lazy { GlideApp.with(context) }
 
+  fun loadDataSet(newDataSet: List<Favorite>) {
+    dataSet = newDataSet
+    this.notifyDataSetChanged()
+  }
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
     ViewHolder(LayoutInflater.from(parent.context).inflate(resource, parent, false))
 

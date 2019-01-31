@@ -9,8 +9,11 @@
     <include
         android:id="@+id/appBarLayout"
         layout="@layout/view_app_bar_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/bookmarkButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/playerView"
@@ -58,15 +61,16 @@
         android:id="@+id/bookmarkButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="5dp"
-        android:background="@color/transparent"
+        android:background="@color/primaryColor"
         android:contentDescription="@string/bookmark"
-        android:tint="@color/secondaryColor"
+        android:padding="6dp"
+        android:foreground="@drawable/ic_image_button"
+        android:tint="@color/primaryTextColor"
         app:layout_constraintBottom_toTopOf="@+id/playerView"
-        app:layout_constraintDimensionRatio="2:3"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_input_get" />
+        app:srcCompat="@drawable/ic_bookmark" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
