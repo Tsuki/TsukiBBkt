@@ -2,7 +2,8 @@ package com.sukitsuki.tsukibb.module
 
 import android.app.Application
 import com.google.android.exoplayer2.DefaultLoadControl
-import com.google.android.exoplayer2.DefaultLoadControl.*
+import com.google.android.exoplayer2.DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
+import com.google.android.exoplayer2.DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -23,8 +24,8 @@ class ExoPlayerModule {
     val loadControl = DefaultLoadControl.Builder()
       .setBackBuffer(30 * 1000, false)
       .setBufferDurationsMs(
-        DEFAULT_MIN_BUFFER_MS,
-        5 * 60 * 1000,
+        10 * 60 * 1000,
+        15 * 60 * 1000,
         DEFAULT_BUFFER_FOR_PLAYBACK_MS,
         DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
       )

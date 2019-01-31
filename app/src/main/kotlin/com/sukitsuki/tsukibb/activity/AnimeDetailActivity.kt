@@ -3,10 +3,15 @@ package com.sukitsuki.tsukibb.activity
 import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
+import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.getExternalStoragePublicDirectory
 import android.view.MenuItem
 import android.view.SurfaceView
+import android.view.TextureView
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
@@ -49,10 +54,13 @@ import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.uiThread
-import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.RuntimePermissions
+import permissions.dispatcher.*
 import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
+import java.util.*
 import javax.inject.Inject
 
 @RuntimePermissions
@@ -153,7 +161,10 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
 
   private fun setupPlayerView() {
     exoPlayer.clearVideoSurface()
-    exoPlayer.setVideoSurfaceView(mPlayerView.videoSurfaceView as SurfaceView)
+    when (mPlayerView.videoSurfaceView) {
+      is SurfaceView -> exoPlayer.setVideoSurfaceView(mPlayerView.videoSurfaceView as SurfaceView)
+      is TextureView -> exoPlayer.setVideoTextureView(mPlayerView.videoSurfaceView as TextureView)
+    }
     mPlayerView.requestFocus()
   }
 
@@ -205,13 +216,52 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     }
   }
 
-  @NeedsPermission(
-    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    Manifest.permission.READ_EXTERNAL_STORAGE,
-    maxSdkVersion = 18)
+  @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  fun showRationaleForStorage(request: PermissionRequest) {
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this@AnimeDetailActivity)
+    builder.setMessage(R.string.alert_sure_to_change)
+      .setPositiveButton("Yes") { _, _ -> request.proceed() }
+      .setNegativeButton("No") { _, _ -> request.cancel() }
+      .setCancelable(false).setMessage("挑战需要录音权限，应用将要申请录音权限").show()
+  }
+
+  @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  fun showDenied() {
+    longToast("拒绝录音权限将无法进行挑战")
+  }
+
+  @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  fun onNeverAskAgain() {
+    longToast("您已经禁止了录音权限,是否现在去开启")
+  }
+
   @OnClick(R.id.exo_screenshot)
+  internal fun screenshotPermissionCheck() {
+    screenshotWithPermissionCheck()
+  }
+
+  @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
   internal fun screenshot() {
     Timber.d("screenshot: ")
+    val bitmap = (mPlayerView.videoSurfaceView as TextureView).bitmap
+    Timber.d("screenshot: bitmap$bitmap")
+    doAsync {
+      val mediaStorageDir = File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "TsukiBB")
+      Timber.d("screenshot: mediaStorageDir ${mediaStorageDir.path}${File.separator}")
+      if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+        Timber.d("screenshot: ${mediaStorageDir.exists()}")
+        Timber.d("screenshot: ${mediaStorageDir.mkdirs()}")
+        return@doAsync
+      }
+      val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+      val mediaFile = File("${mediaStorageDir.path}${File.separator}$timestamp.jpg")
+      Timber.d("screenshot: file ${mediaStorageDir.path}${File.separator}$timestamp.jpg")
+      val fos = FileOutputStream(mediaFile)
+      val compress = bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos)
+      Timber.d("screenshot: compress:$compress")
+      fos.close()
+      uiThread { longToast("成功保存在:$mediaFile") }
+    }
   }
 
   private fun updateBookmark() {

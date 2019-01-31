@@ -22,7 +22,8 @@
         app:layout_constraintDimensionRatio="h,16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:surface_type="texture_view">
 
     </com.google.android.exoplayer2.ui.PlayerView>
 
@@ -63,8 +64,8 @@
         android:layout_height="0dp"
         android:background="@color/primaryColor"
         android:contentDescription="@string/bookmark"
-        android:padding="6dp"
         android:foreground="@drawable/ic_image_button"
+        android:padding="6dp"
         android:tint="@color/primaryTextColor"
         app:layout_constraintBottom_toTopOf="@+id/playerView"
         app:layout_constraintDimensionRatio="1:1"
