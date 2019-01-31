@@ -2,13 +2,11 @@ package com.sukitsuki.tsukibb.preference
 
 import android.os.Bundle
 import android.view.MenuItem
+import com.sukitsuki.tsukibb.AppConst.TITLE_TAG
 import com.sukitsuki.tsukibb.R
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import timber.log.Timber
-
-
-private const val TITLE_TAG = "settingsActivityTitle"
 
 class PreferenceActivity : DaggerAppCompatActivity() {
 
@@ -25,7 +23,7 @@ class PreferenceActivity : DaggerAppCompatActivity() {
     if (savedInstanceState == null) {
       supportFragmentManager
         .beginTransaction()
-        .replace(R.id.setting_fragment, InitPreferenceFragment())
+        .replace(R.id.setting_fragment, com.sukitsuki.tsukibb.preference.InitPreferenceFragment())
         .commit()
     } else {
       title = savedInstanceState.getCharSequence(TITLE_TAG)

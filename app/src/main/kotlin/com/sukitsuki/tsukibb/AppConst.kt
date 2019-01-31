@@ -7,4 +7,5 @@ object AppConst {
       "(KHTML, like Gecko) Chrome/71.0.3578.99 Mobile Safari/537.36"
   const val BASE_URL = "https://ebb.io/"
   const val DatabaseName = "TbbDatabase.db"
+  const val TITLE_TAG = "settingsActivityTitle"
 }
