@@ -9,10 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Environment.getExternalStoragePublicDirectory
-import android.view.MenuItem
-import android.view.SurfaceView
-import android.view.TextureView
-import android.view.View
+import android.view.*
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -173,7 +170,15 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
       STATE_IDLE -> return
       STATE_BUFFERING -> mProgressBar.visibility = View.VISIBLE
       STATE_READY -> mProgressBar.visibility = View.INVISIBLE
-      STATE_ENDED -> exoPlayer.playWhenReady = false
+      STATE_ENDED -> {
+        exoPlayer.playWhenReady = false
+        exoPlayer.stop()
+        exoPlayer.seekTo(0)
+      }
+    }
+    when (playbackState) {
+      STATE_BUFFERING, STATE_READY -> window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+      STATE_IDLE, STATE_ENDED -> window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
   }
 

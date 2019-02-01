@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.ProgressBar
 import butterknife.BindView
@@ -74,7 +75,15 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
       Player.STATE_IDLE -> return
       Player.STATE_BUFFERING -> mProgressBar.visibility = View.VISIBLE
       Player.STATE_READY -> mProgressBar.visibility = View.INVISIBLE
-      Player.STATE_ENDED -> exoPlayer.playWhenReady = false
+      Player.STATE_ENDED -> {
+        exoPlayer.playWhenReady = false
+        exoPlayer.stop()
+        exoPlayer.seekTo(0)
+      }
+    }
+    when (playbackState) {
+      Player.STATE_BUFFERING, Player.STATE_READY -> window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+      Player.STATE_IDLE, Player.STATE_ENDED -> window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
   }
 
@@ -97,8 +106,4 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
     }
   }
 
-  override fun onUserLeaveHint() {
-    super.onUserLeaveHint()
-    // enterPIPMode()
-  }
 }
