@@ -9,7 +9,6 @@ import android.view.*
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -152,7 +151,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
         if (exoPlayer.playbackState == STATE_IDLE) {
           mBlurry.radius(50).sampling(5).capture(mArtworkMask).into(mArtworkMask)
           mArtwork.visibility = View.VISIBLE
-          mArtworkMask.visibility = View.VISIBLE
+          // mArtworkMask.visibility = View.VISIBLE
         }
       }
     }
@@ -274,7 +273,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
         replace(episodesItem, seasonsItem)
       }
     } else {
-      Toast.makeText(applicationContext, R.string.noti_cannot_load_video_source, Toast.LENGTH_LONG).show()
+      longToast(R.string.noti_cannot_load_video_source)
     }
   }
 
