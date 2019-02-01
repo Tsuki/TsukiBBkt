@@ -14,6 +14,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.sukitsuki.tsukibb.R
@@ -108,18 +109,18 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
 
   override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
     when (playbackState) {
-      Player.STATE_IDLE -> return
-      Player.STATE_BUFFERING -> mProgressBar.visibility = View.VISIBLE
-      Player.STATE_READY -> mProgressBar.visibility = View.INVISIBLE
-      Player.STATE_ENDED -> {
+      STATE_IDLE -> return
+      STATE_BUFFERING -> mProgressBar.visibility = View.VISIBLE
+      STATE_READY -> mProgressBar.visibility = View.INVISIBLE
+      STATE_ENDED -> {
         exoPlayer.playWhenReady = false
         exoPlayer.stop()
         exoPlayer.seekTo(0)
       }
     }
     when (playbackState) {
-      Player.STATE_BUFFERING, Player.STATE_READY -> window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-      Player.STATE_IDLE, Player.STATE_ENDED -> window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+      STATE_BUFFERING, STATE_READY -> window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+      STATE_IDLE, STATE_ENDED -> window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
   }
 

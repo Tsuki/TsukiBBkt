@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
@@ -48,6 +49,7 @@ import com.sukitsuki.tsukibb.utils.takeScreenshot
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
+import jp.wasabeef.blurry.Blurry
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
@@ -87,6 +89,10 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   lateinit var mToolbar: Toolbar
   @BindView(R.id.bookmarkButton)
   lateinit var mBookmarkButton: ImageButton
+  @BindView(R.id.exo_artwork)
+  lateinit var mArtwork: ImageView
+  @BindView(R.id.exo_artwork_mask)
+  lateinit var mArtworkMask: ImageView
 
   private val mResultCodeForFullscreenVideoActivity: Int = 100
   private val compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -100,6 +106,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   private lateinit var mPageSp: String
   private lateinit var mAnimeList: AnimeList
   private val mImageLoader by lazy { GlideApp.with(this) }
+  private val mBlurry by lazy { Blurry.with(this) }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -110,19 +117,12 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     toolbar?.setDisplayHomeAsUpEnabled(true)
     mPlayerView.player = exoPlayer
     exoPlayer.addListener(this@AnimeDetailActivity)
-    setupPlayerView()
-    initAnimeList()
   }
 
   override fun onResume() {
     super.onResume()
-    Timber.d("onResume: $mAnimeList")
-    Timber.d("onResume: getParcelableExtra ${intent.getParcelableExtra("animeList") as AnimeList}")
     setupPlayerView()
-    if (mAnimeList != intent.getParcelableExtra("animeList")) {
-      Timber.d("onResume: reInit")
-      initAnimeList()
-    }
+    initAnimeList()
   }
 
   override fun onDestroy() {
@@ -131,14 +131,15 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
   }
 
   private fun initAnimeList() {
-    Timber.d("initAnimeList: getParcelableExtra")
     mAnimeList = intent.getParcelableExtra("animeList")
     toolbar?.title = mAnimeList.nameChi
+    mImageLoader.load("https://seaside.ebb.io/${mAnimeList.animeId}x${mAnimeList.seasonId}.jpg").into(mArtworkMask)
+    mImageLoader.load("https://seaside.ebb.io/${mAnimeList.animeId}x${mAnimeList.seasonId}.jpg").into(mArtwork)
     doAsync {
       mSeason = mTbbRepository.fetchSeason(mAnimeList.animeId).toFuture().get()
-      mPageSp = mTbbRepository.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
       getListSuccess = mSeason.status == 200
       mFavorite = mFavoriteRepository.getFavorite(mAnimeList)
+      mPageSp = mTbbRepository.fetchPageSpecials(mAnimeList.seasonId).toFuture().get()
       uiThread {
         mSeason.list.seasons.forEach { i: SeasonsItem ->
           val episodesListFragment = EpisodesListFragment()
@@ -148,6 +149,11 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
         mViewPager.adapter = EpisodesListFragmentAdapter(supportFragmentManager)
         mTabLayout.setupWithViewPager(mViewPager)
         updateBookmark()
+        if (exoPlayer.playbackState == STATE_IDLE) {
+          mBlurry.radius(50).sampling(5).capture(mArtworkMask).into(mArtworkMask)
+          mArtwork.visibility = View.VISIBLE
+          mArtworkMask.visibility = View.VISIBLE
+        }
       }
     }
   }
@@ -292,11 +298,6 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     exoPlayer.prepare(hlsMediaSource)
     exoPlayer.playWhenReady = true
     mCurrentEpisodesItem = episodesItem
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-    setupPlayerView()
   }
 
   inner class EpisodesListFragmentAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
