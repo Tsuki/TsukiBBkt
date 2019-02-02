@@ -28,6 +28,7 @@ fun Context.takeScreenshot(bitmap: Bitmap): String? {
     val fos = FileOutputStream(mediaFile)
     compress = bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos)
     fos.close()
+    SingleMediaScanner(this@takeScreenshot, mediaStorageDir)
   }.get()
   return if (compress) mediaFile.toString() else null
 }
