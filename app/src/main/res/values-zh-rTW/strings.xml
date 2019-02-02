@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_header_title">遊客</string>
+    <string name="nav_header_desc">導航標題</string>
+    <string name="action_settings">設定</string>
+
+    <string name="menu_share">分享</string>
+    <string name="communities">社區</string>
+    <string name="anime_list">動畫列表</string>
+    <string name="menu_favorite">收藏</string>
+    <string name="menu_history">歷史</string>
+    <string name="menu_login">登錄</string>
+    <string name="menu_logout">登出</string>
+    <string name="menu_download">下載</string>
+    <string name="menu_setting">設定</string>
+    <string name="noti_cannot_load_video_source">無法加載視頻源</string>
+    <string name="alert_sure_to_change">你確定改變視頻?</string>
+    <string name="bookmark">書籤</string>
+    <string name="anime_cover">封面</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+</resources>
