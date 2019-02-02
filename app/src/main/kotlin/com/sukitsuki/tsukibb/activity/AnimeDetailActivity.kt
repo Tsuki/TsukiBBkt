@@ -21,6 +21,7 @@ import butterknife.BindColor
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -28,6 +29,7 @@ import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_DETECT_ACCESS_UNITS
 import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -58,7 +60,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @RuntimePermissions
-class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
+class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, PlayerControlView.VisibilityListener {
 
   @dagger.Subcomponent(modules = [])
   interface Component : AndroidInjector<AnimeDetailActivity> {
@@ -163,6 +165,8 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
       is SurfaceView -> exoPlayer.setVideoSurfaceView(mPlayerView.videoSurfaceView as SurfaceView)
       is TextureView -> exoPlayer.setVideoTextureView(mPlayerView.videoSurfaceView as TextureView)
     }
+    mPlayerView.hideController()
+    mPlayerView.setControllerVisibilityListener(this)
     mPlayerView.requestFocus()
   }
 
@@ -180,6 +184,24 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener {
     when (playbackState) {
       STATE_BUFFERING, STATE_READY -> window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
       STATE_IDLE, STATE_ENDED -> window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+  }
+
+  override fun onPlayerError(error: ExoPlaybackException) {
+    Timber.w(error)
+    error.message?.let { longToast("onPlayerError: $it") }
+  }
+
+  override fun onVisibilityChange(visibility: Int) {
+    when (visibility) {
+      View.VISIBLE -> {
+        if (exoPlayer.currentTrackGroups.length < 1) {
+          mPlayerView.hideController()
+        }
+      }
+      View.GONE -> {
+        Timber.d("onVisibilityChange: hide")
+      }
     }
   }
 
