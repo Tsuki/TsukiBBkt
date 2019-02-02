@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.ui.TimeBar
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.tabs.TabLayout
@@ -43,6 +44,7 @@ import com.sukitsuki.tsukibb.model.AnimeList
 import com.sukitsuki.tsukibb.model.Season
 import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem
 import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem.EpisodesItem
+import com.sukitsuki.tsukibb.player.PlayerPreviewLayout
 import com.sukitsuki.tsukibb.repository.FavoriteRepository
 import com.sukitsuki.tsukibb.repository.TbbRepository
 import com.sukitsuki.tsukibb.utils.showRationale
@@ -94,6 +96,10 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
   lateinit var mArtwork: ImageView
   @BindView(R.id.exo_artwork_mask)
   lateinit var mArtworkMask: ImageView
+  @BindView(R.id.exo_progress)
+  lateinit var timeBar: TimeBar
+  @BindView(R.id.playerPreview)
+  lateinit var playerPreviewLayout: PlayerPreviewLayout
 
   private val mResultCodeForFullscreenVideoActivity: Int = 100
   private val compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -118,6 +124,8 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
     toolbar?.setDisplayHomeAsUpEnabled(true)
     mPlayerView.player = exoPlayer
     exoPlayer.addListener(this@AnimeDetailActivity)
+    Timber.d("onCreate: ${timeBar}")
+    timeBar.addListener(playerPreviewLayout)
   }
 
   override fun onResume() {
@@ -219,7 +227,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
     return super.onOptionsItemSelected(item)
   }
 
-  @OnClick(R.id.exo_fullscreen_button)
+  @OnClick(R.id.exo_fullscreen_icon)
   internal fun fullscreen() {
     val intent = Intent(applicationContext, FullscreenVideoActivity::class.java)
     startActivityForResult(intent, mResultCodeForFullscreenVideoActivity)

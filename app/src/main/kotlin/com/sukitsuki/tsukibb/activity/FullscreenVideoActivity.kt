@@ -17,7 +17,9 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.ui.TimeBar
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.player.PlayerPreviewLayout
 import com.sukitsuki.tsukibb.utils.showRationale
 import com.sukitsuki.tsukibb.utils.takeScreenshot
 import dagger.android.AndroidInjector
@@ -47,6 +49,10 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
   lateinit var mPlayerView: PlayerView
   @BindView(R.id.exo_fullscreen_icon)
   lateinit var fullscreenIcon: ImageView
+  @BindView(R.id.exo_progress)
+  lateinit var timeBar: TimeBar
+  @BindView(R.id.playerPreview)
+  lateinit var playerPreviewLayout: PlayerPreviewLayout
 
   @Inject
   lateinit var exoPlayer: SimpleExoPlayer
@@ -72,6 +78,7 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
     exoPlayer.addListener(this@FullscreenVideoActivity)
     mPlayerView.player = exoPlayer
     window.decorView.onSystemUiVisibilityChange { if ((it and View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) delayedHide(1000L) }
+    timeBar.addListener(playerPreviewLayout)
   }
 
   override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -124,9 +131,9 @@ class FullscreenVideoActivity : DaggerActivity(), Player.EventListener {
     }
   }
 
-  @OnClick(R.id.exo_fullscreen_button)
+  @OnClick(R.id.exo_fullscreen_icon)
   internal fun fullscreen() {
-    finish()
+    onBackPressed()
   }
 
   private fun delayedHide(uiAnimationDelay: Long = 1000L) {
