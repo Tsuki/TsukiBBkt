@@ -47,6 +47,7 @@ import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem.EpisodesItem
 import com.sukitsuki.tsukibb.player.PlayerPreviewLayout
 import com.sukitsuki.tsukibb.repository.FavoriteRepository
 import com.sukitsuki.tsukibb.repository.TbbRepository
+import com.sukitsuki.tsukibb.utils.GlideThumbnailTransformation
 import com.sukitsuki.tsukibb.utils.showRationale
 import com.sukitsuki.tsukibb.utils.takeScreenshot
 import dagger.android.AndroidInjector
@@ -330,6 +331,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
     val url: String? = episodesItem.sl?.let { "https://ebb.io/resload/p/${it.removeSuffix("/master.csv").split("/").last()}.jpg" }
     Timber.d("replace: $url")
     playerPreviewLayout.thumbnailsUrl = url ?: ""
+    mImageLoader.load(url).transform(GlideThumbnailTransformation(0, 1000)).preload()
     exoPlayer.playWhenReady = true
     mCurrentEpisodesItem = episodesItem
   }

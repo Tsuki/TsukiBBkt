@@ -37,7 +37,7 @@ class PlayerPreviewLayout : FrameLayout, TimeBar.OnScrubListener {
 
   override fun onScrubMove(timeBar: TimeBar?, position: Long) {
     if (duration < 0 || thumbnailsUrl == "") return
-    mImageLoader.load(thumbnailsUrl).transform(GlideThumbnailTransformation(position, duration)).into(mTimeImage)
+    mImageLoader.load(thumbnailsUrl).transform(GlideThumbnailTransformation(position, duration)).placeholder(mTimeImage.drawable).into(mTimeImage)
     mTimeTitle.text = DateUtils.formatElapsedTime(position / 1000)
   }
 

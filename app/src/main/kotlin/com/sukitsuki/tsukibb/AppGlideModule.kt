@@ -1,6 +1,7 @@
 package com.sukitsuki.tsukibb
 
 import android.content.Context
+import android.util.Log
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.engine.cache.DiskCache
@@ -14,5 +15,8 @@ class AppGlideModule : AppGlideModule() {
     builder.setDiskCache(InternalCacheDiskCacheFactory(
       context, "cache_image", DiskCache.Factory.DEFAULT_DISK_CACHE_SIZE.toLong()
     ))
+    if (BuildConfig.DEBUG) {
+      builder.setLogLevel(Log.DEBUG)
+    }
   }
 }
