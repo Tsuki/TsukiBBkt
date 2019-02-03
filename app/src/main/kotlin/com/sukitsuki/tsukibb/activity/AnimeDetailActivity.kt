@@ -124,7 +124,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
     toolbar?.setDisplayHomeAsUpEnabled(true)
     mPlayerView.player = exoPlayer
     exoPlayer.addListener(this@AnimeDetailActivity)
-    Timber.d("onCreate: ${timeBar}")
+    Timber.d("onCreate: $timeBar")
     timeBar.addListener(playerPreviewLayout)
   }
 
@@ -205,7 +205,9 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
       View.VISIBLE -> {
         if (exoPlayer.currentTrackGroups.length < 1) {
           mPlayerView.hideController()
+          return
         }
+        playerPreviewLayout.duration = exoPlayer.duration
       }
       View.GONE -> {
         Timber.d("onVisibilityChange: hide")
@@ -325,6 +327,9 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
       descriptionAdapter.largeIcon = request.get()
     }
     exoPlayer.prepare(hlsMediaSource)
+    val url: String? = episodesItem.sl?.let { "https://ebb.io/resload/p/${it.removeSuffix("/master.csv").split("/").last()}.jpg" }
+    Timber.d("replace: $url")
+    playerPreviewLayout.thumbnailsUrl = url ?: ""
     exoPlayer.playWhenReady = true
     mCurrentEpisodesItem = episodesItem
   }

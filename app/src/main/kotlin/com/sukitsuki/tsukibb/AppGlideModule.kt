@@ -12,9 +12,7 @@ class AppGlideModule : AppGlideModule() {
   override fun applyOptions(context: Context, builder: GlideBuilder) {
     super.applyOptions(context, builder)
     builder.setDiskCache(InternalCacheDiskCacheFactory(
-      context,
-      "cache_image",
-      DiskCache.Factory.DEFAULT_DISK_CACHE_SIZE.toLong()
+      context, "cache_image", DiskCache.Factory.DEFAULT_DISK_CACHE_SIZE.toLong()
     ))
   }
 }

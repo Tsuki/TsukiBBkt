@@ -6,15 +6,24 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.exoplayer2.ui.TimeBar
+import com.sukitsuki.tsukibb.GlideApp
 import com.sukitsuki.tsukibb.R
+import com.sukitsuki.tsukibb.utils.GlideThumbnailTransformation
 
 class PlayerPreviewLayout : FrameLayout, TimeBar.OnScrubListener {
   @BindView(R.id.timeline_preview_time)
   lateinit var mTimeTitle: TextView
+  @BindView(R.id.timeline_preview_image)
+  lateinit var mTimeImage: ImageView
+  var thumbnailsUrl: String = ""
+  var duration: Long = -1
+  // private val mImageLoader by lazy { GlideApp.with(this) }
+  private val mImageLoader by lazy { GlideApp.with(this) }
 
   constructor(context: Context) : this(context, null)
   constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -27,6 +36,8 @@ class PlayerPreviewLayout : FrameLayout, TimeBar.OnScrubListener {
 
 
   override fun onScrubMove(timeBar: TimeBar?, position: Long) {
+    if (duration < 0 || thumbnailsUrl == "") return
+    mImageLoader.load(thumbnailsUrl).transform(GlideThumbnailTransformation(position, duration)).into(mTimeImage)
     mTimeTitle.text = DateUtils.formatElapsedTime(position / 1000)
   }
 
