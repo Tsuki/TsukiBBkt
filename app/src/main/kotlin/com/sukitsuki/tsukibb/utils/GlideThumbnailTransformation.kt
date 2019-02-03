@@ -14,7 +14,7 @@ class GlideThumbnailTransformation(private val position: Long, private val max: 
   var epsiso: Int = 0
 
   init {
-    epsiso = floor(position * 100 / max.toDouble()).toInt()
+    epsiso = floor(position * 99 / max.toDouble()).toInt()
   }
 
   override fun updateDiskCacheKey(messageDigest: MessageDigest) {
