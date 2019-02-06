@@ -16,8 +16,9 @@ data class Favorite(
   , @ColumnInfo(name = "season_id") val seasonId: Int = -1
   , @ColumnInfo(name = "aired") val aired: Int = -1
   , @ColumnInfo(name = "name_chi") val nameChi: String = ""
-  , @ColumnInfo(name = "last_updated") val lastUpdated: Date = Date(0)
-  , @ColumnInfo(name = "episode_title") val episodeTitle: String = ""
+  , @ColumnInfo(name = "last_updated") var lastUpdated: Date = Date(0)
+  , @ColumnInfo(name = "episode_title") var episodeTitle: String = ""
+  , @ColumnInfo(name = "create_at") val createAt: Date = Date(java.util.Date().time)
 ) {
   constructor(anime: AnimeList) : this(
     null,
