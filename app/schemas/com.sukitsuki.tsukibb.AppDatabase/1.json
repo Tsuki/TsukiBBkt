@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d9bbf29a6a151075a5c7df654af365f5",
+    "identityHash": "d98318b41a170c198c0bd99ab8601db9",
     "entities": [
       {
         "tableName": "settings",
@@ -134,7 +134,7 @@
       },
       {
         "tableName": "favorites",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `anime_id` INTEGER NOT NULL, `season_title` TEXT NOT NULL, `season_id` INTEGER NOT NULL, `aired` INTEGER NOT NULL, `name_chi` TEXT NOT NULL, `last_updated` INTEGER NOT NULL, `episode_title` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `anime_id` INTEGER NOT NULL, `season_title` TEXT NOT NULL, `season_id` INTEGER NOT NULL, `aired` INTEGER NOT NULL, `name_chi` TEXT NOT NULL, `last_updated` INTEGER NOT NULL, `episode_title` TEXT NOT NULL, `create_at` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -183,6 +183,12 @@
             "columnName": "episode_title",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "createAt",
+            "columnName": "create_at",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -205,7 +211,7 @@
       },
       {
         "tableName": "histories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `anime_id` INTEGER NOT NULL, `season_id` INTEGER NOT NULL, `episode_title` TEXT NOT NULL, `aired` INTEGER NOT NULL, `name_chi` TEXT NOT NULL, `season_title` TEXT NOT NULL, `position` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `anime_id` INTEGER NOT NULL, `season_id` INTEGER NOT NULL, `episode_title` TEXT NOT NULL, `aired` INTEGER NOT NULL, `name_chi` TEXT NOT NULL, `season_title` TEXT NOT NULL, `position` INTEGER NOT NULL, `create_at` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -254,6 +260,12 @@
             "columnName": "position",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "createAt",
+            "columnName": "create_at",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -279,7 +291,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d9bbf29a6a151075a5c7df654af365f5\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d98318b41a170c198c0bd99ab8601db9\")"
     ]
   }
 }

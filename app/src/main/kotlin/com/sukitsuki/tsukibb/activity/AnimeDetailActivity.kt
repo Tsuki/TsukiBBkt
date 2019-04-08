@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_DETECT_ACCESS_UNITS
 import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory
@@ -32,7 +33,6 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.ui.TimeBar
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.tabs.TabLayout
 import com.sukitsuki.tsukibb.GlideApp
@@ -47,13 +47,13 @@ import com.sukitsuki.tsukibb.model.Season.SeasonList.SeasonsItem.EpisodesItem
 import com.sukitsuki.tsukibb.player.PlayerPreviewLayout
 import com.sukitsuki.tsukibb.repository.FavoriteRepository
 import com.sukitsuki.tsukibb.repository.TbbRepository
-import com.sukitsuki.tsukibb.utils.GlideThumbnailTransformation
 import com.sukitsuki.tsukibb.utils.showRationale
 import com.sukitsuki.tsukibb.utils.takeScreenshot
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
 import jp.wasabeef.blurry.Blurry
+import okhttp3.OkHttpClient
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
@@ -80,6 +80,8 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
   lateinit var mTbbRepository: TbbRepository
   @Inject
   lateinit var mFavoriteRepository: FavoriteRepository
+  @Inject
+  lateinit var mOkHttpClient: OkHttpClient
 
   @BindView(R.id.playerProgressBar)
   lateinit var mProgressBar: ProgressBar
@@ -197,7 +199,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
   }
 
   override fun onPlayerError(error: ExoPlaybackException) {
-    Timber.w(error)
+    Timber.w(error, "onPlayerError: ")
     error.message?.let { longToast("onPlayerError: $it") }
   }
 
@@ -248,7 +250,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
   internal fun bookmark() {
     Timber.d("bookmark: $mAnimeList")
     doAsync {
-      mFavorite?.let { mFavoriteRepository.deleteFavorite(mFavorite!!) }
+      mFavorite?.let { mFavoriteRepository.deleteFavorite(it) }
         ?: run { mFavoriteRepository.insertFavorite(mAnimeList) }
       mFavorite = mFavoriteRepository.getFavorite(mAnimeList)
       uiThread { updateBookmark() }
@@ -311,7 +313,7 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
   }
 
   private fun replace(episodesItem: EpisodesItem, seasonsItem: SeasonsItem) {
-    val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ebb"), null)
+    val httpDataSourceFactory = OkHttpDataSourceFactory(mOkHttpClient, Util.getUserAgent(applicationContext, "ebb"))
     httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://ebb.io/anime/")
     val defaultHlsExtractorFactory =
       DefaultHlsExtractorFactory(FLAG_DETECT_ACCESS_UNITS or FLAG_ALLOW_NON_IDR_KEYFRAMES)
@@ -322,16 +324,18 @@ class AnimeDetailActivity : DaggerAppCompatActivity(), Player.EventListener, Pla
     descriptionAdapter.contentTitle = mAnimeList.nameChi
     descriptionAdapter.contentText = "${seasonsItem.seasonTitle} - ${episodesItem.title}"
     descriptionAdapter.animeList = mAnimeList
-    doAsync {
-      val request = mImageLoader.asBitmap()
-        .load("https://seaside.ebb.io/${seasonsItem.animeId}x${seasonsItem.id}.jpg").submit()
-      descriptionAdapter.largeIcon = request.get()
-    }
+//    doAsync {
+//      val request = mImageLoader.asBitmap()
+//        .load("https://seaside.ebb.io/${seasonsItem.animeId}x${seasonsItem.id}.jpg").submit()
+//      descriptionAdapter.largeIcon = request.get()
+//    }
     exoPlayer.prepare(hlsMediaSource)
-    val url: String? = episodesItem.sl?.let { "https://ebb.io/resload/p/${it.removeSuffix("/master.csv").split("/").last()}.jpg" }
-    Timber.d("replace: $url")
-    playerPreviewLayout.thumbnailsUrl = url ?: ""
-    mImageLoader.load(url).transform(GlideThumbnailTransformation(0, 1000)).preload()
+    Timber.d("replace: $episodesItem")
+//    val url: String? =
+//      episodesItem.sl?.let { "https://ebb.io/resload/p/${it.removeSuffix("/master.csv").split("/").last()}.jpg" }
+//    Timber.d("replace: $url")
+//    playerPreviewLayout.thumbnailsUrl = url ?: ""
+//    mImageLoader.load(url).transform(GlideThumbnailTransformation(0, 1000)).preload()
     exoPlayer.playWhenReady = true
     mCurrentEpisodesItem = episodesItem
   }

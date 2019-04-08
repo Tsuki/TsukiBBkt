@@ -37,8 +37,9 @@ class CookieRepository(
   }
 
   private fun saveCookieToSQLite(cookies: List<okhttp3.Cookie>) {
-    Timber.d("saveCookieToSQLite ${cookies.map { Cookie(it) }.joinToString("\n")}")
-    cookieDao.insert(*(cookies.map { Cookie(it) }.toTypedArray()))
+    val cookie = cookies.filter { it.value() != "" }.map { Cookie(it) }.toTypedArray()
+    Timber.d("saveCookieToSQLite ${cookie.joinToString("\n")}")
+    cookieDao.insert(*cookie)
   }
 
   override fun saveFromResponse(url: HttpUrl, cookies: List<okhttp3.Cookie>) {

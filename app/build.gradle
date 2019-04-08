@@ -84,7 +84,7 @@ android {
 }
 
 ext.anko_version = '0.10.8'
-ext.exo_version = '2.9.3'
+ext.exo_version = '2.9.6'
 kapt {
     correctErrorTypes = true
     useBuildCache = true
@@ -137,7 +137,8 @@ dependencies {
     testImplementation 'androidx.room:room-testing:2.0.0'
     kapt 'androidx.room:room-compiler:2.0.0'
 
-    implementation "com.google.android.exoplayer:exoplayer:2.9.3"
+    implementation "com.google.android.exoplayer:exoplayer:$exo_version"
+    implementation "com.google.android.exoplayer:extension-okhttp:$exo_version"
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
 

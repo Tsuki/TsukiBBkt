@@ -20,7 +20,7 @@ class TbbRepositoryTest {
 
   @Before
   fun setUp() {
-    DaggerTbbRepositoryTest_TestComponent.create().inject(this)
+//    DaggerTbbRepositoryTest_TestComponent.create().inject(this)
   }
 
   @Test
