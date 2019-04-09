@@ -5,9 +5,11 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.webkit.CookieManager
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.gson.GsonBuilder
@@ -58,10 +60,13 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
   @BindView(R.id.webview)
   lateinit var webView: WebView
 
+  var toolbar: ActionBar? = null
+
   @SuppressLint("SetJavaScriptEnabled")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     method = intent.getIntExtra("login", -2)
+    toolbar = supportActionBar
     Timber.d("login method $method")
     setContentView(R.layout.activity_web_view)
     ButterKnife.bind(this)
@@ -88,12 +93,23 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
       Timber.d("url:$url")
+      toolbar?.title = url
       when (method) {
         0 -> processGoogleLogin(url)
         1 -> processTelegramLogin(url)
         else -> finish()
       }
       super.onPageStarted(view, url, favicon)
+    }
+
+    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+      Timber.d("shouldOverrideUrlLoading url: $url")
+      return false
+    }
+
+    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+      Timber.d("shouldOverrideUrlLoading request: ${request?.url}")
+      return false
     }
 
     private fun processGoogleLogin(url: String?) {
