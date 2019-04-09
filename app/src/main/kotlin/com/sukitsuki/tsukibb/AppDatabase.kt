@@ -23,7 +23,7 @@ import com.sukitsuki.tsukibb.utils.DateTypeConverter
     , Cookie::class
     , Favorite::class
     , History::class
-  ], version = 1, exportSchema = true
+  ], version = 2, exportSchema = true
 )
 @TypeConverters(DateTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {

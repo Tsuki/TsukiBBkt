@@ -22,6 +22,7 @@ import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import okhttp3.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import timber.log.Timber
 import javax.inject.Inject
@@ -65,8 +66,8 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
     setContentView(R.layout.activity_web_view)
     ButterKnife.bind(this)
     cookieManager = CookieManager.getInstance()
-    cookieManager.removeAllCookies(null)
-    cookieManager.removeSessionCookies(null)
+//    cookieManager.removeAllCookies(null)
+//    cookieManager.removeSessionCookies(null)
     // TODO Load cookie from SQLite
     cookieManager.flush()
     webView.settings.javaScriptEnabled = true
@@ -107,10 +108,10 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
           sharedPreferences.edit().putBoolean("is_login", true).apply()
           uiThread {
             Toast.makeText(this@LoginWebViewActivity, "Login success", Toast.LENGTH_LONG).show()
+            setResult(RESULT_OK, null)
+            finish()
           }
         }
-        setResult(RESULT_OK, null)
-        finish()
       }
     }
 
@@ -134,19 +135,17 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
         doAsync {
           appDatabase.cookieDao().insert(*cookies.map(::Cookie).toTypedArray())
           val response = okHttpClient.newCall(request).execute()
-          val telegramAuth = response.body()!!.let {
-            gson.fromJson(it.string(), TelegramAuth::class.java)
-          }
+          val telegramAuth = response.body()!!.let { gson.fromJson(it.string(), TelegramAuth::class.java) }
           Timber.d("telegramAuth.user ${telegramAuth.user}")
           val authTelegram = mTbbRepository.authTelegram(telegramAuth.user.toMap())
           authTelegram.first("").blockingGet()
-          sharedPreferences.edit().putBoolean("is_login", true).apply()
           uiThread {
-            Toast.makeText(this@LoginWebViewActivity, "Login success", Toast.LENGTH_LONG).show()
+            toast("Login success")
+            setResult(RESULT_OK, null)
+            sharedPreferences.edit().putBoolean("is_login", true).apply()
+            finish()
           }
         }
-        setResult(RESULT_OK, null)
-        finish()
       }
     }
   }
