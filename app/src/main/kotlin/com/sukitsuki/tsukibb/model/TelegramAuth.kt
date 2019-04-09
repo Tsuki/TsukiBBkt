@@ -10,7 +10,7 @@ data class TelegramAuth(
   @SerializedName("html")
   val html: String = "",
   @SerializedName("user")
-  val user: TelegramUser
+  val user: TelegramUser?
 ) {
   data class TelegramUser(
     @SerializedName("id")

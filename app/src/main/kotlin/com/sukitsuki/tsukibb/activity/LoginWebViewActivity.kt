@@ -153,10 +153,13 @@ class LoginWebViewActivity : DaggerAppCompatActivity() {
           val response = okHttpClient.newCall(request).execute()
           val telegramAuth = response.body()!!.let { gson.fromJson(it.string(), TelegramAuth::class.java) }
           Timber.d("telegramAuth.user ${telegramAuth.user}")
-          val authTelegram = mTbbRepository.authTelegram(telegramAuth.user.toMap())
-          authTelegram.first("").blockingGet()
+          var success = false
+          telegramAuth.user?.let {
+            mTbbRepository.authTelegram(telegramAuth.user.toMap()).first("").blockingGet()
+            success = true
+          }
           uiThread {
-            toast("Login success")
+            if (success) toast("Login success") else toast("Login fail please retry")
             setResult(RESULT_OK, null)
             sharedPreferences.edit().putBoolean("is_login", true).apply()
             finish()
